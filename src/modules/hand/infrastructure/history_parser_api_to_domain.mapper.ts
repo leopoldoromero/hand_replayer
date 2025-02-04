@@ -18,7 +18,7 @@ function actionDtoToDomainMapper(actionDto: ActionDto): Action {
 function playerDtoToDomain(playerDto: PlayerDto): Player {
     return {
         seat: playerDto.seat,
-        nickName: playerDto.name,
+        name: playerDto.name,
         stack: playerDto.stack,
         cards: playerDto.cards,
     }

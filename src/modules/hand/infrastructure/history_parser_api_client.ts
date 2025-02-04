@@ -6,7 +6,7 @@ import { historyParserApiToDomainHand } from "./history_parser_api_to_domain.map
 
 export class HistoryParserApiClient implements HistoryParserRepository {
     private readonly API_URL = process.env.API_URL;
-    
+
     async parse(file: File): Promise<Array<Hand>> {
         try {
             const formData = new FormData();
@@ -25,5 +25,11 @@ export class HistoryParserApiClient implements HistoryParserRepository {
             console.error("Error uploading file:", error);
             throw new Error((error as AxiosError).message || "Failed to parse hand history.");
         }
+    }
+
+    async fetch(id: string): Promise<Array<Hand>> {
+        console.log('Fetch hands', id)
+        // TODO: Not impplemented yet
+        return [];
     }
 }

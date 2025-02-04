@@ -1,6 +1,6 @@
 export interface Player {
     seat: number,
-    nickName: string,
+    name: string,
     stack: number,
     cards?: Array<string>
 }
