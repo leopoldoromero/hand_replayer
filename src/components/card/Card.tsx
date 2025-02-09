@@ -2,14 +2,15 @@ import { StyledBottomContainer, StyledCard, StyledCardText, StyledTopContainer }
 
 interface CardProps {
     card: string;
+    showSliced?: boolean;
 }
 
 type Suits = {[key in string]: string}
 
-const CardComponent: React.FC<CardProps> = ({ card }) => {
+const CardComponent: React.FC<CardProps> = ({ card, showSliced }) => {
     if (card == '') {
         return (
-            <StyledCard $bgColor='grey'></StyledCard>
+            <StyledCard $bgColor='grey' $showSliced={showSliced}></StyledCard>
         )
     }
     const cardElements: Array<string> = card.split('')
@@ -28,7 +29,7 @@ const CardComponent: React.FC<CardProps> = ({ card }) => {
         h: "red" 
     }
     return (
-        <StyledCard $bgColor={bgColorBySuit[suit]}>
+        <StyledCard $bgColor={bgColorBySuit[suit]} $showSliced={showSliced}>
             <StyledTopContainer>
                 <StyledCardText >{value}</StyledCardText>
                 <StyledCardText $isSuit>{suitsSimbols[suit]}</StyledCardText>

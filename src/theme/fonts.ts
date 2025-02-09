@@ -6,14 +6,14 @@ const BASE_SIZE = 1;
 
 const tagScales: Record<TextTags, Partial<Record<FontSizeNames, number>>> = {
   h1: { tiny: 1.9, small: 2.5, base: 3, medium: 3.5, large: 4 },
-  h2: { tiny: 1.65, small: 2, base: 2.5, medium: 3, large: 3.5 },
+  h2: { tiny: 1.65, small: 2, base: 2.5, medium: 3, large: 3.4 },
   h3: { tiny: 1.5, small: 1.75, base: 2, medium: 2.5, large: 3 },
   h4: { tiny: 1.25, small: 1.5, base: 1.75, medium: 2, large: 2.5 },
   h5: { tiny: 1, small: 1.25, base: 1.5, medium: 1.75, large: 2 },
   h6: { tiny: 0.875, small: 1, base: 1.25, medium: 1.5, large: 1.75 },
   p: { tiny: 0.75, small: 0.875, base: 1, medium: 1.125, large: 1.25 },
   a: { tiny: 0.75, small: 0.875, base: 1, medium: 1.125, large: 1.25 },
-  span: { tiny: 0.8, small: 0.8, base: 0.9, medium: 1, large: 1.1 },
+  span: { tiny: 0.6, small: 0.8, base: 0.9, medium: 1, large: 1.1 },
   strong: { tiny: 0.7, small: 0.8, base: 0.9, medium: 1, large: 1.1 },
   input: { tiny: 0.875, small: 1, base: 1.125, medium: 1.25, large: 1.375 },
 };

@@ -8,8 +8,8 @@ export class MockHistoryParserApiClient implements HistoryParserRepository {
         data: [
             {
                 "general_info": {
-                    "hand_id": "254310896120",
-                    "datetime": "11-01-2025 11:37:11",
+                    "hand_id": "254717133582",
+                    "datetime": "05-02-2025 12:29:33",
                     "game_type": "zoom",
                     "currency": "€",
                     "small_blind": 0.02,
@@ -21,72 +21,73 @@ export class MockHistoryParserApiClient implements HistoryParserRepository {
                     {
                         "seat": 1,
                         "name": "Nicoromero87",
-                        "stack": 5.14
+                        "stack": 9.55
                     },
                     {
                         "seat": 2,
-                        "name": "Viriato525",
-                        "stack": 6.05
+                        "name": "Mauuu_bg",
+                        "stack": 4.78
                     },
                     {
                         "seat": 3,
-                        "name": "titus&mus",
-                        "stack": 4.68
+                        "name": "ghanjaman007",
+                        "stack": 5.26
                     },
                     {
                         "seat": 4,
-                        "name": "doryann26",
-                        "stack": 3.25
+                        "name": "camamo26",
+                        "stack": 6.3
                     },
                     {
                         "seat": 5,
-                        "name": "sonieta1991",
-                        "stack": 5.8
+                        "name": "SachS1970",
+                        "stack": 5.09
                     },
                     {
                         "seat": 6,
-                        "name": "Ruben1990869",
-                        "stack": 5.02
+                        "name": "CHTIDAN59",
+                        "stack": 3.08
                     }
                 ],
-                "hero_hand": [
-                    "8s",
-                    "9h"
+                "hero_cards": [
+                    "3h",
+                    "6s"
                 ],
+                "hero_name": 'Nicoromero87',
                 "actions": [
                     {
                         "phase": "PRE-FLOP",
-                        "player": "Viriato525",
+                        "player": "Mauuu_bg",
                         "action": "small_blind",
                         "amount": 0.02,
                         "cards": []
                     },
                     {
                         "phase": "PRE-FLOP",
-                        "player": "titus&mus",
+                        "player": "ghanjaman007",
                         "action": "big_blind",
                         "amount": 0.05,
                         "cards": []
                     },
                     {
                         "phase": "PRE-FLOP",
-                        "player": "doryann26",
-                        "action": "raise",
-                        "amount": 0.10,
-                        "cards": []
-                    },
-                    {
-                        "phase": "PRE-FLOP",
-                        "player": "sonieta1991",
+                        "player": "camamo26",
                         "action": "call",
-                        "amount": 0.10,
+                        "amount": 0.05,
                         "cards": []
                     },
                     {
                         "phase": "PRE-FLOP",
-                        "player": "Ruben1990869",
-                        "action": "fold",
-                        "amount": null,
+                        "player": "SachS1970",
+                        "action": "call",
+                        "amount": 0.05,
+                        "cards": []
+                    },
+                    {
+                        "phase": "PRE-FLOP",
+                        "player": "CHTIDAN59",
+                        "action": "call",
+                        "amount": 0.05,
                         "cards": []
                     },
                     {
@@ -98,71 +99,164 @@ export class MockHistoryParserApiClient implements HistoryParserRepository {
                     },
                     {
                         "phase": "PRE-FLOP",
-                        "player": "Viriato525",
-                        "action": "fold",
-                        "amount": null,
+                        "player": "Mauuu_bg",
+                        "action": "call",
+                        "amount": 0.03,
                         "cards": []
                     },
                     {
                         "phase": "PRE-FLOP",
-                        "player": "titus&mus",
-                        "action": "fold",
+                        "player": "ghanjaman007",
+                        "action": "check",
                         "amount": null,
                         "cards": []
                     },
                     {
                         "phase": "FLOP",
-                        "player": "doryann26",
+                        "player": "Mauuu_bg",
                         "action": "check",
                         "amount": null,
                         "cards": [
-                            "Ad",
-                            "4h",
-                            "Kc"
+                            "4s",
+                            "Ac",
+                            "5c"
                         ]
                     },
                     {
                         "phase": "FLOP",
-                        "player": "sonieta1991",
+                        "player": "ghanjaman007",
                         "action": "check",
                         "amount": null,
                         "cards": [
-                            "Ad",
-                            "4h",
-                            "Kc"
+                            "4s",
+                            "Ac",
+                            "5c"
                         ]
                     },
                     {
-                        "phase": "TURN",
-                        "player": "doryann26",
+                        "phase": "FLOP",
+                        "player": "camamo26",
                         "action": "check",
                         "amount": null,
                         "cards": [
-                            "Ad",
-                            "4h",
-                            "Kc"
+                            "4s",
+                            "Ac",
+                            "5c"
                         ]
                     },
                     {
-                        "phase": "TURN",
-                        "player": "sonieta1991",
+                        "phase": "FLOP",
+                        "player": "SachS1970",
                         "action": "bet",
-                        "amount": 0.13,
+                        "amount": 0.24,
                         "cards": [
-                            "Ad",
-                            "4h",
-                            "Kc"
+                            "4s",
+                            "Ac",
+                            "5c"
                         ]
                     },
                     {
-                        "phase": "TURN",
-                        "player": "doryann26",
+                        "phase": "FLOP",
+                        "player": "CHTIDAN59",
+                        "action": "call",
+                        "amount": 0.24,
+                        "cards": [
+                            "4s",
+                            "Ac",
+                            "5c"
+                        ]
+                    },
+                    {
+                        "phase": "FLOP",
+                        "player": "Mauuu_bg",
+                        "action": "call",
+                        "amount": 0.24,
+                        "cards": [
+                            "4s",
+                            "Ac",
+                            "5c"
+                        ]
+                    },
+                    {
+                        "phase": "FLOP",
+                        "player": "ghanjaman007",
                         "action": "fold",
                         "amount": null,
                         "cards": [
-                            "Ad",
-                            "4h",
-                            "Kc"
+                            "4s",
+                            "Ac",
+                            "5c"
+                        ]
+                    },
+                    {
+                        "phase": "FLOP",
+                        "player": "camamo26",
+                        "action": "fold",
+                        "amount": null,
+                        "cards": [
+                            "4s",
+                            "Ac",
+                            "5c"
+                        ]
+                    },
+                    {
+                        "phase": "TURN",
+                        "player": "Mauuu_bg",
+                        "action": "check",
+                        "amount": null,
+                        "cards": [
+                            "4s",
+                            "Ac",
+                            "5c",
+                            "7c"
+                        ]
+                    },
+                    {
+                        "phase": "TURN",
+                        "player": "SachS1970",
+                        "action": "check",
+                        "amount": null,
+                        "cards": [
+                            "4s",
+                            "Ac",
+                            "5c",
+                            "7c"
+                        ]
+                    },
+                    {
+                        "phase": "TURN",
+                        "player": "CHTIDAN59",
+                        "action": "bet",
+                        "amount": 0.46,
+                        "cards": [
+                            "4s",
+                            "Ac",
+                            "5c",
+                            "7c"
+                        ]
+                    },
+                    {
+                        "phase": "TURN",
+                        "player": "Mauuu_bg",
+                        "action": "fold",
+                        "amount": null,
+                        "cards": [
+                            "4s",
+                            "Ac",
+                            "5c",
+                            "7c"
+                        ]
+                    },
+                    {
+                        "phase": "TURN",
+                        "player": "SachS1970",
+                        "action": "fold",
+                        "amount": null,
+                        "cards": [
+                            "4s",
+                            "Ac",
+                            "5c",
+                            "7c"
                         ]
                     }
                 ],
@@ -176,51 +270,56 @@ export class MockHistoryParserApiClient implements HistoryParserRepository {
                         },
                         {
                             "seat": 2,
-                            "name": "Viriato525",
+                            "name": "Mauuu_bg",
                             "details": "",
                             "amount": 0
                         },
                         {
                             "seat": 3,
-                            "name": "titus&mus",
+                            "name": "ghanjaman007",
                             "details": "",
                             "amount": 0
                         },
                         {
                             "seat": 4,
-                            "name": "doryann26",
+                            "name": "camamo26",
                             "details": "",
                             "amount": 0
                         },
                         {
                             "seat": 5,
-                            "name": "sonieta1991",
-                            "details": "recaudó (0.26 €)",
-                            "amount": 0.26
+                            "name": "SachS1970",
+                            "details": "",
+                            "amount": 0
                         },
                         {
                             "seat": 6,
-                            "name": "Ruben1990869",
-                            "details": "",
-                            "amount": 0
+                            "name": "CHTIDAN59",
+                            "details": "recaudó (0.92 €)",
+                            "amount": 0.92
                         }
                     ],
-                    "pot": 0.27,
-                    "rake": 0.01
+                    "pot": 0.97,
+                    "rake": 0.05
                 },
                 "showdown": null,
                 "finish_before_showdown": [
                     {
-                        "player": "sonieta1991",
+                        "player": "CHTIDAN59",
                         "action": "uncalled_bet_return",
-                        "amount": 0.13
+                        "amount": 0.46
+                    },
+                    {
+                        "player": "CHTIDAN59",
+                        "action": "wins_pot",
+                        "amount": 0.92
                     }
                 ]
             },
             {
                 "general_info": {
-                    "hand_id": "254310893687",
-                    "datetime": "11-01-2025 11:36:52",
+                    "hand_id": "254717130528",
+                    "datetime": "05-02-2025 12:29:09",
                     "game_type": "zoom",
                     "currency": "€",
                     "small_blind": 0.02,
@@ -231,39 +330,40 @@ export class MockHistoryParserApiClient implements HistoryParserRepository {
                 "players": [
                     {
                         "seat": 1,
-                        "name": "Viriato525",
-                        "stack": 6.05
+                        "name": "ghanjaman007",
+                        "stack": 5.78
                     },
                     {
                         "seat": 2,
                         "name": "Nicoromero87",
-                        "stack": 5.16
+                        "stack": 5.93
                     },
                     {
                         "seat": 3,
-                        "name": "frasein567",
-                        "stack": 4.29
+                        "name": "GhostGambler1",
+                        "stack": 5.3
                     },
                     {
                         "seat": 4,
-                        "name": "sonieta1991",
-                        "stack": 7.82
+                        "name": "ciocobel",
+                        "stack": 4.82
                     },
                     {
                         "seat": 5,
-                        "name": "ciceron0077",
-                        "stack": 5.43
+                        "name": "imanol119",
+                        "stack": 1.31
                     },
                     {
                         "seat": 6,
-                        "name": "doryann26",
-                        "stack": 3.06
+                        "name": "Mauuu_bg",
+                        "stack": 4.64
                     }
                 ],
-                "hero_hand": [
-                    "2d",
-                    "Kh"
+                "hero_cards": [
+                    "Kc",
+                    "Qc"
                 ],
+                "hero_name": 'Nicoromero87',
                 "actions": [
                     {
                         "phase": "PRE-FLOP",
@@ -274,35 +374,35 @@ export class MockHistoryParserApiClient implements HistoryParserRepository {
                     },
                     {
                         "phase": "PRE-FLOP",
-                        "player": "frasein567",
+                        "player": "GhostGambler1",
                         "action": "big_blind",
                         "amount": 0.05,
                         "cards": []
                     },
                     {
                         "phase": "PRE-FLOP",
-                        "player": "sonieta1991",
+                        "player": "ciocobel",
                         "action": "raise",
-                        "amount": null,
+                        "amount": 0.11,
                         "cards": []
                     },
                     {
                         "phase": "PRE-FLOP",
-                        "player": "ciceron0077",
+                        "player": "imanol119",
+                        "action": "call",
+                        "amount": 0.11,
+                        "cards": []
+                    },
+                    {
+                        "phase": "PRE-FLOP",
+                        "player": "Mauuu_bg",
                         "action": "fold",
                         "amount": null,
                         "cards": []
                     },
                     {
                         "phase": "PRE-FLOP",
-                        "player": "doryann26",
-                        "action": "raise",
-                        "amount": null,
-                        "cards": []
-                    },
-                    {
-                        "phase": "PRE-FLOP",
-                        "player": "Viriato525",
+                        "player": "ghanjaman007",
                         "action": "fold",
                         "amount": null,
                         "cards": []
@@ -310,20 +410,27 @@ export class MockHistoryParserApiClient implements HistoryParserRepository {
                     {
                         "phase": "PRE-FLOP",
                         "player": "Nicoromero87",
+                        "action": "raise",
+                        "amount": 0.64,
+                        "cards": []
+                    },
+                    {
+                        "phase": "PRE-FLOP",
+                        "player": "GhostGambler1",
                         "action": "fold",
                         "amount": null,
                         "cards": []
                     },
                     {
                         "phase": "PRE-FLOP",
-                        "player": "frasein567",
+                        "player": "ciocobel",
                         "action": "fold",
                         "amount": null,
                         "cards": []
                     },
                     {
                         "phase": "PRE-FLOP",
-                        "player": "sonieta1991",
+                        "player": "imanol119",
                         "action": "fold",
                         "amount": null,
                         "cards": []
@@ -333,50 +440,55 @@ export class MockHistoryParserApiClient implements HistoryParserRepository {
                     "player_actions": [
                         {
                             "seat": 1,
-                            "name": "Viriato525",
+                            "name": "ghanjaman007",
                             "details": "",
                             "amount": 0
                         },
                         {
                             "seat": 2,
                             "name": "Nicoromero87",
-                            "details": "",
-                            "amount": 0
+                            "details": "(ciega pequeña) recaudó (0.38 €)",
+                            "amount": 0.38
                         },
                         {
                             "seat": 3,
-                            "name": "frasein567",
+                            "name": "GhostGambler1",
                             "details": "",
                             "amount": 0
                         },
                         {
                             "seat": 4,
-                            "name": "sonieta1991",
+                            "name": "ciocobel",
                             "details": "",
                             "amount": 0
                         },
                         {
                             "seat": 5,
-                            "name": "ciceron0077",
+                            "name": "imanol119",
                             "details": "",
                             "amount": 0
                         },
                         {
                             "seat": 6,
-                            "name": "doryann26",
-                            "details": "recaudó (0.31 €)",
-                            "amount": 0.31
+                            "name": "Mauuu_bg",
+                            "details": "",
+                            "amount": 0
                         }
                     ],
-                    "pot": 0.31,
+                    "pot": 0.38,
                     "rake": 0.0
                 },
                 "showdown": null,
                 "finish_before_showdown": [
                     {
-                        "player": "doryann26",
+                        "player": "Nicoromero87",
                         "action": "uncalled_bet_return",
-                        "amount": 0.33
+                        "amount": 0.53
+                    },
+                    {
+                        "player": "Nicoromero87",
+                        "action": "wins_pot",
+                        "amount": 0.38
                     }
                 ]
             }

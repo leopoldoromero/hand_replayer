@@ -36,6 +36,10 @@ function handDtoToDomainMapper(handDto: HandDto): Hand {
         actions: handDto.actions?.map(actionDtoToDomainMapper),
         players: handDto.players?.map(playerDtoToDomain),
         room: handDto.general_info.room as PokerRooms, 
+        hero: {
+            nick: handDto.hero_name,
+            cards: handDto.hero_cards,
+        }
     }
 }
 

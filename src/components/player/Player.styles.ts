@@ -10,41 +10,48 @@ const positionBySeat = (seat: number) => {
         5: "bottom: 50%; left: 18%; transform: translate(-50%, 50%);",
         6: "top: 30%; left: 18%; transform: translate(-50%, -50%);",
     };
-
     return stylesBySeat[seat] || ""; 
+};
+
+const betPositionBySeat = (seat: number) => {
+    const betCoonatinerStyles: Record<number, string> = {
+        1: "top: 100%;",
+        2: "top: 40%; right: 115%;",
+        3: "right: 115%;",
+        4: "bottom: 110%;",
+        5: "left: 115%;",
+        6: "top: 40%; left: 115%",
+    }
+
+    return betCoonatinerStyles[seat] || ""; 
 };
 
 export const StyledPlayerContainer = styled.div<{$seat: number}>`
     position: absolute;
-    min-width: 100px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    max-width: 90px;
     ${({ $seat }) => positionBySeat($seat)}
 `;
 
-export const StyledPlayerInfoContainer = styled.div`
+export const StyledPlayerInfoContainer = styled.div<{$isHero: boolean}>`
     position: relative;
     width: 100%;
-    margin-top: -30%;
+    margin-top: ${(p) => (p.$isHero ? '-15%' : '-40%')};
     padding: 5px;
-    z-index: 3;
+    z-index: ${(p) => (p.theme.zIndex.low)};
     background: ${(p) => (p.theme.color.black)};
-    border: 2px solid white;
+    border: 2px solid ${(p) => (p.theme.color.white)};
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-size: 14px;
 `;
 
-/*
-.seat1 { top: 18%; left: 50%; transform: translate(-50%, -50%); }
-    .seat2 { top: 30%; right: 5%; transform: translate(50%, -50%); }
-    .seat3 { bottom: 30%; right: 5%; transform: translate(50%, 50%); }
-    .seat4 { bottom: 20%; left: 50%; transform: translate(-50%, 50%); }
-    .seat5 { bottom: 30%; left: 5%; transform: translate(-50%, 50%); }
-    .seat6 { top: 30%; left: 5%; transform: translate(-50%, -50%); }
-*/
+export const StyledPlayerBetConatiner = styled.div<{$seat: number}>`
+    position: absolute;
+    ${({ $seat }) => betPositionBySeat($seat)}
+`;

@@ -45,7 +45,8 @@ export interface HandDto {
     room: string;
     },
     players: Array<PlayerDto>,
-    hero_hand: Array<string>,
+    hero_cards: Array<string>,
+    hero_name: string;
     actions: Array<ActionDto>,
     summary: SummaryDto,
     showdown: ShowdownDto | null;
