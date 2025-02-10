@@ -2,8 +2,8 @@
 import styled from "styled-components";
 
 export const StyledTable = styled.div`
-    width: 300px;
-    height: 520px;
+    width: 280px;
+    height: 480px;
     display: flex;
     justify-content: center;
     align-items: center;

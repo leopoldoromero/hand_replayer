@@ -13,7 +13,6 @@ const TableComponent: React.FC<TableProps> = ({pot, cards, currency, room}) => (
     <StyledTable>
         <Block display="flex" direction="column" justify="flex-end" height="50%">
             <Block display="flex" direction="column" align="center" mb="m">
-                <Text as="h4">{room}</Text>
                 {
                     pot ? (
                         <Text>Pot: {`${pot} ${currency}`}</Text>
@@ -22,7 +21,7 @@ const TableComponent: React.FC<TableProps> = ({pot, cards, currency, room}) => (
             </Block>
             {
                 cards?.length  ? (
-                    <Block display="flex" gap="5px">
+                    <Block display="flex" gap="2px">
                     {
                         cards.map((card, i) => (
                             <CardComponent card={card} key={i}/>

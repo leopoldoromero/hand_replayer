@@ -16,7 +16,7 @@ interface PlayerProps {
 const PlayerComponent: React.FC<PlayerProps> = ({nick, stack, currency, cards, seat, amount, isHero}) => (
       <StyledPlayerContainer $seat={seat}>
         <Block display="flex" direction="column" justify="center" align="center">
-          <Block display="flex" gap="2px">
+          <Block display="flex">
             {
                 cards?.map((card, i) => (
                     <CardComponent card={card} key={i} showSliced={!isHero}/>

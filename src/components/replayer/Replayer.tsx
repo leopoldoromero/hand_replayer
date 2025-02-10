@@ -85,7 +85,6 @@ const gameReducer = (state: GameState, action: ChangeStateAction): GameState => 
         case "PREV_ACTION":
             return action.prevState;
         case "HIDE_ACTION":
-            console.log('HIDDING')
             return {
                 ...state,
                 playersActions: state.playersActions.map((player) => ({
@@ -111,7 +110,7 @@ const gameReducer = (state: GameState, action: ChangeStateAction): GameState => 
     }
 };
 
-export default function GameTable() {
+export default function Replayer() {
     const { currentHand, nextHand } = useHandContext();
     const initialState: GameState = {
         pot: 0,
@@ -149,7 +148,6 @@ export default function GameTable() {
     }, [currentHand, state.playersActions?.length])
 
     useEffect(() => {
-        console.log('HANDLING', currentHand)
         if (!state.isPlaying || !currentHand) return;
 
         if (state.actionIndex >= currentHand.actions.length) {
@@ -177,19 +175,33 @@ export default function GameTable() {
     if (!currentHand) return <p>Loading...</p>;
 
     return (
-        <Block display="flex" justify="center" align="center" height="100%">
+        <Block display="flex" justify="center" align="center" height="100%" position="relative" customStyles={{ maxWidth: '400px'}}>
             {state.playersActions.map((player) => (
                 <PlayerComponent
                     key={player.name}
                     nick={player.showAction && player.action ? player.action : player.name}
                     stack={formatAmount(player.stack, currentHand.bb)}
                     currency={state?.showInBigBlinds ? 'BB' : currentHand?.currency}
-                    cards={player.name === state.heroName ? state.heroCards : ["", ""]} 
+                    cards={player.name === state.heroName ? state.heroCards : ["Ks", "Qh"]} 
                     seat={currentHand.players.find((p) => p.name === player.name)?.seat || 1}
                     amount={player.amount ? formatAmount(player.amount, currentHand.bb) : null}
                     isHero={player.name === state.heroName}
                 />
             ))}
+            {
+                state.playersActions?.slice(0,3).map((player, i) => (
+                    <PlayerComponent
+                        key={player.name}
+                        nick={player.showAction && player.action ? player.action : player.name}
+                        stack={formatAmount(player.stack, currentHand.bb)}
+                        currency={state?.showInBigBlinds ? 'BB' : currentHand?.currency}
+                        cards={player.name === state.heroName ? state.heroCards : ["Ks", "Qh"]} 
+                        seat={i + 7}
+                        amount={player.amount ? formatAmount(player.amount, currentHand.bb) : null}
+                        isHero={player.name === state.heroName}
+                    />
+                ))
+            }
 
             <TableComponent 
             pot={formatAmount(state.pot, currentHand?.bb)} 
@@ -220,7 +232,7 @@ export default function GameTable() {
                     <Icon icon="forward" size="s" color="white"/>
                 </StyledButton>
                 <StyledButton onClick={() => dispatch({ type: "TOGGLE_BIG_BLINDS" })}>
-                    {state.showInBigBlinds ? "Show €" : "Show BB"}
+                    {state.showInBigBlinds ? `Show in ${currentHand?.currency}` : "Show in BB"}
                 </StyledButton>
                 <StyledButton onClick={() => handleNextHand()}>
                     <Icon icon="next" size="s" color="white"/>

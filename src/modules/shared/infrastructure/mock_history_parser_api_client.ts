@@ -117,9 +117,9 @@ export class MockHistoryParserApiClient implements HistoryParserRepository {
                         "action": "check",
                         "amount": null,
                         "cards": [
-                            "4s",
+                            "Ks",
                             "Ac",
-                            "5c"
+                            "Qc"
                         ]
                     },
                     {
@@ -504,6 +504,7 @@ export class MockHistoryParserApiClient implements HistoryParserRepository {
     }
 
     getMockData(): Array<Hand> {
+        console.log('EXECUTING.-...')
         return historyParserApiToDomainHand(this.mockResponse)
     }
 }
