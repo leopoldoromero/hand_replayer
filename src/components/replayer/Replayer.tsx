@@ -186,23 +186,9 @@ export default function Replayer() {
                     seat={currentHand.players.find((p) => p.name === player.name)?.seat || 1}
                     amount={player.amount ? formatAmount(player.amount, currentHand.bb) : null}
                     isHero={player.name === state.heroName}
+                    totalSeats={state.playersActions?.length}
                 />
             ))}
-            {
-                state.playersActions?.slice(0,3).map((player, i) => (
-                    <PlayerComponent
-                        key={player.name}
-                        nick={player.showAction && player.action ? player.action : player.name}
-                        stack={formatAmount(player.stack, currentHand.bb)}
-                        currency={state?.showInBigBlinds ? 'BB' : currentHand?.currency}
-                        cards={player.name === state.heroName ? state.heroCards : ["Ks", "Qh"]} 
-                        seat={i + 7}
-                        amount={player.amount ? formatAmount(player.amount, currentHand.bb) : null}
-                        isHero={player.name === state.heroName}
-                    />
-                ))
-            }
-
             <TableComponent 
             pot={formatAmount(state.pot, currentHand?.bb)} 
             currency={state?.showInBigBlinds ? 'BB' : currentHand?.currency}

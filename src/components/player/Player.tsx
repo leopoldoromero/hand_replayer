@@ -11,10 +11,12 @@ interface PlayerProps {
     seat: number;
     amount: number | null;
     isHero: boolean;
+    totalSeats: number;
 }
 
-const PlayerComponent: React.FC<PlayerProps> = ({nick, stack, currency, cards, seat, amount, isHero}) => (
-      <StyledPlayerContainer $seat={seat}>
+const SIX_MAX_TOTAL_SEATS = 6;
+const PlayerComponent: React.FC<PlayerProps> = ({nick, stack, currency, cards, seat, amount, isHero, totalSeats}) => (
+      <StyledPlayerContainer $seat={seat} $isFullRing={totalSeats > SIX_MAX_TOTAL_SEATS}>
         <Block display="flex" direction="column" justify="center" align="center">
           <Block display="flex">
             {
@@ -28,7 +30,7 @@ const PlayerComponent: React.FC<PlayerProps> = ({nick, stack, currency, cards, s
             <Text fontSize="tiny" weight="bold">{`${stack.toFixed(2)} ${currency}`}</Text>
           </StyledPlayerInfoContainer>
         </Block>
-        <StyledPlayerBetConatiner $seat={seat}>
+        <StyledPlayerBetConatiner $seat={seat} $isFullRing={totalSeats > SIX_MAX_TOTAL_SEATS}>
           {
             amount && (
               <Text fontSize="small">{amount}{currency}</Text>

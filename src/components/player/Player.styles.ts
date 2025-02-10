@@ -1,8 +1,8 @@
 'use client'
 import styled from "styled-components";
 
-const positionBySeat = (seat: number) => {
-    const stylesBySeat: Record<number, string> = {
+const positionBySeat = (seat: number, isFullRing: boolean) => {
+    const fullRingStylesBySeat: Record<number, string> = {
         1: "top: 10%; right: 15%;",
         2: "top: 35%; right: 5%; transform: translate(50%, -50%);",
         3: "top: 40%; right: 5%; transform: translate(50%, 50%);",
@@ -13,11 +13,19 @@ const positionBySeat = (seat: number) => {
         8: "top: 35%; right: 95%; transform: translate(50%, -50%);",
         9: "top: 15%; left: 0;",
     };
-    return stylesBySeat[seat] || ""; 
+    const sixMaxStylesBySeat: Record<number, string> = {
+        1: "top: 10%; right: 40%;",
+        2: "top: 35%; right: 5%; transform: translate(50%, -50%);",
+        3: "top: 45%; right: 5%; transform: translate(50%, 50%);",
+        4: "bottom: 12%; left: 40%;",
+        5: "top: 45%; left: 5%; transform: translate(-50%, 50%);",
+        6: "top: 35%; left: 5%; transform: translate(-50%, -50%);",
+    };
+    return isFullRing ? fullRingStylesBySeat[seat]  : sixMaxStylesBySeat[seat]; 
 };
 
-const betPositionBySeat = (seat: number) => {
-    const betContinerStyles: Record<number, string> = {
+const betPositionBySeat = (seat: number, isFullRing: boolean) => {
+    const fullRingStyles: Record<number, string> = {
         1: "top: 130%; right: 50%; transform: translate(50%, -50%);",
         2: "top: 70%; right: 100%; transform: translate(-50%, -50%);",
         3: "top: 70%; right: 100%; transform: translate(-50%, -50%);",
@@ -28,18 +36,26 @@ const betPositionBySeat = (seat: number) => {
         8: "top: 70%; left: 100%; transform: translate(50%, -50%);",
         9: "top: 130%; left: 70%; transform: translate(50%, -50%);",
     }
+    const sixMaxStyles: Record<number, string> = {
+        1: "top: 95%; right: 50%; transform: translate(50%, 50%);",
+        2: "top: 70%; right: 95%; transform: translate(-50%, -50%);",
+        3: "top: 70%; right: 95%; transform: translate(-50%, -50%);",
+        4: "right: 50%; bottom: 100%; transform: translate(50%, -50%);",
+        5: "top: 70%; left: 95%; transform: translate(50%, -50%);",
+        6: "top: 70%; left: 95%; transform: translate(50%, -50%);",
+    };
 
-    return betContinerStyles[seat] || ""; 
+    return isFullRing ? fullRingStyles[seat] : sixMaxStyles[seat]; 
 };
 
-export const StyledPlayerContainer = styled.div<{$seat: number}>`
+export const StyledPlayerContainer = styled.div<{$seat: number; $isFullRing: boolean}>`
     position: absolute;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     max-width: 90px;
-    ${({ $seat }) => positionBySeat($seat)}
+    ${({ $seat, $isFullRing }) => positionBySeat($seat, $isFullRing)}
 `;
 
 export const StyledPlayerInfoContainer = styled.div<{$isHero: boolean}>`
@@ -58,7 +74,7 @@ export const StyledPlayerInfoContainer = styled.div<{$isHero: boolean}>`
     text-align: center;
 `;
 
-export const StyledPlayerBetConatiner = styled.div<{$seat: number}>`
+export const StyledPlayerBetConatiner = styled.div<{$seat: number; $isFullRing: boolean}>`
     position: absolute;
-    ${({ $seat }) => betPositionBySeat($seat)}
+    ${({ $seat, $isFullRing }) => betPositionBySeat($seat, $isFullRing)}
 `;
