@@ -1,7 +1,7 @@
 import Block from "../block/Block";
 import Icon from "../icon/Icon";
 import Text from "../text/Text";
-import { StyledHeader } from "./HeaderStyles";
+import { StyledHeader, StyledTextLink } from "./HeaderStyles";
 
 const HeaderComponent = () => (
     <StyledHeader>
@@ -14,7 +14,9 @@ const HeaderComponent = () => (
         pl="s"
         width="100%"
         >
-            <Text isUppercase>Replayer</Text>
+            <StyledTextLink href={`/`}>
+                <Text isUppercase >Replayer</Text>
+            </StyledTextLink>
             <Icon 
             icon="next" 
             size="xs" 

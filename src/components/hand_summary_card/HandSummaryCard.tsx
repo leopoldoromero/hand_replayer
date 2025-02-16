@@ -15,18 +15,19 @@ interface Props {
 }
 
 const HandSummaryCard: React.FC<Props> = ({
-     cards, 
-     heroPosition, 
-     potType, 
-     lastPhaseHeroFolded, 
-     gameType = '6-max', 
-     onClickHandler 
+    handId,
+    cards, 
+    heroPosition, 
+    potType, 
+    lastPhaseHeroFolded, 
+    gameType = '6-max', 
+    onClickHandler 
     }) => {
     const isSixMax = gameType === '6-max'
     const position = positionNumberToName(heroPosition, isSixMax);
 
     return (
-        <StyledHandSummaryContainer href={`/replay`} onClick={onClickHandler}>
+        <StyledHandSummaryContainer href={`/hands/${handId}`} onClick={onClickHandler}>
              {
                 cards?.length  ? (
                     <Block display="flex" justify="center">

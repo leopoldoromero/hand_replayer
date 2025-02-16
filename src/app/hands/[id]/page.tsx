@@ -3,7 +3,11 @@ import HandInfoComponent from "@/components/hand_info/HandInfo";
 import Replayer from "@/components/replayer/Replayer";
 
 
-export default function HandReplay() {
+export default function HandReplay({
+    params,
+  }: {
+    params: { id: string };
+  }) {
     return (
         <Block 
         display="flex" 
@@ -13,7 +17,7 @@ export default function HandReplay() {
         position="relative"
         >
             <HandInfoComponent />
-            <Replayer  />
+            <Replayer />
         </Block>
     );
     }
