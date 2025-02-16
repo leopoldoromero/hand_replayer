@@ -11,18 +11,16 @@ export class HistoryParserApiClient implements HistoryParserRepository {
         try {
             const formData = new FormData();
             formData.append("file", file); 
-
-            const response = await axios.post<File, AxiosResponse<HistoryParserApiResponseDto>>(`${this.API_URL}/api/v1/upload`, formData, {
+            const response = await axios.post<File, AxiosResponse<HistoryParserApiResponseDto>>(`${this.API_URL}/api/v1/history`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
-            });
-
+            });            
             const hands: Array<Hand> = historyParserApiToDomainHand(response.data);
 
             return hands;
         } catch (error: unknown) {
-            console.error("Error uploading file:", error);
+            console.error("Error uploading file:", (error as AxiosError).response?.data);
             throw new Error((error as AxiosError).message || "Failed to parse hand history.");
         }
     }

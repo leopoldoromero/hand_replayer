@@ -54,6 +54,7 @@ export class MockHistoryParserApiClient implements HistoryParserRepository {
                     "6s"
                 ],
                 "hero_name": 'Nicoromero87',
+                "hero_seat": 1,
                 "actions": [
                     {
                         "phase": "PRE-FLOP",
@@ -300,7 +301,19 @@ export class MockHistoryParserApiClient implements HistoryParserRepository {
                         }
                     ],
                     "pot": 0.97,
-                    "rake": 0.05
+                    "rake": 0.05,
+                    "winner": {
+                        name: 'Fiel.8504200',
+                        seat: 6,
+                        cards: [],
+                        amount: 0.12,
+                        currency: '€'
+                      },
+                      "looser": null,
+                      "community_cards": [],
+                      "showdown": false,
+                      "last_phase_hero_folded": 'PRE_FLOP',
+                      "pot_type": 'OPEN_RAISED'
                 },
                 "showdown": null,
                 "finish_before_showdown": [
@@ -364,6 +377,7 @@ export class MockHistoryParserApiClient implements HistoryParserRepository {
                     "Qc"
                 ],
                 "hero_name": 'Nicoromero87',
+                "hero_seat": 2,
                 "actions": [
                     {
                         "phase": "PRE-FLOP",
@@ -476,7 +490,19 @@ export class MockHistoryParserApiClient implements HistoryParserRepository {
                         }
                     ],
                     "pot": 0.38,
-                    "rake": 0.0
+                    "rake": 0.0,
+                    "winner": {
+                        name: 'Fiel.8504200',
+                        seat: 6,
+                        cards: [],
+                        amount: 0.12,
+                        currency: '€'
+                      },
+                      "looser": null,
+                      "community_cards": [],
+                      "showdown": false,
+                      "last_phase_hero_folded": 'PRE_FLOP',
+                      "pot_type": 'OPEN_RAISED'
                 },
                 "showdown": null,
                 "finish_before_showdown": [

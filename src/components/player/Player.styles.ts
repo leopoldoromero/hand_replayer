@@ -78,3 +78,21 @@ export const StyledPlayerBetConatiner = styled.div<{$seat: number; $isFullRing: 
     position: absolute;
     ${({ $seat, $isFullRing }) => betPositionBySeat($seat, $isFullRing)}
 `;
+
+export const StyledDealerButton = styled.div`
+    position: absolute;
+    top: 140%;
+    left: 20%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    background: red;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    box-shadow: 0 0 10px rgba(0, 0, 255, 0.5);
+`;

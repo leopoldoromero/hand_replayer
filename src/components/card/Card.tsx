@@ -3,14 +3,19 @@ import { StyledBottomContainer, StyledCard, StyledCardText, StyledTopContainer }
 interface CardProps {
     card: string;
     showSliced?: boolean;
+    bigSize?: boolean;
 }
 
 type Suits = {[key in string]: string}
 
-const CardComponent: React.FC<CardProps> = ({ card, showSliced }) => {
+const CardComponent: React.FC<CardProps> = ({ card, showSliced, bigSize }) => {
     if (card == '') {
         return (
-            <StyledCard $bgColor='grey' $showSliced={showSliced}></StyledCard>
+            <StyledCard 
+            $bgColor='grey' 
+            $showSliced={showSliced}
+            $bigSize={bigSize}
+            ></StyledCard>
         )
     }
     const cardElements: Array<string> = card.split('')
@@ -29,12 +34,16 @@ const CardComponent: React.FC<CardProps> = ({ card, showSliced }) => {
         h: "red" 
     }
     return (
-        <StyledCard $bgColor={bgColorBySuit[suit]} $showSliced={showSliced}>
-            <StyledTopContainer>
+        <StyledCard 
+        $bgColor={bgColorBySuit[suit]} 
+        $showSliced={showSliced}
+        $bigSize={bigSize}
+        >
+            <StyledTopContainer $bigSize={bigSize}>
                 <StyledCardText >{value}</StyledCardText>
-                <StyledCardText $isSuit>{suitsSimbols[suit]}</StyledCardText>
+                <StyledCardText $isSuit $bigSize={bigSize}>{suitsSimbols[suit]}</StyledCardText>
             </StyledTopContainer>
-            <StyledBottomContainer>
+            <StyledBottomContainer $bigSize={bigSize}>
                 <StyledCardText>{value}</StyledCardText>
             </StyledBottomContainer>
         </StyledCard>

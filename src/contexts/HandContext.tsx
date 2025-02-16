@@ -1,10 +1,10 @@
 'use client';
 import { Hand } from '@/modules/hand/domain/hand';
 import { LocalStorageRepository } from '@/modules/shared/infrastructure/local_storage.repository';
-import { MockHistoryParserApiClient } from '@/modules/shared/infrastructure/mock_history_parser_api_client';
 import { createContext, useState, useContext, useEffect } from 'react';
 interface HandContextState {
     currentHandIdx: number;
+    setCurrentHandIdx: (idx: number) => void;
     hands: Array<Hand>;
     setHands: (newHands: Array<Hand>) => void;
     nextHand: () => void;
@@ -14,6 +14,7 @@ interface HandContextState {
 
 export const HandContext = createContext<HandContextState>({
     currentHandIdx: 0,
+    setCurrentHandIdx: () => {},
     hands: [],
     setHands: () => {},
     nextHand: () => {},
@@ -38,17 +39,19 @@ export function HandContextProvider({ children }: { children: React.ReactNode })
       }
     };
 
+    const loadHand = (handId: string) => {
+      const idx = hands?.findIndex((hand) => hand.id === handId);
+      if (idx > -1) {
+        setCurrentHandIdx(idx)
+      }
+      return hands[idx]
+    }
+
     useEffect(() => {
-      let handHistory = null;
       const existingHistory = localStorageRepository.loadHandHistory('handHistory', true);
       if (existingHistory) {
-        handHistory = existingHistory;
-      } else {
-        const mockParser = new MockHistoryParserApiClient()
-        handHistory = mockParser.getMockData();
-        localStorageRepository.saveHandHistory(handHistory, 'handHistory', true);
-      }
-      setHands(handHistory)
+        setHands(existingHistory)
+      } 
     }, [])
   
     return (
@@ -58,6 +61,7 @@ export function HandContextProvider({ children }: { children: React.ReactNode })
           setHands, 
           nextHand, 
           prevHand, 
+          setCurrentHandIdx,
           currentHand: hands[currentHandIdx],
       }}>
         {children}

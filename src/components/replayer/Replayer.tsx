@@ -5,9 +5,8 @@ import PlayerComponent from "@/components/player/Player";
 import TableComponent from "@/components/table/Table";
 import { useHandContext } from "@/contexts/HandContext";
 import { Action } from "@/modules/hand/domain/action";
-import { StyledButton } from "./Replayer.styles";
-import Icon from "../icon/Icon";
 import { Hand } from "@/modules/hand/domain/hand";
+import ReplayerControls from "../replayer_controls/ReplayerControls";
 
 interface GameState {
     pot: number;
@@ -24,17 +23,19 @@ interface GameState {
     actionIndex: number;
     heroCards: Array<string>;
     heroName: string;
+    showKnownCards: boolean;
 }
 
 type ChangeStateAction =
     | { type: "LOAD_STATE", hand: Hand }
     | { type: "PLAY" }
     | { type: "PAUSE" }
-    | { type: "NEXT_ACTION"; action: Action }
+    | { type: "NEXT_ACTION"; action: Action; lastActionIdx: number }
     | { type: "HIDE_ACTION"}
-    | { type: "PREV_ACTION"; prevState: GameState }
+    | { type: "PREV_ACTION"; currentHand: Hand}
     | { type: "TOGGLE_BIG_BLINDS" }
-    | { type: "NEXT_HAND" };
+    | { type: "NEXT_HAND" }
+    | { type: "PREV_HAND" };
 
 const gameReducer = (state: GameState, action: ChangeStateAction): GameState => {
     switch (action.type) {
@@ -55,7 +56,8 @@ const gameReducer = (state: GameState, action: ChangeStateAction): GameState => 
         case "PAUSE":
             return { ...state, isPlaying: false };
         case "NEXT_ACTION":
-            const { action: currentAction } = action;
+            const { action: currentAction, lastActionIdx } = action;
+            const isShowdown = state.actionIndex  >= lastActionIdx - 1;
             const isNewRound = state.playersActions.length > 0 &&
         state.playersActions.some(player => player.action !== null) &&
         (state.actionIndex === 0 || state.board.length !== (currentAction.cards?.length || state.board.length));
@@ -70,7 +72,7 @@ const gameReducer = (state: GameState, action: ChangeStateAction): GameState => 
                             action: currentAction.action,
                             amount: currentAction.amount 
                                 ? (player.amount || 0) + currentAction.amount 
-                                : null,
+                                : player.amount, // TODO: This was changed from null, pending to test
                             showAction: true,
                         }
                         : {
@@ -81,9 +83,29 @@ const gameReducer = (state: GameState, action: ChangeStateAction): GameState => 
                 ),
                 pot: currentAction.amount ? state.pot + currentAction.amount : state.pot,
                 board: currentAction.cards?.length ? currentAction.cards : state.board,
+                showKnownCards: isShowdown,
             };
-        case "PREV_ACTION":
-            return action.prevState;
+        case "PREV_ACTION": 
+            if (state.actionIndex === 0) return state;
+            const { currentHand } = action;
+            const prevAction = currentHand.actions[state.actionIndex - 1];
+            return {
+                ...state,
+                actionIndex: state.actionIndex - 1,
+                playersActions: state.playersActions.map((player) =>
+                    player.name === prevAction.player
+                        ? {
+                            ...player,
+                            stack: prevAction.amount ? player.stack + prevAction.amount : player.stack, // Undo stack deduction
+                            action: null, 
+                            amount: null,
+                            showAction: false,
+                        }
+                        : player
+                ),
+                pot: prevAction.amount ? state.pot - prevAction.amount : state.pot,
+                board: prevAction.cards, 
+            };
         case "HIDE_ACTION":
             return {
                 ...state,
@@ -94,6 +116,19 @@ const gameReducer = (state: GameState, action: ChangeStateAction): GameState => 
             };
         case "TOGGLE_BIG_BLINDS":
             return { ...state, showInBigBlinds: !state.showInBigBlinds };
+        case "PREV_HAND":
+            return {
+                pot: 0,
+                isPlaying: false,
+                showInBigBlinds: false,
+                board: [],
+                playersActions: [],
+                actionIndex: 0,
+                heroCards: [],
+                heroName: '',
+                showKnownCards: false
+            
+            }
         case "NEXT_HAND":
             return {
                 pot: 0,
@@ -104,14 +139,16 @@ const gameReducer = (state: GameState, action: ChangeStateAction): GameState => 
                 actionIndex: 0,
                 heroCards: [],
                 heroName: '',
+                showKnownCards: false
             }
         default:
             return state;
     }
 };
 
-export default function Replayer() {
-    const { currentHand, nextHand } = useHandContext();
+const Replayer = () => {
+    const REPRODUCTION_SPEED = 1000;
+    const { currentHand, nextHand, prevHand } = useHandContext();
     const initialState: GameState = {
         pot: 0,
         isPlaying: false,
@@ -127,6 +164,7 @@ export default function Replayer() {
         actionIndex: 0,
         heroCards: currentHand?.hero?.cards ?? [],
         heroName: currentHand?.hero?.nick ?? '',
+        showKnownCards: false,
     };
 
     const [state, dispatch] = useReducer(gameReducer, initialState);
@@ -134,6 +172,11 @@ export default function Replayer() {
     const formatAmount = (amount: number, bb: number) => {
         const amountToShow = state?.showInBigBlinds ? amount / bb : amount;
         return Number(amountToShow.toFixed(2))
+    }
+
+    const handlePrevHand = () => {
+        dispatch({ type: "PREV_HAND"});
+        prevHand()
     }
 
     const handleNextHand = () => {
@@ -147,46 +190,81 @@ export default function Replayer() {
         }
     }, [currentHand, state.playersActions?.length])
 
-    useEffect(() => {
-        if (!state.isPlaying || !currentHand) return;
-
-        if (state.actionIndex >= currentHand.actions.length) {
+    useEffect(() => {    
+        if (state.isPlaying && (state.actionIndex >= currentHand!.actions.length)) {
             dispatch({ type: "PAUSE" });
             return;
         }
-
-        const timer = setTimeout(() => {
-            dispatch({ type: "NEXT_ACTION", action: currentHand.actions[state.actionIndex] });
-        }, 2000);
-
-        return () => clearTimeout(timer);
+    
+        const nextActionTimer = setTimeout(() => {
+            setTimeout(() => {
+                dispatch({ type: "HIDE_ACTION" });
+            }, REPRODUCTION_SPEED / 2);
+            
+            if (!state.isPlaying || !currentHand) return
+            
+            dispatch({ 
+                type: "NEXT_ACTION", 
+                action: currentHand.actions[state.actionIndex], 
+                lastActionIdx: currentHand.actions.length 
+            });
+        }, REPRODUCTION_SPEED);
+    
+        return () => clearTimeout(nextActionTimer);
     }, [state.isPlaying, state.actionIndex, currentHand]);
 
-    useEffect(() => {
-        if (!currentHand || state.actionIndex === 0) return;
+    // useEffect(() => {
+    //     if (!state.isPlaying || !currentHand) return;
 
-        const timer = setTimeout(() => {
-            dispatch({ type: "HIDE_ACTION" });
-        }, 1000);
+    //     if (state.actionIndex >= currentHand.actions.length) {
+    //         dispatch({ type: "PAUSE" });
+    //         return;
+    //     }
 
-        return () => clearTimeout(timer);
-    }, [state.actionIndex, currentHand]);
+    //     const timer = setTimeout(() => {
+    //         dispatch({ type: "NEXT_ACTION", action: currentHand.actions[state.actionIndex], lastActionIdx: currentHand.actions.length });
+    //     }, 2000);
+
+    //     return () => clearTimeout(timer);
+    // }, [state.isPlaying, state.actionIndex, currentHand]);
+
+    // useEffect(() => {
+    //     if (state.actionIndex === 0) return;
+
+    //     const timer = setTimeout(() => {
+    //         dispatch({ type: "HIDE_ACTION" });
+    //     }, 1000);
+
+    //     return () => clearTimeout(timer);
+    // }, [state.actionIndex]);
 
     if (!currentHand) return <p>Loading...</p>;
 
+    function setPlayerCards(playerName: string): Array<string> {
+        if (playerName === state.heroName) return state.heroCards;
+        if (state?.showKnownCards && currentHand?.winner && (playerName === currentHand?.winner.name)) {
+            return currentHand?.winner?.cards?.length ? currentHand?.winner?.cards : ["", ""];
+        }
+        if (state?.showKnownCards && currentHand?.looser && (playerName === currentHand?.looser.name)) {
+            return currentHand?.looser?.cards?.length ? currentHand?.looser?.cards : ["", ""];
+        }
+        return ["", ""]
+    }
+
     return (
-        <Block display="flex" justify="center" align="center" height="100%" position="relative" customStyles={{ maxWidth: '400px'}}>
+        <Block display="flex" justify="center" align="center" height="100%" position="relative" customStyles={{ maxWidth: '400px', maxHeight: '700px'}}>
             {state.playersActions.map((player) => (
                 <PlayerComponent
                     key={player.name}
                     nick={player.showAction && player.action ? player.action : player.name}
                     stack={formatAmount(player.stack, currentHand.bb)}
                     currency={state?.showInBigBlinds ? 'BB' : currentHand?.currency}
-                    cards={player.name === state.heroName ? state.heroCards : ["Ks", "Qh"]} 
+                    cards={setPlayerCards(player.name)} 
                     seat={currentHand.players.find((p) => p.name === player.name)?.seat || 1}
                     amount={player.amount ? formatAmount(player.amount, currentHand.bb) : null}
                     isHero={player.name === state.heroName}
                     totalSeats={state.playersActions?.length}
+                    isButton={(currentHand.players.find((p) => p.name === player.name)?.seat || 1) === currentHand.buttonSeat}
                 />
             ))}
             <TableComponent 
@@ -195,35 +273,24 @@ export default function Replayer() {
             cards={state.board} 
             room={currentHand.room} 
             />
-
-            <Block display="flex" justify="center" mt="m" customStyles={{ position: 'fixed', bottom: '5%'}}>
-                <StyledButton
-                    onClick={() =>
-                        dispatch({
-                            type: "PREV_ACTION",
-                            prevState: initialState, 
-                        })
-                    }
-                    disabled={state.actionIndex === 0}
-                >
-                    <Icon icon="backward" size="s" color="white"/>
-                </StyledButton>
-                <StyledButton onClick={() => dispatch({ type: state.isPlaying ? "PAUSE" : "PLAY" })}>
-                    <Icon icon={state.isPlaying ? 'play' : 'pause'} size="s" color="white"/>
-                </StyledButton>
-                <StyledButton
-                    onClick={() => dispatch({ type: "NEXT_ACTION", action: currentHand.actions[state.actionIndex] })}
-                    disabled={state.actionIndex >= currentHand.actions.length}
-                >
-                    <Icon icon="forward" size="s" color="white"/>
-                </StyledButton>
-                <StyledButton onClick={() => dispatch({ type: "TOGGLE_BIG_BLINDS" })}>
-                    {state.showInBigBlinds ? `Show in ${currentHand?.currency}` : "Show in BB"}
-                </StyledButton>
-                <StyledButton onClick={() => handleNextHand()}>
-                    <Icon icon="next" size="s" color="white"/>
-                </StyledButton>
-            </Block>
+            <ReplayerControls
+            onPrevActionHandler={() => dispatch({
+                type: "PREV_ACTION",
+                currentHand,
+            })} 
+            onNextActionHandler={() => dispatch({ type: "NEXT_ACTION", action: currentHand.actions[state.actionIndex], lastActionIdx: currentHand.actions.length })} 
+            actionIndex={state.actionIndex} 
+            lastActionIndex={currentHand?.actions?.length} 
+            showInBigBlinds={state.showInBigBlinds}
+            currency={currentHand?.currency}
+            isPlaying={state.isPlaying}
+            onNextHandHandler={() => handleNextHand()}
+            onPrevHandHandler={() => handlePrevHand()}
+            onShowInBbHandler={() => dispatch({ type: "TOGGLE_BIG_BLINDS" })}
+            onReplayHandler={() => dispatch({ type: state.isPlaying ? "PAUSE" : "PLAY" })}
+            />
         </Block>
     );
 }
+
+export default Replayer;

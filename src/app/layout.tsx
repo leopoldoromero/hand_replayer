@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import StyledComponentsRegistry from "@/lib/StyledComponentsRegistry";
 import StylesProvider from "@/theme/StylesProvider";
 import { HandContextProvider } from "@/contexts/HandContext";
+import HeaderComponent from "@/components/header/Header";
+import Head from "next/head";
 
 
 export const metadata: Metadata = {
@@ -16,10 +18,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+      </Head>
       <body>
         <StyledComponentsRegistry>
           <StylesProvider>
             <HandContextProvider>
+              <HeaderComponent />
               {children}
             </HandContextProvider>
           </StylesProvider>

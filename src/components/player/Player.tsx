@@ -1,7 +1,7 @@
 import Block from "../block/Block";
 import CardComponent from "../card/Card";
 import Text from "../text/Text";
-import { StyledPlayerBetConatiner, StyledPlayerContainer, StyledPlayerInfoContainer } from "./Player.styles";
+import { StyledDealerButton, StyledPlayerBetConatiner, StyledPlayerContainer, StyledPlayerInfoContainer } from "./Player.styles";
 
 interface PlayerProps {
     nick: string;
@@ -12,10 +12,21 @@ interface PlayerProps {
     amount: number | null;
     isHero: boolean;
     totalSeats: number;
+    isButton: boolean;
 }
 
 const SIX_MAX_TOTAL_SEATS = 6;
-const PlayerComponent: React.FC<PlayerProps> = ({nick, stack, currency, cards, seat, amount, isHero, totalSeats}) => (
+const PlayerComponent: React.FC<PlayerProps> = ({
+  nick, 
+  stack, 
+  currency, 
+  cards, 
+  seat,
+  amount, 
+  isHero, 
+  totalSeats,
+  isButton
+}) => (
       <StyledPlayerContainer $seat={seat} $isFullRing={totalSeats > SIX_MAX_TOTAL_SEATS}>
         <Block display="flex" direction="column" justify="center" align="center">
           <Block display="flex">
@@ -30,6 +41,11 @@ const PlayerComponent: React.FC<PlayerProps> = ({nick, stack, currency, cards, s
             <Text fontSize="tiny" weight="bold">{`${stack.toFixed(2)} ${currency}`}</Text>
           </StyledPlayerInfoContainer>
         </Block>
+        {
+          isButton ? (
+            <StyledDealerButton>D</StyledDealerButton>
+          ) : null
+        }
         <StyledPlayerBetConatiner $seat={seat} $isFullRing={totalSeats > SIX_MAX_TOTAL_SEATS}>
           {
             amount && (

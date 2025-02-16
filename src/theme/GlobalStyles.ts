@@ -8,12 +8,14 @@ const GlobalStyles = createGlobalStyle`
     body{
         height: 100%;
         width: 100%;
+        display: flex;
+        flex-direction: column;
         text-align: center;  
         margin: 0;
         padding: 0;
         background: linear-gradient(to bottom, black, #000040);
         color: #ffffff;
-        font-family: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
         font-variant: tabular-nums;
         line-height: 1.5;
     }

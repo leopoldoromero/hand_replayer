@@ -1,6 +1,6 @@
 import { Action, ActionPhaseTypes, ActionTypes } from "../domain/action";
 import { GameModality } from "../domain/game_modality";
-import { Hand } from "../domain/hand";
+import { Hand, LastPhaseHeroFolded, PotType } from "../domain/hand";
 import { Player } from "../domain/player";
 import { PokerRooms } from "../domain/poker_rooms";
 import { ActionDto, HandDto, HistoryParserApiResponseDto, PlayerDto } from "./history_parser_api.response";
@@ -39,7 +39,16 @@ function handDtoToDomainMapper(handDto: HandDto): Hand {
         hero: {
             nick: handDto.hero_name,
             cards: handDto.hero_cards,
-        }
+            seat: handDto.hero_seat,
+        },
+        winner: handDto.summary?.winner,
+        looser: handDto.summary?.looser,
+        showdown: handDto.summary.showdown,
+        lastPhaseHeroFolded: handDto.summary.last_phase_hero_folded as LastPhaseHeroFolded,
+        potType: handDto.summary.pot_type as PotType,
+        buttonSeat: handDto.button_seat, 
+        tableName: handDto.table_name,
+        tableType: handDto.table_type,
     }
 }
 
