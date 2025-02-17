@@ -71,22 +71,53 @@ const Replayer = () => {
 
     return (
         <Block display="flex" justify="center" align="center" height="100%" position="relative" customStyles={{ maxWidth: '400px', maxHeight: '700px'}}>
-            {state.playersActions.map((player) => (
+            {/* {state.playersActions.map((player) => (
                 <PlayerComponent
                     key={player.name}
                     nick={player.showAction && player.action ? player.action : player.name}
                     stack={formatAmount(player.stack, currentHand.bb)}
                     currency={state?.showInBigBlinds ? 'BB' : currentHand?.currency}
-                    cards={setPlayerCards(player.name)} 
+                    cards={player.action === 'fold' ? ['X', 'X'] : setPlayerCards(player.name)} 
                     seat={currentHand.players.find((p) => p.name === player.name)?.seat || 1}
                     amount={player.amount ? formatAmount(player.amount, currentHand.bb) : null}
                     isHero={player.name === state.heroName}
                     totalSeats={state.playersActions?.length}
                     isButton={(currentHand.players.find((p) => p.name === player.name)?.seat || 1) === currentHand.buttonSeat}
+                    folded={player.action === 'fold'}
                 />
-            ))}
+            ))} */}
+            {state.playersActions.map((player) => {
+            const isWinner = currentHand.winner?.name === player.name;
+                return (
+                        <PlayerComponent
+                            key={player.name}
+                            nick={player.showAction && player.action ? player.action : player.name}
+                            stack={formatAmount(player.stack, currentHand.bb)}
+                            currency={state?.showInBigBlinds ? 'BB' : currentHand?.currency}
+                            cards={
+                                state.actionIndex < currentHand.actions.length
+                                ? player.action === 'fold' && player.name !== currentHand.hero.nick ? ['X', 'X'] : setPlayerCards(player.name)
+                                : isWinner
+                                ? currentHand!.winner!.cards?.length ? currentHand!.winner!.cards : ["X", "X"]
+                                : ["", ""]
+                            }
+                            seat={currentHand.players.find((p) => p.name === player.name)?.seat || 1}
+                            amount={
+                            state.actionIndex < currentHand.actions.length
+                            ? player.amount ? formatAmount(player.amount, currentHand.bb) : null
+                            : isWinner
+                            ? formatAmount(currentHand!.winner!.amount, currentHand.bb)
+                            : null
+                            }
+                            isHero={player.name === state.heroName}
+                            totalSeats={state.playersActions?.length}
+                            isButton={(currentHand.players.find((p) => p.name === player.name)?.seat || 1) === currentHand.buttonSeat}
+                            folded={player.action === 'fold'}
+                        />
+                );
+            })}
             <TableComponent 
-            pot={formatAmount(state.pot, currentHand?.bb)} 
+            pot={state.actionIndex < currentHand.actions.length ? formatAmount(state.pot, currentHand?.bb) : 0} 
             currency={state?.showInBigBlinds ? 'BB' : currentHand?.currency}
             cards={state.board} 
             room={currentHand.room} 

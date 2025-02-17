@@ -1,7 +1,7 @@
 'use client'
 import styled from "styled-components";
 
-export const StyledCard = styled.div<{$bgColor: string, $showSliced?: boolean, $bigSize?: boolean}>`
+export const StyledCard = styled.div<{$bgColor: string, $showSliced?: boolean, $bigSize?: boolean, $hidden?: boolean}>`
     ${(p) => p.$bigSize ? 'width: 63px; height: 90px;' : ' width: 35px; height: 50px;'}
     position: relative;
     background: ${(p) => p.theme.color[p.$bgColor]};
@@ -10,6 +10,7 @@ export const StyledCard = styled.div<{$bgColor: string, $showSliced?: boolean, $
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 5%;
+    ${(p)  =>  p.$hidden && 'visibility: hidden;'};
     ${(p) => p.$showSliced && 'clip-path: inset(0 0 45% 0);'}
 `
 

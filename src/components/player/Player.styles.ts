@@ -48,13 +48,14 @@ const betPositionBySeat = (seat: number, isFullRing: boolean) => {
     return isFullRing ? fullRingStyles[seat] : sixMaxStyles[seat]; 
 };
 
-export const StyledPlayerContainer = styled.div<{$seat: number; $isFullRing: boolean}>`
+export const StyledPlayerContainer = styled.div<{$seat: number; $isFullRing: boolean, $folded?: boolean}>`
     position: absolute;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     max-width: 90px;
+    ${(p) => p.$folded && 'opacity: 0.5;'}
     ${({ $seat, $isFullRing }) => positionBySeat($seat, $isFullRing)}
 `;
 

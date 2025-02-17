@@ -13,6 +13,7 @@ interface PlayerProps {
     isHero: boolean;
     totalSeats: number;
     isButton: boolean;
+    folded?: boolean;
 }
 
 const SIX_MAX_TOTAL_SEATS = 6;
@@ -25,9 +26,14 @@ const PlayerComponent: React.FC<PlayerProps> = ({
   amount, 
   isHero, 
   totalSeats,
-  isButton
+  isButton,
+  folded
 }) => (
-      <StyledPlayerContainer $seat={seat} $isFullRing={totalSeats > SIX_MAX_TOTAL_SEATS}>
+      <StyledPlayerContainer 
+      $seat={seat} 
+      $isFullRing={totalSeats > SIX_MAX_TOTAL_SEATS}
+      $folded={folded}
+      >
         <Block display="flex" direction="column" justify="center" align="center">
           <Block display="flex">
             {

@@ -18,6 +18,18 @@ const CardComponent: React.FC<CardProps> = ({ card, showSliced, bigSize }) => {
             ></StyledCard>
         )
     }
+
+    if (card == 'X') {
+        return (
+            <StyledCard 
+            $bgColor='grey' 
+            $showSliced={showSliced}
+            $bigSize={bigSize}
+            $hidden
+            ></StyledCard>
+        )
+    }
+
     const cardElements: Array<string> = card.split('')
     const suit: string = cardElements?.pop() ?? 'c'
     const value: string = cardElements.join('')

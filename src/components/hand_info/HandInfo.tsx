@@ -17,10 +17,6 @@ const HandInfoComponent = () => {
         pl="s"
         >
             <Block display="flex" align="center">
-                <Text mr="xs">HandID:</Text>
-                <Text fontSize="small">{currentHand?.id}</Text>
-            </Block>
-            <Block display="flex" align="center">
                 <Text mr="xs">Limits:</Text>
                 <Text fontSize="small">{currentHand?.currency}{currentHand?.sb}/{currentHand?.currency}{currentHand?.bb}</Text>
             </Block>
@@ -29,7 +25,8 @@ const HandInfoComponent = () => {
                 <Text fontSize="small">{currentHandIdx + 1}/{hands?.length}</Text>
             </Block>
             <Block display="flex" align="center">
-                <Text>{currentHand?.game}</Text>
+                <Text mr="xs">{currentHand?.game}</Text>
+                <Text fontSize="small">{currentHand?.tableType}</Text>
             </Block>
         </Block>
     )

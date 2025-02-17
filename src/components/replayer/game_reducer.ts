@@ -77,7 +77,7 @@ export const gameReducer = (state: GameState, action: ChangeStateAction): GameSt
                             action: currentAction.action,
                             amount: currentAction.amount 
                                 ? (player.amount || 0) + currentAction.amount 
-                                : player.amount, // TODO: This was changed from null, pending to test
+                                : (isNewRound ? null : player.amount),
                             showAction: true,
                         }
                         : {

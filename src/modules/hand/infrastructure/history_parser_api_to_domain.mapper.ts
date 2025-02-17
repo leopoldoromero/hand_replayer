@@ -49,6 +49,7 @@ function handDtoToDomainMapper(handDto: HandDto): Hand {
         buttonSeat: handDto.button_seat, 
         tableName: handDto.table_name,
         tableType: handDto.table_type,
+        potAmount: handDto.summary.pot,
     }
 }
 

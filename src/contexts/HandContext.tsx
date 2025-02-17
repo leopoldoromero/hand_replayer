@@ -1,8 +1,9 @@
 'use client';
-import { Hand } from '@/modules/hand/domain/hand';
+import { Hand, positionNumberToName } from '@/modules/hand/domain/hand';
 import { LocalStorageRepository } from '@/modules/shared/infrastructure/local_storage.repository';
 import { createContext, useState, useContext, useEffect } from 'react';
 import { useRouter } from "next/navigation";
+import { Criteria } from '@/modules/shared/domain/criteria';
 interface HandContextState {
     currentHandIdx: number;
     setCurrentHandIdx: (idx: number) => void;
@@ -12,6 +13,8 @@ interface HandContextState {
     prevHand: () => void;
     currentHand: Hand | null;
     loadHand: (id: string) => void;
+    filterHandsByCriteria: (criteria: Criteria) => void;
+    loadHands: () => void;
 }
 
 export const HandContext = createContext<HandContextState>({
@@ -23,6 +26,8 @@ export const HandContext = createContext<HandContextState>({
     prevHand: () => {},
     currentHand: null,
     loadHand: () => {},
+    filterHandsByCriteria: () => {},
+    loadHands: () => {},
 });
 
 export function HandContextProvider({ children }: { children: React.ReactNode }) {
@@ -60,13 +65,42 @@ export function HandContextProvider({ children }: { children: React.ReactNode })
       }
     }
 
+    const loadHands = () => {
+      const existingHistory = localStorageRepository.loadHandHistory('handHistory', true);
+      if (existingHistory) {
+        setHands(existingHistory)
+      } 
+    }
+
+    const filterHandsByCriteria = (criteria: Criteria) => {
+      const filterHands: Array<Hand> = [];
+      criteria.filters?.forEach((filter) => {
+        switch(filter.field) {
+          case "potType":
+            filterHands.push(...hands.filter((hand) => hand.potType === filter.value));
+          case "position":            
+            filterHands.push(...hands.filter((hand) => {
+              const position = positionNumberToName(hand.hero?.seat, hand.tableType === '6-max');
+              return position === filter.value;
+            }));
+          case "minPotSize":            
+            filterHands.push(...hands.filter((hand) => (hand.potAmount / hand.bb) >= (filter.value as number)));
+          case "loosingHands":            
+            filterHands.push(...hands.filter((hand) => hand.looser?.name === hand.hero.nick))
+          default:
+            break;
+        }
+      })
+      setHands(filterHands);
+    }
+
     useEffect(() => {
       const existingHistory = localStorageRepository.loadHandHistory('handHistory', true);
       if (existingHistory) {
         setHands(existingHistory)
-        const urlHandId = window.location.pathname.split('/').pop(); // Get hand ID from URL
+        const urlHandId = window.location.pathname.split('/').pop();
         if (urlHandId) {
-            const idx = existingHistory.findIndex((hand) => hand.id === urlHandId);
+            const idx = existingHistory.findIndex((hand: Hand) => hand.id === urlHandId);
             if (idx > -1) setCurrentHandIdx(idx);
         }
       } 
@@ -82,6 +116,8 @@ export function HandContextProvider({ children }: { children: React.ReactNode })
           setCurrentHandIdx,
           currentHand: hands[currentHandIdx],
           loadHand,
+          filterHandsByCriteria,
+          loadHands,
       }}>
         {children}
       </HandContext.Provider>

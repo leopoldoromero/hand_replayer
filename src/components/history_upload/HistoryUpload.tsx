@@ -4,10 +4,11 @@ import Block from "../block/Block";
 import Text from "../text/Text";
 import Textarea from "../textarea/Textarea";
 import { uploadHistoryAction } from "@/actions/upload_history.action";
-import { StyledButton, StyledForm } from "./HistoryUpload.styles";
+import { StyledForm } from "./HistoryUpload.styles";
 import UploadedHandsList from "../uploaded_hands_list/UploadedHandsList";
 import { useHandContext } from "@/contexts/HandContext";
 import { LocalStorageRepository } from "@/modules/shared/infrastructure/local_storage.repository";
+import Button from "../button/Button";
 
 const HistoryUploadComponent = () => {
     const { setHands } = useHandContext();
@@ -50,10 +51,11 @@ const HistoryUploadComponent = () => {
             textAlign="center"
             fontSize="tiny"
             weight="bold"
+            mb="m"
             >
                 Upload your poker hands
             </Text>
-            <Text >Paste your hand history or directly upload a .txt file with your hand history and we&apos;ll convert it into a replay for you to share with others.</Text>
+            <Text mb="m">Paste your hand history or directly upload a .txt file with your hand history and we&apos;ll convert it into a replay for you to share with others.</Text>
             <StyledForm onSubmit={handleUpload}>
                 <Textarea 
                 value={text} 
@@ -63,10 +65,15 @@ const HistoryUploadComponent = () => {
                 name=""
                 cols={10}
                 />
-                <Block display="flex" justify="center">
-                    <StyledButton type="submit" disabled={loading}>
-                    {loading ? "Uploading..." : "Upload"}
-                    </StyledButton>
+                 <Block display="flex" justify="center" mt="m" mb="m">
+                    <Button 
+                    type="submit"
+                    disabled={loading}
+                    variant="default" 
+                    size="m" 
+                    text={loading ? "Uploading..." : "Upload"}
+                    color="green" 
+                    />                
                 </Block>
             </StyledForm>
             <UploadedHandsList />
