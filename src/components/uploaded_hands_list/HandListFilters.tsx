@@ -2,7 +2,6 @@
 import { useState } from "react";
 import Block from "../block/Block";
 import Dropdown from "../dropdown/DropDown";
-import { useHandContext } from "@/contexts/HandContext";
 import { PotType, sixMaxPositions } from "@/modules/hand/domain/hand";
 import { Range } from "../range/Range";
 import Text from "../text/Text";
@@ -11,8 +10,12 @@ import Button from "../button/Button";
 import { Criteria } from "@/modules/shared/domain/criteria";
 import { CriteriaFilter } from "@/modules/shared/domain/criteria_filter";
 
-const HandListFilters = () => {
-    const { filterHandsByCriteria, loadHands } = useHandContext();
+interface Props {
+    filterHandsByCriteria: (criteria: Criteria) => void;
+    loadHands: () => void;
+}
+
+const HandListFilters: React.FC<Props> = ({filterHandsByCriteria, loadHands}) => {
     const [potType, setPotType] = useState<string>("");
     const [position, setPosition] = useState<string>("");
     const [minPotSize, setMinPotSize] = useState<number>(0);
@@ -47,7 +50,6 @@ const HandListFilters = () => {
         if (filters?.length) {
             const criteria = new Criteria(filters);
             filterHandsByCriteria(criteria);
-            console.log(criteria);
         }
     }
 

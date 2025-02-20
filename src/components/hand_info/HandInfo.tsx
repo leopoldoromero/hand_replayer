@@ -1,12 +1,14 @@
 'use client';
-import { useHandContext } from "@/contexts/HandContext";
 import Block from "../block/Block";
 import Text from "../text/Text";
+import { Hand } from "@/modules/hand/domain/hand";
 
+interface Props {
+    hand: Hand;
+}
 
-const HandInfoComponent = () => {
-    const { currentHand, hands, currentHandIdx } = useHandContext();
-    if (!currentHand) return null;
+const HandInfoComponent: React.FC<Props> = ({ hand }) => {
+    if (!hand) return null;
     return (
         <Block 
         display="flex" 
@@ -18,15 +20,14 @@ const HandInfoComponent = () => {
         >
             <Block display="flex" align="center">
                 <Text mr="xs">Limits:</Text>
-                <Text fontSize="small">{currentHand?.currency}{currentHand?.sb}/{currentHand?.currency}{currentHand?.bb}</Text>
+                <Text fontSize="small">{hand?.currency}{hand?.sb}/{hand?.currency}{hand?.bb}</Text>
             </Block>
             <Block display="flex" align="center">
-                <Text mr="xs">Hand:</Text>
-                <Text fontSize="small">{currentHandIdx + 1}/{hands?.length}</Text>
+                <Text mr="xs">{hand?.tableName}</Text>
+                <Text fontSize="small">{hand?.tableType}</Text>
             </Block>
             <Block display="flex" align="center">
-                <Text mr="xs">{currentHand?.game}</Text>
-                <Text fontSize="small">{currentHand?.tableType}</Text>
+                <Text mr="xs">{hand?.game}</Text>
             </Block>
         </Block>
     )

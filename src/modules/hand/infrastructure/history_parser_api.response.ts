@@ -47,6 +47,8 @@ export interface ShowdownDto {
 }
 
 export interface HandDto {
+    id: string;
+    user_id: string;
     general_info: {
     hand_id: string;
     datetime: string;

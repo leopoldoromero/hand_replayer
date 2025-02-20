@@ -24,9 +24,10 @@ function playerDtoToDomain(playerDto: PlayerDto): Player {
     }
 }
 
-function handDtoToDomainMapper(handDto: HandDto): Hand {
+export function handDtoToDomainMapper(handDto: HandDto): Hand {
     return {
-        id: handDto.general_info.hand_id,
+        id: handDto?.id,
+        userId: handDto?.user_id,
         currency: handDto.general_info.currency,
         sb: handDto.general_info.small_blind,
         bb: handDto.general_info.big_blind,

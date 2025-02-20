@@ -29,6 +29,7 @@ export interface SummaryPlayer {
 }
 export interface Hand {
     id: string;
+    userId: string;
     currency: string;
     sb: number;
     bb: number;

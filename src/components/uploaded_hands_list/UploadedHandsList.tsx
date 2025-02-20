@@ -1,21 +1,31 @@
 'use client';
-import { useHandContext } from "@/contexts/HandContext";
+import { Criteria } from "@/modules/shared/domain/criteria";
 import Block from "../block/Block";
 import HandSummaryCard from "../hand_summary_card/HandSummaryCard";
 import HandListFilters from "./HandListFilters";
+import { Hand } from "@/modules/hand/domain/hand";
+import { useRouter } from "next/navigation";
 
-const UploadedHandsList = () => {
-    const { hands, setCurrentHandIdx } = useHandContext();
+interface Props {
+    hands: Array<Hand>
+    filterHandsByCriteria: (criteria: Criteria) => void;
+    loadHands: () => void;
+}
 
+const UploadedHandsList: React.FC<Props> = ({ hands, filterHandsByCriteria, loadHands }) => {
+    const router = useRouter();
     return (
         <Block mt="m">
             <Block mb="m">
-                <HandListFilters />
+                <HandListFilters 
+                filterHandsByCriteria={filterHandsByCriteria}
+                loadHands={loadHands}
+                />
             </Block>
             <Block 
             display="flex" 
             flexWrap="wrap" 
-            gap="5px" 
+            gap="10px" 
             justify="center"
             >
                 {
@@ -28,7 +38,7 @@ const UploadedHandsList = () => {
                             heroPosition={hero?.seat} 
                             potType={potType}
                             lastPhaseHeroFolded={lastPhaseHeroFolded}
-                            onClickHandler={() => setCurrentHandIdx(i)}
+                            onClickHandler={() => router.push(`/hands/${id}`, {scroll: true})}
                             gameType={tableType}
                             />
                         ))
