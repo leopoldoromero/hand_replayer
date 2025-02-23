@@ -2,6 +2,7 @@
 import Block from "../block/Block";
 import Text from "../text/Text";
 import { Hand } from "@/modules/hand/domain/hand";
+import { StyledHandInfoContainer } from "./HandInfo.styles";
 
 interface Props {
     hand: Hand;
@@ -10,26 +11,19 @@ interface Props {
 const HandInfoComponent: React.FC<Props> = ({ hand }) => {
     if (!hand) return null;
     return (
-        <Block 
-        display="flex" 
-        direction="column" 
-        align="flex-start" 
-        position="absolute" 
-        customStyles={{left: '0', top: '1rem'}}
-        pl="s"
-        >
-            <Block display="flex" align="center">
-                <Text mr="xs">Limits:</Text>
+        <StyledHandInfoContainer>
+            <Block display="flex" align="center" mb="xs">
+                {/* <Text mr="xs">Limits:</Text> */}
                 <Text fontSize="small">{hand?.currency}{hand?.sb}/{hand?.currency}{hand?.bb}</Text>
             </Block>
-            <Block display="flex" align="center">
-                <Text mr="xs">{hand?.tableName}</Text>
+            <Block display="flex" align="center" mb="xs">
+                <Text fontSize="small" mr="xs">{hand?.tableName}</Text>
                 <Text fontSize="small">{hand?.tableType}</Text>
             </Block>
-            <Block display="flex" align="center">
-                <Text mr="xs">{hand?.game}</Text>
+            <Block display="flex" align="center" mb="xs">
+                <Text fontSize="small" mr="xs">{hand?.game}</Text>
             </Block>
-        </Block>
+        </StyledHandInfoContainer>
     )
 }
 

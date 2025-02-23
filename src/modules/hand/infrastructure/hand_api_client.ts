@@ -1,9 +1,10 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Hand } from "../domain/hand";
 import { HandRepository } from "../domain/hand.repository";
-import { HandDto } from "./history_parser_api.response";
+import { HandDto, PlayersStatsDto } from "./history_parser_api.response";
 import { handDtoToDomainMapper } from "./history_parser_api_to_domain.mapper";
 import { cookies } from 'next/headers';
+import { PlayerStats } from "../domain/player_stats";
 
 interface GetHandResponse {
     hand: HandDto;
@@ -57,8 +58,10 @@ export class HandApiClient implements HandRepository {
             withCredentials: true
         });  
 
+        const playeerStats = await this.getStats();
+
         return {
-            hand: handDtoToDomainMapper(response?.data?.hand),
+            hand: handDtoToDomainMapper(response?.data?.hand, playeerStats),
             prevHandId: response?.data?.prev_hand_id,
             nextHandId: response?.data?.next_hand_id,
         }
@@ -78,7 +81,34 @@ export class HandApiClient implements HandRepository {
             },
             withCredentials: true
         }); 
-        const hands: Array<Hand> = response?.data?.map(handDtoToDomainMapper);
+        const hands: Array<Hand> = response?.data?.map((handDto) => handDtoToDomainMapper(handDto));
         return hands;
+    }
+
+    async getStats(): Promise<PlayerStats> {
+        const cookieStore = await cookies();
+        const userId = cookieStore.get('user_id')?.value;
+
+        if (!userId) {
+            cookieStore.set('user_id', '75565b68-ed1f-11ef-901b-0ade7a4f7cd3')
+        }
+        const response = await axios.get<File, AxiosResponse<PlayersStatsDto>>(`${this.API_URL}/api/v1/stats`, {
+            headers: {
+                'Access-Control-Allow-Origin': 'localhost:8000',
+                'Cookie': `user_id=${userId}`,
+            },
+            withCredentials: true
+        }); 
+        const playerStats: PlayerStats = {};
+
+        Object.entries(response?.data).forEach(([player, stats]) => {
+            playerStats[player] = {
+                hands: stats?.hands,
+                vpip: stats?.vpip,
+                pfr: stats?. pfr,
+                threeBetPercent: stats?.three_bet_percent,
+            }
+        })
+        return playerStats;
     }
 }

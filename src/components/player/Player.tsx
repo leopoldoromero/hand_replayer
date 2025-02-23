@@ -1,7 +1,8 @@
+import { PreflopStats } from "@/modules/hand/domain/player";
 import Block from "../block/Block";
 import CardComponent from "../card/Card";
 import Text from "../text/Text";
-import { StyledDealerButton, StyledPlayerBetConatiner, StyledPlayerContainer, StyledPlayerInfoContainer } from "./Player.styles";
+import { StyledDealerButton, StyledPlayerBetConatiner, StyledPlayerContainer, StyledPlayerInfoContainer, StyledVpipContainer } from "./Player.styles";
 
 interface PlayerProps {
     nick: string;
@@ -14,6 +15,7 @@ interface PlayerProps {
     totalSeats: number;
     isButton: boolean;
     folded?: boolean;
+    stats?: PreflopStats;
 }
 
 const SIX_MAX_TOTAL_SEATS = 6;
@@ -27,7 +29,8 @@ const PlayerComponent: React.FC<PlayerProps> = ({
   isHero, 
   totalSeats,
   isButton,
-  folded
+  folded,
+  stats,
 }) => (
       <StyledPlayerContainer 
       $seat={seat} 
@@ -43,6 +46,11 @@ const PlayerComponent: React.FC<PlayerProps> = ({
             }
           </Block>
           <StyledPlayerInfoContainer $isHero={isHero}>
+            {
+              stats ? (
+                <StyledVpipContainer>{stats.vpip}</StyledVpipContainer>
+              ) : null
+            }
             <Text fontSize="tiny">{nick}</Text>
             <Text fontSize="tiny" weight="bold">{`${stack.toFixed(2)} ${currency}`}</Text>
           </StyledPlayerInfoContainer>

@@ -127,6 +127,7 @@ const Replayer: React.FC<Props> = ({ handId }) => {
                                 totalSeats={state.playersActions?.length}
                                 isButton={(currentHand.players.find((p) => p.name === player.name)?.seat || 1) === currentHand.buttonSeat}
                                 folded={player.action === 'fold'}
+                                stats={player.stats}
                             />
                     );
                 })}

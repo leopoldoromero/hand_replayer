@@ -2,7 +2,6 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { Hand } from "../domain/hand";
 import { HistoryParserRepository } from "../domain/history_parser.repository";
 import { HistoryParserApiResponseDto } from "./history_parser_api.response";
-import { historyParserApiToDomainHand } from "./history_parser_api_to_domain.mapper";
 
 export class HistoryParserApiClient implements HistoryParserRepository {
     private readonly API_URL = process.env.API_URL;
@@ -16,9 +15,9 @@ export class HistoryParserApiClient implements HistoryParserRepository {
                     "Content-Type": "multipart/form-data",
                 },
             });            
-            const hands: Array<Hand> = historyParserApiToDomainHand(response.data);
-
-            return hands;
+            // const hands: Array<Hand> = historyParserApiToDomainHand(response.data);
+            
+            return [];
         } catch (error: unknown) {
             console.error("Error uploading file:", (error as AxiosError).response?.data);
             throw new Error((error as AxiosError).message || "Failed to parse hand history.");

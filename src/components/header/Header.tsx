@@ -1,5 +1,5 @@
 import Block from "../block/Block";
-import Icon from "../icon/Icon";
+// import Icon from "../icon/Icon";
 import Text from "../text/Text";
 import { StyledHeader, StyledTextLink } from "./HeaderStyles";
 
@@ -17,12 +17,12 @@ const HeaderComponent = () => (
             <StyledTextLink href={`/`}>
                 <Text isUppercase >Replayer</Text>
             </StyledTextLink>
-            <Icon 
+            {/* <Icon 
             icon="next" 
             size="xs" 
             color="white"
             customStyles={{transform: 'rotate(90deg)'}}
-            />
+            /> */}
         </Block>
     </StyledHeader>
 )

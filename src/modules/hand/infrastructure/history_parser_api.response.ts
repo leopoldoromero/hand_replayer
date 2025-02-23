@@ -79,3 +79,10 @@ export interface HandDto {
 export interface HistoryParserApiResponseDto {
     data: Array<HandDto>
 }
+
+export interface PlayersStatsDto {
+    hands: number;
+    vpip: number;
+    pfr: number;
+    three_bet_percent: number;
+}

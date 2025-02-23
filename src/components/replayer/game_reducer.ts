@@ -1,5 +1,6 @@
 import { Action } from "@/modules/hand/domain/action";
 import { Hand } from "@/modules/hand/domain/hand";
+import { PreflopStats } from "@/modules/hand/domain/player";
 
 interface GameState {
     pot: number;
@@ -12,6 +13,7 @@ interface GameState {
         action: string | null;
         amount: number | null;
         showAction: boolean;
+        stats?: PreflopStats;
     }>;
     actionIndex: number;
     heroCards: Array<string>;
@@ -52,6 +54,7 @@ export const gameReducer = (state: GameState, action: ChangeStateAction): GameSt
                 action: null,
                 amount: null,
                 showAction: false,
+                stats: player?.stats,
             })),
         heroCards: hand?.hero?.cards,
         heroName: hand?.hero?.nick 

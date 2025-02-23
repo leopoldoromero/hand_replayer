@@ -97,3 +97,18 @@ export const StyledDealerButton = styled.div`
     font-size: 14px;
     box-shadow: 0 0 10px rgba(0, 0, 255, 0.5);
 `;
+
+export const StyledVpipContainer = styled.div`
+    position: absolute;
+    left: -15%;
+    top: -40%;
+    border: 1px solid ${(p) => p.theme.color.white};
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    background-color: black;
+    ${(p) => p.theme.fontSizeGenerator('span', 'small')}
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;

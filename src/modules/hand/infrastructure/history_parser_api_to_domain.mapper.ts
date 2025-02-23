@@ -2,8 +2,9 @@ import { Action, ActionPhaseTypes, ActionTypes } from "../domain/action";
 import { GameModality } from "../domain/game_modality";
 import { Hand, LastPhaseHeroFolded, PotType } from "../domain/hand";
 import { Player } from "../domain/player";
+import { PlayerStats } from "../domain/player_stats";
 import { PokerRooms } from "../domain/poker_rooms";
-import { ActionDto, HandDto, HistoryParserApiResponseDto, PlayerDto } from "./history_parser_api.response";
+import { ActionDto, HandDto, PlayerDto } from "./history_parser_api.response";
 
 function actionDtoToDomainMapper(actionDto: ActionDto): Action {
     return {
@@ -15,16 +16,25 @@ function actionDtoToDomainMapper(actionDto: ActionDto): Action {
     }
 }
 
-function playerDtoToDomain(playerDto: PlayerDto): Player {
+function playerDtoToDomain(playerDto: PlayerDto, playerStats?: PlayerStats): Player {
+    const playerStatsOrNull = playerStats && playerStats[playerDto.name] ? playerStats[playerDto.name] : null;
     return {
         seat: playerDto.seat,
         name: playerDto.name,
         stack: playerDto.stack,
         cards: playerDto.cards,
+        ...( playerStatsOrNull &&  {
+            stats: {
+                hands: playerStatsOrNull.hands,
+                vpip: playerStatsOrNull.vpip,
+                pfr: playerStatsOrNull.pfr,
+                threeBetPercent: playerStatsOrNull.threeBetPercent,
+            }
+        })
     }
 }
 
-export function handDtoToDomainMapper(handDto: HandDto): Hand {
+export function handDtoToDomainMapper(handDto: HandDto, playerStats?: PlayerStats): Hand {
     return {
         id: handDto?.id,
         userId: handDto?.user_id,
@@ -35,7 +45,7 @@ export function handDtoToDomainMapper(handDto: HandDto): Hand {
         game: handDto.general_info.game,
         modality: handDto.general_info.game_type as GameModality,
         actions: handDto.actions?.map(actionDtoToDomainMapper),
-        players: handDto.players?.map(playerDtoToDomain),
+        players: handDto.players?.map((playerDto) => playerDtoToDomain(playerDto, playerStats)),
         room: handDto.general_info.room as PokerRooms, 
         hero: {
             nick: handDto.hero_name,
@@ -52,8 +62,4 @@ export function handDtoToDomainMapper(handDto: HandDto): Hand {
         tableType: handDto.table_type,
         potAmount: handDto.summary.pot,
     }
-}
-
-export function historyParserApiToDomainHand(input: HistoryParserApiResponseDto): Array<Hand> {
-    return input?.data?.map(handDtoToDomainMapper)
 }

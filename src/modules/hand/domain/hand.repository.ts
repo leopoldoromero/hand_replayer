@@ -1,4 +1,5 @@
 import { Hand } from "./hand";
+import { PlayerStats } from "./player_stats";
 
 export interface HandRepository {
     upload(file: File): Promise<void>;
@@ -8,4 +9,5 @@ export interface HandRepository {
         nextHandId: string | null;
     } | null>;
     getAll(): Promise<Array<Hand>>;
+    getStats(): Promise<PlayerStats>;
 }
