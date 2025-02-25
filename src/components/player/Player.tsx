@@ -62,9 +62,8 @@ const PlayerComponent: React.FC<PlayerProps> = ({
         }
         <StyledPlayerBetConatiner $seat={seat} $isFullRing={totalSeats > SIX_MAX_TOTAL_SEATS}>
           {
-            !amount && (
-              // <Text fontSize="small">{amount}{currency}</Text>
-              <Text fontSize="small">3BB</Text>
+            amount && (
+              <Text fontSize="small">{amount}{currency}</Text>
             )
           }
         </StyledPlayerBetConatiner>

@@ -54,16 +54,20 @@ const HandListFilters: React.FC<Props> = ({filterHandsByCriteria, loadHands}) =>
     }
 
     return (
-        <Block display="flex" direction="column">
+        <Block 
+        display="flex" 
+        direction="column"
+        width="100%"
+        customStyles={{ maxWidth: '500px'}}
+        >
             <Block 
             display="flex"
             justify="space-between"
-            mb="m"
+            flexWrap="wrap"
+            gap="5px"
+            mb="l"
+            width="100%"
             >
-                <Block 
-                display="flex"
-                direction="column" 
-                >
                     <Dropdown  
                     label="POT TYPE"
                     options={["SRP", "ROL", "LIMPED", "3BET", "SQUEEZE", "4BET"]}
@@ -76,11 +80,6 @@ const HandListFilters: React.FC<Props> = ({filterHandsByCriteria, loadHands}) =>
                     value={position}
                     onChange={setPosition}
                     />
-                </Block>
-                <Block
-                display="flex" 
-                direction="column" 
-                >
                     <Block 
                     display="flex" 
                     direction="column" 
@@ -99,7 +98,7 @@ const HandListFilters: React.FC<Props> = ({filterHandsByCriteria, loadHands}) =>
                     display="flex" 
                     direction="column" 
                     justify="center" 
-                    align="flex-end"
+                    align="flex-start"
                     >
                         <Toggle 
                         isChecked={showLosingHands} 
@@ -107,7 +106,6 @@ const HandListFilters: React.FC<Props> = ({filterHandsByCriteria, loadHands}) =>
                         />
                         <Text>{showLosingHands ? "Showing only losing hands" : "Showing all hands"}</Text>
                     </Block>
-                </Block>
             </Block>
             <Block 
             display="flex" 
@@ -122,7 +120,7 @@ const HandListFilters: React.FC<Props> = ({filterHandsByCriteria, loadHands}) =>
                 /> 
                 <Button 
                 variant="default" 
-                size="m" 
+                size="l" 
                 text="Reset filters"
                 color="green" 
                 onClick={() => loadHands()}

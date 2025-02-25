@@ -135,11 +135,9 @@ const Replayer: React.FC<Props> = ({ handId }) => {
                     );
                 })}
                 <TableComponent 
-                // pot={state.actionIndex < currentHand.actions.length ? formatAmount(state.pot, currentHand?.bb) : 0} 
-                pot={120}
+                pot={state.actionIndex < currentHand.actions.length ? formatAmount(state.pot, currentHand?.bb) : 0} 
                 currency={state?.showInBigBlinds ? 'BB' : currentHand?.currency}
-                // cards={state.board} 
-                cards={["Ks", "Qc", "As", "5h", "4d"]}
+                cards={state.board} 
                 room={currentHand.room} 
                 />
                 <ReplayerControls

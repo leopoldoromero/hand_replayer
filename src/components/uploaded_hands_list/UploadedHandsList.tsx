@@ -16,7 +16,7 @@ const UploadedHandsList: React.FC<Props> = ({ hands, filterHandsByCriteria, load
     const router = useRouter();
     return (
         <Block mt="m">
-            <Block mb="m">
+            <Block display="flex" justify="center" mb="m">
                 <HandListFilters 
                 filterHandsByCriteria={filterHandsByCriteria}
                 loadHands={loadHands}

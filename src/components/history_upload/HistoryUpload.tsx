@@ -77,6 +77,7 @@ const HistoryUploadComponent = () => {
         <Block 
         display="flex" 
         direction="column" 
+        align="center"
         width="100%" 
         height="100%" 
         position="relative" 
@@ -87,36 +88,41 @@ const HistoryUploadComponent = () => {
         pb="l" 
         pl="l"
         >
-            <Text 
-            as="h4" 
-            textAlign="center"
-            fontSize="tiny"
-            weight="bold"
-            mb="m"
-            >
-                Upload your poker hands
-            </Text>
-            <Text mb="m">Paste your hand history or directly upload a .txt file with your hand history and we&apos;ll convert it into a replay for you to share with others.</Text>
-            <StyledForm onSubmit={handleUpload}>
-                <Textarea 
-                value={text} 
-                onChange={(e) => setText(e.target.value)} 
-                placeholder="Paste your hand history to upload..." 
-                rows={4}
-                name=""
-                cols={10}
-                />
-                 <Block display="flex" justify="center" mt="m" mb="m">
-                    <Button 
-                    type="submit"
-                    disabled={loading}
-                    variant="default" 
-                    size="m" 
-                    text={loading ? "Uploading..." : "Upload"}
-                    color="green" 
-                    />                
-                </Block>
-            </StyledForm>
+            <Block 
+            display="flex" 
+            direction="column" 
+            customStyles={{ maxWidth: '500px'}}>
+                <Text 
+                as="h4" 
+                textAlign="center"
+                fontSize="tiny"
+                weight="bold"
+                mb="m"
+                >
+                    Upload your poker hands
+                </Text>
+                <Text mb="m">Paste your hand history or directly upload a .txt file with your hand history and we&apos;ll convert it into a replay for you to share with others.</Text>
+                <StyledForm onSubmit={handleUpload}>
+                    <Textarea 
+                    value={text} 
+                    onChange={(e) => setText(e.target.value)} 
+                    placeholder="Paste your hand history to upload..." 
+                    rows={4}
+                    name=""
+                    cols={10}
+                    />
+                    <Block display="flex" justify="center" mt="m" mb="m">
+                        <Button 
+                        type="submit"
+                        disabled={loading}
+                        variant="default" 
+                        size="m" 
+                        text={loading ? "Uploading..." : "Upload"}
+                        color="green" 
+                        />                
+                    </Block>
+                </StyledForm>
+            </Block>
             {
                 hands?.length ? (
                     <UploadedHandsList 
