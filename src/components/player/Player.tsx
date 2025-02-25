@@ -48,7 +48,7 @@ const PlayerComponent: React.FC<PlayerProps> = ({
           <StyledPlayerInfoContainer $isHero={isHero}>
             {
               stats ? (
-                <StyledVpipContainer>{stats.vpip}</StyledVpipContainer>
+                <StyledVpipContainer>{Math.round(stats.vpip)}</StyledVpipContainer>
               ) : null
             }
             <Text fontSize="tiny">{nick}</Text>
@@ -62,8 +62,9 @@ const PlayerComponent: React.FC<PlayerProps> = ({
         }
         <StyledPlayerBetConatiner $seat={seat} $isFullRing={totalSeats > SIX_MAX_TOTAL_SEATS}>
           {
-            amount && (
-              <Text fontSize="small">{amount}{currency}</Text>
+            !amount && (
+              // <Text fontSize="small">{amount}{currency}</Text>
+              <Text fontSize="small">3BB</Text>
             )
           }
         </StyledPlayerBetConatiner>

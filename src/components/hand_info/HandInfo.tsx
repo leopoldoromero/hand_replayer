@@ -13,7 +13,7 @@ const HandInfoComponent: React.FC<Props> = ({ hand }) => {
     return (
         <StyledHandInfoContainer>
             <Block display="flex" align="center" mb="xs">
-                {/* <Text mr="xs">Limits:</Text> */}
+                <Text  fontSize="small" weight="bold" mr="xs">Limits:</Text>
                 <Text fontSize="small">{hand?.currency}{hand?.sb}/{hand?.currency}{hand?.bb}</Text>
             </Block>
             <Block display="flex" align="center" mb="xs">

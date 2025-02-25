@@ -25,7 +25,7 @@ export class HandApiClient implements HandRepository {
             if (!userId) {
                 cookieStore.set('user_id', '75565b68-ed1f-11ef-901b-0ade7a4f7cd3')
             }
-            return axios.post<File, void>(`${this.API_URL}/api/v1/history`, formData, {
+            await axios.post<File, void>(`${this.API_URL}/api/v1/hands`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     'Access-Control-Allow-Origin': 'localhost:8000',
@@ -59,7 +59,12 @@ export class HandApiClient implements HandRepository {
         });  
 
         const playeerStats = await this.getStats();
-
+        // TODO: the next lines are usefull to test full ring styles
+        // response.data.hand.players.push(...response.data.hand.players.slice(0,3).map((el) => ({
+        //     ...el,
+        //     seat: el.seat + 6,
+        //     name: `${el.name}-${Math.random().toFixed(0)}`
+        // })))
         return {
             hand: handDtoToDomainMapper(response?.data?.hand, playeerStats),
             prevHandId: response?.data?.prev_hand_id,
@@ -112,3 +117,5 @@ export class HandApiClient implements HandRepository {
         return playerStats;
     }
 }
+
+export const handApiClient: HandRepository = new HandApiClient()

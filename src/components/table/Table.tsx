@@ -11,7 +11,7 @@ interface TableProps {
 }
 const TableComponent: React.FC<TableProps> = ({pot, cards, currency, room}) => (
     <StyledTable>
-        <Block display="flex" direction="column" justify="flex-end" height="50%">
+        <Block display="flex" direction="column" justify="flex-end" height="30%">
             <Block display="flex" direction="column" align="center" mb="m">
                 {
                     pot ? (

@@ -9,6 +9,7 @@ import { Hand } from "@/modules/hand/domain/hand";
 import { getHandAction } from "@/actions/get_hand.action";
 import { useRouter } from "next/navigation";
 import HandInfoComponent from "../hand_info/HandInfo";
+import { StyledGameContainer } from "./Replayer.styles";
 
 interface Props {
     handId: string;
@@ -44,6 +45,7 @@ const Replayer: React.FC<Props> = ({ handId }) => {
     useEffect(() => {
         getHandAction(handId).then((response) => {
             const hand = response?.hand as Hand
+            console.log('HAND', hand)
             setCurrentHand(hand)
             setPrevHandId(response?.prevHandId ?? '')
             setNextHandId(response?.nextHandId ?? '')
@@ -92,6 +94,7 @@ const Replayer: React.FC<Props> = ({ handId }) => {
         <Block 
         display="flex" 
         justify="center" 
+        align="center"
         width="100%" 
         height="100%" 
         position="relative"
@@ -99,12 +102,12 @@ const Replayer: React.FC<Props> = ({ handId }) => {
             <HandInfoComponent 
             hand={currentHand}
             />
-            <Block display="flex" justify="center" align="center" height="100%" position="relative" customStyles={{ maxWidth: '400px', maxHeight: '700px'}}>
-                {state.playersActions.map((player) => {
+            <StyledGameContainer>
+                {state.playersActions.map((player, i) => {
                 const isWinner = currentHand.winner?.name === player.name;
                     return (
                             <PlayerComponent
-                                key={player.name}
+                                key={i}
                                 nick={player.showAction && player.action ? player.action : player.name}
                                 stack={formatAmount(player.stack, currentHand.bb)}
                                 currency={state?.showInBigBlinds ? 'BB' : currentHand?.currency}
@@ -132,9 +135,11 @@ const Replayer: React.FC<Props> = ({ handId }) => {
                     );
                 })}
                 <TableComponent 
-                pot={state.actionIndex < currentHand.actions.length ? formatAmount(state.pot, currentHand?.bb) : 0} 
+                // pot={state.actionIndex < currentHand.actions.length ? formatAmount(state.pot, currentHand?.bb) : 0} 
+                pot={120}
                 currency={state?.showInBigBlinds ? 'BB' : currentHand?.currency}
-                cards={state.board} 
+                // cards={state.board} 
+                cards={["Ks", "Qc", "As", "5h", "4d"]}
                 room={currentHand.room} 
                 />
                 <ReplayerControls
@@ -153,7 +158,7 @@ const Replayer: React.FC<Props> = ({ handId }) => {
                 onShowInBbHandler={() => dispatch({ type: "TOGGLE_BIG_BLINDS" })}
                 onReplayHandler={() => dispatch({ type: state.isPlaying ? "PAUSE" : "PLAY" })}
                 />
-            </Block>
+            </StyledGameContainer>
         </Block>
     );
 }

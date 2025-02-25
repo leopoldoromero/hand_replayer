@@ -1,48 +1,242 @@
 'use client'
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const positionBySeat = (seat: number, isFullRing: boolean) => {
-    const fullRingStylesBySeat: Record<number, string> = {
-        1: "top: 10%; right: 15%;",
-        2: "top: 35%; right: 5%; transform: translate(50%, -50%);",
-        3: "top: 40%; right: 5%; transform: translate(50%, 50%);",
-        4: "bottom: 30%; right: -20%; transform: translate(-50%, 50%);",
-        5: "bottom: 12%; left: 40%;",
-        6: "bottom: 20%; left: 5%; transform: translate(-50%, -50%);",
-        7: "top: 40%; right: 95%; transform: translate(50%, 50%);",
-        8: "top: 35%; right: 95%; transform: translate(50%, -50%);",
-        9: "top: 15%; left: 0;",
+    const fullRingStylesBySeat: Record<number, ReturnType<typeof css>> = {
+        1: css`
+            top: 0;
+           `,
+        2: css`
+        top: 10%;
+        right: -5%;
+        ${(p) => p.theme.media.tablet`
+            top: 5%;
+            right: 10%;
+        `}
+        `,
+        3: css`
+        top: 40%;
+        transform: translateY(-50%);
+        right: -5%;
+        `,
+        4: css`
+        bottom: 20%;
+        transform: translateY(-50%);
+        right: -5%;
+        ${(p) => p.theme.media.tablet`
+            bottom: 10%;
+            right: 0%;
+        `}
+        `,
+        5: css`
+        bottom: 0;
+        transform: translateY(-50%);
+        right: 5%;
+        ${(p) => p.theme.media.tablet`
+            bottom: -5%;
+            right: 30%;
+        `}
+        `,
+        6: css`
+        bottom: 0;
+        transform: translateY(-50%);
+        left: 5%;
+        ${(p) => p.theme.media.tablet`
+            left: 25%;
+            transform: none;
+            bottom: 5%;
+        `}
+        `,
+        7: css`
+        bottom: 20%;
+        transform: translateY(-50%);
+        left: -5%;
+        ${(p) => p.theme.media.tablet`
+            bottom: 10%;
+            left: 0;
+        `}
+        `,
+        8: css`
+        top: 40%;
+        transform: translateY(-50%);
+        left: -5%;
+        ${(p) => p.theme.media.tablet`
+            bottom: 50%;
+            transform: translateY(-50%);
+            left: -5%;
+        `}
+        `,
+        9: css`
+        top: 10%;
+        left: -5%;
+        ${(p) => p.theme.media.tablet`
+            top: 5%;
+            left: 10%;
+        `}
+        `,
     };
-    const sixMaxStylesBySeat: Record<number, string> = {
-        1: "top: 10%; right: 40%;",
-        2: "top: 35%; right: 5%; transform: translate(50%, -50%);",
-        3: "top: 45%; right: 5%; transform: translate(50%, 50%);",
-        4: "bottom: 12%; left: 40%;",
-        5: "top: 45%; left: 5%; transform: translate(-50%, 50%);",
-        6: "top: 35%; left: 5%; transform: translate(-50%, -50%);",
+    const sixMaxStylesBySeat: Record<number, ReturnType<typeof css>> = {
+        1: css`
+        top: 0;
+       `,
+        2: css`
+            top: 30%;
+            right: 10%; 
+            transform: translate(50%, -50%);
+             ${(p) => p.theme.media.tablet`
+                top: 25%;
+            `}
+        ` ,
+        3: css`
+            top: 60%;
+            right: 10%; 
+            transform: translate(50%, 50%);
+             ${(p) => p.theme.media.tablet`
+                top: 60%;
+            `}
+        `,
+        4: css`
+            bottom: 5%;
+        `,
+        5: css`
+            top: 60%;
+            left: 10%;  
+            transform: translate(-50%, 50%);
+            ${(p) => p.theme.media.tablet`
+                top: 60%;
+            `}
+        `,
+        6: css`
+            top: 30%;
+            left: 10%; 
+            transform: translate(-50%, -50%);
+            ${(p) => p.theme.media.tablet`
+                top: 25%;
+            `}
+        `,
     };
     return isFullRing ? fullRingStylesBySeat[seat]  : sixMaxStylesBySeat[seat]; 
 };
 
 const betPositionBySeat = (seat: number, isFullRing: boolean) => {
-    const fullRingStyles: Record<number, string> = {
-        1: "top: 130%; right: 50%; transform: translate(50%, -50%);",
-        2: "top: 70%; right: 100%; transform: translate(-50%, -50%);",
-        3: "top: 70%; right: 100%; transform: translate(-50%, -50%);",
-        4: "top: 70%; right: 115%; transform: translate(-50%, -50%);",
-        5: "left: 50%; bottom: 110%; transform: translate(-50%, -50%);",
-        6: "top: 70%; left: 100%; transform: translate(50%, -50%);",
-        7: "top: 70%; left: 100%; transform: translate(50%, -50%);",
-        8: "top: 70%; left: 100%; transform: translate(50%, -50%);",
-        9: "top: 130%; left: 70%; transform: translate(50%, -50%);",
+    const fullRingStyles: Record<number, ReturnType<typeof css>> = {
+        1: css`
+        top: 120%;
+        transform: translateX(50%);
+        `,
+        2: css`
+        transform: translateY(50%);
+        top: 100%; 
+        right: 120%;
+        ${(p) => p.theme.media.tablet`
+            top: 100%;
+            left: 10%;
+            right: 0;
+        `}
+        `,
+        3: css`
+        transform: translateY(50%);
+        top: 50%;
+        right: 120%;
+        ${(p) => p.theme.media.tablet`
+            top: 50%;
+            right: 130%;
+        `}
+        `,
+        4: css`
+        transform: translateY(50%);
+        top: 50%;
+        right: 120%;
+        ${(p) => p.theme.media.tablet`
+            bottom: 70%;
+            right: 130%;
+            top: 0;
+        `}
+        `,
+        5: css`
+        transform: translateY(50%);
+        bottom: 100%;
+        right: 120%;
+        ${(p) => p.theme.media.tablet`
+            bottom: 120%;
+            right: 50%;
+        `}
+        `,
+        6: css`
+        bottom: 120%;
+        transform: translateX(50%);
+        right: 0;
+        ${(p) => p.theme.media.tablet`
+            bottom: 120%;
+        `}
+        `,
+        7: css`
+        transform: translateY(50%);
+        top: 50%;
+        left: 120%;
+        ${(p) => p.theme.media.tablet`
+            left: 130%;
+            top: 0;
+        `}
+        `,
+        8: css`
+        transform: translateY(50%);
+        top: 50%;
+        left: 120%;
+        ${(p) => p.theme.media.tablet`
+            left: 130%;
+            top: 0;
+        `}
+        `,
+        9: css`
+        transform: translateY(50%);
+        top: 100%; 
+        left: 100%;
+        ${(p) => p.theme.media.tablet`
+            top: 120%;
+            left: 50%;
+        `}
+        `,
     }
-    const sixMaxStyles: Record<number, string> = {
-        1: "top: 95%; right: 50%; transform: translate(50%, 50%);",
-        2: "top: 70%; right: 95%; transform: translate(-50%, -50%);",
-        3: "top: 70%; right: 95%; transform: translate(-50%, -50%);",
-        4: "right: 50%; bottom: 100%; transform: translate(50%, -50%);",
-        5: "top: 70%; left: 95%; transform: translate(50%, -50%);",
-        6: "top: 70%; left: 95%; transform: translate(50%, -50%);",
+    const sixMaxStyles: Record<number, ReturnType<typeof css>> = {
+        1: css`
+        top: 95%; 
+        right: 50%; 
+        transform: translate(50%, 50%);
+        ${(p) => p.theme.media.tablet`
+            top: 100%;
+        `}`,
+        2: css`
+        top: 70%; 
+        right: 100%; 
+        transform: translate(-50%, -50%);
+        ${(p) => p.theme.media.tablet`
+            right: 100%;
+        `}`,
+        3: css`
+        top: 70%; 
+        right: 100%; 
+        transform: translate(-50%, -50%);
+        ${(p) => p.theme.media.tablet`
+            right: 115%;
+        `}`,
+        4: css`right: 50%; bottom: 100%; transform: translate(50%, -50%);`,
+        5: css`
+        top: 70%; 
+        left: 100%; 
+        transform: translate(50%, -50%);
+        ${(p) => p.theme.media.tablet`
+            top: 30%;
+            left: 100%;
+        `}`,
+        6: css`
+        top: 70%; 
+        left: 100%; 
+        transform: translate(50%, -50%);
+        ${(p) => p.theme.media.tablet`
+            top: 60%;
+            left: 100%;
+        `}`,
     };
 
     return isFullRing ? fullRingStyles[seat] : sixMaxStyles[seat]; 

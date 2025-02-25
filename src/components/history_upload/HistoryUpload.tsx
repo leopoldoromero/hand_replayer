@@ -57,11 +57,15 @@ const HistoryUploadComponent = () => {
         setLoading(true);
 
         try {
-        const file = new File([text], "history.txt", { type: "text/plain" });
-        await uploadHandsAction(file);
+            try {
+                const file = new File([text], "history.txt", { type: "text/plain" });
+                await uploadHandsAction(file);
+            } catch (error) {
+                console.error("Upload Failed 1:", error);
+            }
         const response = await getHandsAction()
         setHands(response);
-        localStorageRepository.saveHandHistory(response, 'handHistory', true);
+        // localStorageRepository.saveHandHistory(response, 'handHistory', true);
 
         } catch (error) {
         console.error("Upload Failed:", error);

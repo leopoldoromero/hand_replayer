@@ -1,7 +1,7 @@
 'use client';
 import styled from "styled-components";
 
-export const StyledHandInfoContainer = styled.header`
+export const StyledHandInfoContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;

@@ -1,6 +1,24 @@
 'use client'
 import styled from "styled-components";
 
+export const StyledGameContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    position: relative;
+    min-width: 350px;
+    width: 90%;
+    max-width: 400px;
+    max-height: 570px;
+
+    ${(p) => p.theme.media.tablet`
+        // max-width: 800px;
+        max-height: 385px;
+        max-width: 700px;
+    `}
+`;
+
 export const StyledButton = styled.button`
     display: flex;
     justify-content: center;
