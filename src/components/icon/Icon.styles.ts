@@ -30,19 +30,22 @@ const getSize = (size: IconSize) => {
   }
 };
 
-export const Container = styled.div<{
-  $size: IconSize;
-  $color: ColorKeys;
-  $hoverColor?: ColorKeys;
-  $hoverBgColor?: ColorKeys;
-  $activeColor?: ColorKeys;
-  $isSortable?: boolean;
-} & MarginStyledProps & CustomStylesStyledProps>`
+export const Container = styled.div<
+  {
+    $size: IconSize;
+    $color: ColorKeys;
+    $hoverColor?: ColorKeys;
+    $hoverBgColor?: ColorKeys;
+    $activeColor?: ColorKeys;
+    $isSortable?: boolean;
+  } & MarginStyledProps &
+    CustomStylesStyledProps
+>`
   display: flex;
   justify-content: center;
   align-items: center;
   ${margin};
-  
+
   > svg {
     ${(p) => getSize(p.$size)};
     fill: ${(p) => p.theme.color[p.$color]};

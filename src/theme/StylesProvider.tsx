@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import * as React from 'react';
 import { ThemeProvider } from 'styled-components';
@@ -23,14 +23,14 @@ const zIndex = {
 };
 
 const theme = {
-    flex,
-    media,
-    zIndex,
-    fontFamily: fontFamilies,
-    fontSize,
-    fontSizeGenerator,
-    color: colors,
-    weight: weights,
+  flex,
+  media,
+  zIndex,
+  fontFamily: fontFamilies,
+  fontSize,
+  fontSizeGenerator,
+  color: colors,
+  weight: weights,
 };
 
 type Props = {

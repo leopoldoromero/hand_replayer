@@ -1,6 +1,17 @@
 import { css } from 'styled-components';
 
-export type TextTags = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'a' | 'span' | 'strong' | 'input';
+export type TextTags =
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'h4'
+  | 'h5'
+  | 'h6'
+  | 'p'
+  | 'a'
+  | 'span'
+  | 'strong'
+  | 'input';
 
 const BASE_SIZE = 1;
 
@@ -18,7 +29,13 @@ const tagScales: Record<TextTags, Partial<Record<FontSizeNames, number>>> = {
   input: { tiny: 0.875, small: 1, base: 1.125, medium: 1.25, large: 1.375 },
 };
 
-export type FontSizeNames = 'tiny' | 'small' | 'base' | 'medium' | 'large' | 'extraLarge';
+export type FontSizeNames =
+  | 'tiny'
+  | 'small'
+  | 'base'
+  | 'medium'
+  | 'large'
+  | 'extraLarge';
 export const fontSize: Record<FontSizeNames, string> = {
   tiny: `${BASE_SIZE * 0.8}rem`,
   small: `${BASE_SIZE * 0.875}rem`,
@@ -28,7 +45,10 @@ export const fontSize: Record<FontSizeNames, string> = {
   extraLarge: `${BASE_SIZE * 2}rem`,
 };
 
-const lineHeightScales: Record<TextTags, Partial<Record<FontSizeNames, number>>> = {
+const lineHeightScales: Record<
+  TextTags,
+  Partial<Record<FontSizeNames, number>>
+> = {
   h1: { tiny: 1.2, small: 1.3, base: 1.4, medium: 1.5, large: 1.6 },
   h2: { tiny: 1.2, small: 1.3, base: 1.4, medium: 1.5, large: 1.6 },
   h3: { tiny: 1.2, small: 1.3, base: 1.4, medium: 1.5, large: 1.6 },
@@ -45,49 +65,54 @@ const lineHeightScales: Record<TextTags, Partial<Record<FontSizeNames, number>>>
 export const defaultFontStyles: Record<
   TextTags,
   {
-    "font-size": Record<FontSizeNames, string>;
-    "font-weight": number;
-    "line-height": Record<FontSizeNames, string>;
+    'font-size': Record<FontSizeNames, string>;
+    'font-weight': number;
+    'line-height': Record<FontSizeNames, string>;
   }
-> = Object.keys(tagScales).reduce((styles, tag) => {
-  const tagKey = tag as TextTags;
-  const scales = tagScales[tagKey];
-  const lineHeights = lineHeightScales[tagKey];
+> = Object.keys(tagScales).reduce(
+  (styles, tag) => {
+    const tagKey = tag as TextTags;
+    const scales = tagScales[tagKey];
+    const lineHeights = lineHeightScales[tagKey];
 
-  return {
-    ...styles,
-    [tagKey]: {
-      "font-size": Object.keys(scales).reduce((sizes, sizeKey) => {
-        const scaleKey = sizeKey as FontSizeNames;
-        return {
-          ...sizes,
-          [scaleKey]: `${BASE_SIZE * (scales[scaleKey] ?? 1)}rem`, // Generate font size based on scale
-        };
-      }, {} as Record<FontSizeNames, string>),
-      "font-weight": tagKey.startsWith("h") ? 600 : 400, // Headings are bold by default
-      "line-height": Object.keys(lineHeights).reduce((lines, sizeKey) => {
-        const lineKey = sizeKey as FontSizeNames;
-        return {
-          ...lines,
-          [lineKey]: `${lineHeights[lineKey]}`, // Use line heights defined in lineHeightScales
-        };
-      }, {} as Record<FontSizeNames, string>),
-    },
-  };
-}, {} as Record<
-  TextTags,
-  {
-    "font-size": Record<FontSizeNames, string>;
-    "font-weight": number;
-    "line-height": Record<FontSizeNames, string>;
-  }
->);
+    return {
+      ...styles,
+      [tagKey]: {
+        'font-size': Object.keys(scales).reduce((sizes, sizeKey) => {
+          const scaleKey = sizeKey as FontSizeNames;
+          return {
+            ...sizes,
+            [scaleKey]: `${BASE_SIZE * (scales[scaleKey] ?? 1)}rem`, // Generate font size based on scale
+          };
+        }, {} as Record<FontSizeNames, string>),
+        'font-weight': tagKey.startsWith('h') ? 600 : 400, // Headings are bold by default
+        'line-height': Object.keys(lineHeights).reduce((lines, sizeKey) => {
+          const lineKey = sizeKey as FontSizeNames;
+          return {
+            ...lines,
+            [lineKey]: `${lineHeights[lineKey]}`, // Use line heights defined in lineHeightScales
+          };
+        }, {} as Record<FontSizeNames, string>),
+      },
+    };
+  },
+  {} as Record<
+    TextTags,
+    {
+      'font-size': Record<FontSizeNames, string>;
+      'font-weight': number;
+      'line-height': Record<FontSizeNames, string>;
+    }
+  >
+);
 
-
-export const fontSizeGenerator = (tag: TextTags, size: keyof typeof fontSize) => css`
-  font-size: ${defaultFontStyles[tag]["font-size"][size]};
-  font-weight: ${defaultFontStyles[tag]["font-weight"]};
-  line-height: ${defaultFontStyles[tag]["line-height"][size]};
+export const fontSizeGenerator = (
+  tag: TextTags,
+  size: keyof typeof fontSize
+) => css`
+  font-size: ${defaultFontStyles[tag]['font-size'][size]};
+  font-weight: ${defaultFontStyles[tag]['font-weight']};
+  line-height: ${defaultFontStyles[tag]['line-height'][size]};
 `;
 
 export const fontWeights = {
@@ -100,10 +125,12 @@ export const fontWeights = {
 
 export type FontWeight = keyof typeof fontWeights;
 
-export const weights: Record<FontWeight, string> = Object.entries(fontWeights).reduce(
+export const weights: Record<FontWeight, string> = Object.entries(
+  fontWeights
+).reduce(
   (acc, [key, value]) => ({
     ...acc,
-    [key]: `${value}`, 
+    [key]: `${value}`,
   }),
   {} as Record<FontWeight, string>
 );
@@ -119,7 +146,9 @@ export const fontFamilies = {
 
 export type FontFamilyKey = keyof typeof fontFamilies;
 
-export const fontFamilyMap: Record<FontFamilyKey, string> = Object.entries(fontFamilies).reduce(
+export const fontFamilyMap: Record<FontFamilyKey, string> = Object.entries(
+  fontFamilies
+).reduce(
   (acc, [key, value]) => ({
     ...acc,
     [key]: value,

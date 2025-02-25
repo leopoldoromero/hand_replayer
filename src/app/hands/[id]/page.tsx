@@ -1,12 +1,6 @@
-import Replayer from "@/components/replayer/Replayer";
+import Replayer from '@/components/replayer/Replayer';
 
-export default function HandReplay({
-    params,
-  }: {
-    params: { id: string };
-  }) {
-    const {id} = params;
-    return (
-      <Replayer handId={id}/>
-    );
-    }
+export default function HandReplay({ params }: { params: { id: string } }) {
+  const { id } = params;
+  return <Replayer handId={id} />;
+}

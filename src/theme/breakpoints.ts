@@ -6,8 +6,14 @@ export enum Breakpoints {
 }
 
 export type Media = {
-  tablet: (strings: CSSObject, ...args: Interpolation<DefaultTheme>[]) => Interpolation<CSSObject>;
-  desktop: (strings: CSSObject, ...args: Interpolation<DefaultTheme>[]) => Interpolation<CSSObject>;
+  tablet: (
+    strings: CSSObject,
+    ...args: Interpolation<DefaultTheme>[]
+  ) => Interpolation<CSSObject>;
+  desktop: (
+    strings: CSSObject,
+    ...args: Interpolation<DefaultTheme>[]
+  ) => Interpolation<CSSObject>;
 };
 
 export const media: Media = {

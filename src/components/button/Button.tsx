@@ -7,7 +7,12 @@ import Icon, { IconSize, IconTypes } from '../icon/Icon';
 
 type ButtonType = 'submit' | 'reset' | 'button';
 export type ButtonWrapperProps = Omit<Props, 'onClick' | 'type'>;
-export type ButtonVariant = 'text' | 'outlined' | 'default' | 'contained' | 'icon';
+export type ButtonVariant =
+  | 'text'
+  | 'outlined'
+  | 'default'
+  | 'contained'
+  | 'icon';
 type ButtonPosition = 'start' | 'end';
 export type ButtonColor = 'primary' | 'secondary';
 

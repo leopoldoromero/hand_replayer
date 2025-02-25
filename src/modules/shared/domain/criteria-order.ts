@@ -1,12 +1,15 @@
 export enum CriteriaOrderTypes {
-    ASC = 'ASC',
-    DESC = 'DESC',
-    NONE = 'NONE',
+  ASC = 'ASC',
+  DESC = 'DESC',
+  NONE = 'NONE',
 }
 
 export class CriteriaOrder {
-    constructor(readonly orderBy: string, readonly orderType: CriteriaOrderTypes) {
-        this.orderBy = orderBy;
-        this.orderType = orderType;
-    }
+  constructor(
+    readonly orderBy: string,
+    readonly orderType: CriteriaOrderTypes
+  ) {
+    this.orderBy = orderBy;
+    this.orderType = orderType;
+  }
 }

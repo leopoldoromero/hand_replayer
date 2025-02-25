@@ -1,4 +1,4 @@
 export enum PokerRooms {
-    STARS = 'STARS',
-    WINAMAX = 'WINAMAX'
+  STARS = 'STARS',
+  WINAMAX = 'WINAMAX',
 }

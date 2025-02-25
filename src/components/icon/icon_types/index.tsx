@@ -11,7 +11,7 @@ const iconTypes = {
   forward: <ForwardIcon />,
   backward: <BackwardIcon />,
   next: <NextIcon />,
-  prev: <PrevIcon />
+  prev: <PrevIcon />,
 };
 
 export default iconTypes;

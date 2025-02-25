@@ -1,5 +1,5 @@
-'use client'
-import styled from "styled-components";
+'use client';
+import styled from 'styled-components';
 
 export const SliderWrapper = styled.div`
   display: flex;
@@ -8,8 +8,8 @@ export const SliderWrapper = styled.div`
 `;
 
 export const SliderInput = styled.input`
-    width: 100px;
-    cursor: pointer;
+  width: 100px;
+  cursor: pointer;
 `;
 
 export const ValueDisplay = styled.span`
