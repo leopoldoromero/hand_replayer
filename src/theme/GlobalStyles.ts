@@ -2,7 +2,7 @@ import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyles = createGlobalStyle`
     html {
-        font-size: calc(15px + 2 * ((100vw - 500px) / (2000 - 768)));
+        font-size: clamp(15px, 1vw + 0.5rem, 16.5px);
         height: 100%;
     }
     body{

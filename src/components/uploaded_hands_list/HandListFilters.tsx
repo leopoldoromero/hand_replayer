@@ -15,14 +15,16 @@ interface Props {
   loadHands: () => void;
 }
 
-const HandListFilters: React.FC<Props> = ({
-  filterHandsByCriteria,
-  loadHands,
-}) => {
-  const [potType, setPotType] = useState<string>('');
-  const [position, setPosition] = useState<string>('');
-  const [minPotSize, setMinPotSize] = useState<number>(0);
-  const [showLosingHands, setShowLosingHands] = useState<boolean>(false);
+
+const HandListFilters: React.FC<Props> = ({ filterHandsByCriteria, loadHands }) => {
+  const initialState = {
+    potType: '',
+    position: '',
+    minPotSize: 0,
+    showLosingHands: false,
+  };
+
+  const [filters, setFilters] = useState(initialState);
 
   const potTypeToEnumMapper = (): PotType => {
     const valuesToEnum: { [key in string]: PotType } = {
@@ -33,102 +35,70 @@ const HandListFilters: React.FC<Props> = ({
       SQUEEZE: PotType.SQUEEZE,
       '4BET': PotType.FOUR_BET,
     };
-    return valuesToEnum[potType] ?? PotType.UNOPENED;
+    return valuesToEnum[filters.potType] ?? PotType.UNOPENED;
   };
 
   const applyFilters = () => {
-    const filters: Array<CriteriaFilter> = [];
-    if (potType !== '') {
-      filters.push(new CriteriaFilter('potType', potTypeToEnumMapper()));
+    const filterCriteria: Array<CriteriaFilter> = [];
+
+    if (filters.potType !== '') {
+      filterCriteria.push(new CriteriaFilter('potType', potTypeToEnumMapper()));
     }
-    if (position !== '') {
-      filters.push(new CriteriaFilter('position', position));
+    if (filters.position !== '') {
+      filterCriteria.push(new CriteriaFilter('position', filters.position));
     }
-    if (minPotSize !== 0) {
-      filters.push(new CriteriaFilter('minPotSize', minPotSize));
+    if (filters.minPotSize !== 0) {
+      filterCriteria.push(new CriteriaFilter('minPotSize', filters.minPotSize));
     }
-    if (showLosingHands) {
-      filters.push(new CriteriaFilter('loosingHands', showLosingHands));
+    if (filters.showLosingHands) {
+      filterCriteria.push(new CriteriaFilter('loosingHands', filters.showLosingHands));
     }
-    if (filters?.length) {
-      const criteria = new Criteria(filters);
-      filterHandsByCriteria(criteria);
+
+    if (filterCriteria.length) {
+      filterHandsByCriteria(new Criteria(filterCriteria));
     }
   };
 
+  const resetFilters = () => {
+    setFilters(initialState); // ✅ Reset all states at once
+    loadHands(); // ✅ Reload hands after reset
+  };
+
   return (
-    <Block
-      display='flex'
-      direction='column'
-      width='100%'
-      customStyles={{ maxWidth: '500px' }}
-    >
-      <Block
-        display='flex'
-        justify='space-between'
-        flexWrap='wrap'
-        gap='5px'
-        mb='l'
-        width='100%'
-      >
+    <Block display='flex' direction='column' width='100%' customStyles={{ maxWidth: '500px' }}>
+      <Block display='flex' justify='space-between' flexWrap='wrap' gap='5px' mb='l' width='100%'>
         <Dropdown
           label='POT TYPE'
           options={['SRP', 'ROL', 'LIMPED', '3BET', 'SQUEEZE', '4BET']}
-          value={potType}
-          onChange={setPotType}
+          value={filters.potType}
+          onChange={(value) => setFilters((prev) => ({ ...prev, potType: value }))}
         />
         <Dropdown
           label='POSITION'
           options={Object.values(sixMaxPositions)}
-          value={position}
-          onChange={setPosition}
+          value={filters.position}
+          onChange={(value) => setFilters((prev) => ({ ...prev, position: value }))}
         />
-        <Block
-          display='flex'
-          direction='column'
-          justify='center'
-          align='flex-end'
-        >
+        <Block display='flex' direction='column' justify='center' align='flex-end'>
           <Range
             min={0}
             max={200}
-            value={minPotSize}
-            onChange={setMinPotSize}
+            value={filters.minPotSize}
+            onChange={(value) => setFilters((prev) => ({ ...prev, minPotSize: value }))}
           />
-          <Text>Pot size ≥ {minPotSize} BB</Text>
+          <Text>Pot size ≥ {filters.minPotSize} BB</Text>
         </Block>
-        <Block
-          display='flex'
-          direction='column'
-          justify='center'
-          align='flex-start'
-        >
+        <Block display='flex' direction='column' justify='center' align='flex-start'>
           <Toggle
-            isChecked={showLosingHands}
-            onToggle={() => setShowLosingHands(!showLosingHands)}
+            isChecked={filters.showLosingHands}
+            onToggle={() => setFilters((prev) => ({ ...prev, showLosingHands: !prev.showLosingHands }))}
           />
-          <Text>
-            {showLosingHands
-              ? 'Showing only losing hands'
-              : 'Showing all hands'}
-          </Text>
+          <Text>{filters.showLosingHands ? 'Showing only losing hands' : 'Showing all hands'}</Text>
         </Block>
       </Block>
       <Block display='flex' justify='space-evenly' mb='m'>
-        <Button
-          variant='default'
-          size='m'
-          text='Apply filters'
-          color='green'
-          onClick={() => applyFilters()}
-        />
-        <Button
-          variant='default'
-          size='l'
-          text='Reset filters'
-          color='green'
-          onClick={() => loadHands()}
-        />
+        <Button variant='default' size='m' text='Apply filters' color='green' onClick={applyFilters} />
+        <Button variant='default' size='l' text='Reset filters' color='green' onClick={resetFilters} />
       </Block>
     </Block>
   );

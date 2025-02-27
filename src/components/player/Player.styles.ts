@@ -264,6 +264,10 @@ export const StyledPlayerContainer = styled.div<{
   max-width: 90px;
   ${(p) => p.$folded && 'opacity: 0.5;'}
   ${({ $seat, $isFullRing }) => positionBySeat($seat, $isFullRing)}
+
+  ${(p) => p.theme.media.tablet`
+    max-width: 110px;
+    `}
 `;
 
 export const StyledPlayerInfoContainer = styled.div<{ $isHero: boolean }>`
@@ -280,6 +284,11 @@ export const StyledPlayerInfoContainer = styled.div<{ $isHero: boolean }>`
   justify-content: center;
   align-items: center;
   text-align: center;
+  gap: 5px;
+
+  ${(p) => p.theme.media.tablet`
+    min-width: 90px;
+    `}
 `;
 
 export const StyledPlayerBetConatiner = styled.div<{
@@ -304,7 +313,7 @@ export const StyledDealerButton = styled.div`
   align-items: center;
   color: white;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 0.8rem;
   box-shadow: 0 0 10px rgba(0, 0, 255, 0.5);
 `;
 

@@ -10,6 +10,7 @@ import { uploadHandsAction } from '@/actions/upload_hands.action';
 import { getHandsAction } from '@/actions/get_hands.action';
 import { Hand, positionNumberToName } from '@/modules/hand/domain/hand';
 import { Criteria } from '@/modules/shared/domain/criteria';
+import HandListFilters from '../uploaded_hands_list/HandListFilters';
 
 const HistoryUploadComponent = () => {
   const [hands, setHands] = useState<Array<Hand>>([]);
@@ -91,11 +92,11 @@ const HistoryUploadComponent = () => {
       height='100%'
       position='relative'
       justify='space-between'
-      customStyles={{ maxHeight: '300px' }}
       pt='l'
       pr='l'
       pb='l'
       pl='l'
+      customStyles={{ overflowY: 'auto'}}
     >
       <Block
         display='flex'
@@ -131,13 +132,19 @@ const HistoryUploadComponent = () => {
           </Block>
         </StyledForm>
       </Block>
-      {hands?.length ? (
-        <UploadedHandsList
-          hands={hands}
-          filterHandsByCriteria={filterHandsByCriteria}
-          loadHands={loadHands}
-        />
-      ) : null}
+      <Block  mt='m'>
+        <Block display='flex' justify='center' mb='m'>
+            <HandListFilters
+            filterHandsByCriteria={filterHandsByCriteria}
+            loadHands={loadHands}
+            />
+        </Block>
+        {hands?.length ? (
+            <UploadedHandsList
+            hands={hands}
+            />
+        ) : null}
+      </Block>
     </Block>
   );
 };

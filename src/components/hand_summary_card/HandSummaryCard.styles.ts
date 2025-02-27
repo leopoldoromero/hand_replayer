@@ -11,4 +11,12 @@ export const StyledHandSummaryContainer = styled(Link)`
   padding: 0.5rem;
   text-decoration: none;
   color: ${(p) => p.theme.color.white};
+
+  ${(p) => p.theme.media.tablet`
+    width: 155px;
+  `}
+
+  ${(p) => p.theme.media.desktop`
+    width: 155px;
+  `}
 `;

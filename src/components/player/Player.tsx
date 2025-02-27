@@ -22,6 +22,7 @@ interface PlayerProps {
   isButton: boolean;
   folded?: boolean;
   stats?: PreflopStats;
+  onClick: () => void;
 }
 
 const SIX_MAX_TOTAL_SEATS = 6;
@@ -37,41 +38,43 @@ const PlayerComponent: React.FC<PlayerProps> = ({
   isButton,
   folded,
   stats,
+  onClick,
 }) => (
-  <StyledPlayerContainer
-    $seat={seat}
-    $isFullRing={totalSeats > SIX_MAX_TOTAL_SEATS}
-    $folded={folded}
-  >
-    <Block display='flex' direction='column' justify='center' align='center'>
-      <Block display='flex'>
-        {cards?.map((card, i) => (
-          <CardComponent card={card} key={i} showSliced={!isHero} />
-        ))}
-      </Block>
-      <StyledPlayerInfoContainer $isHero={isHero}>
-        {stats ? (
-          <StyledVpipContainer>{Math.round(stats.vpip)}</StyledVpipContainer>
-        ) : null}
-        <Text fontSize='tiny'>{nick}</Text>
-        <Text fontSize='tiny' weight='bold'>{`${stack.toFixed(
-          2
-        )} ${currency}`}</Text>
-      </StyledPlayerInfoContainer>
-    </Block>
-    {isButton ? <StyledDealerButton>D</StyledDealerButton> : null}
-    <StyledPlayerBetConatiner
+    <StyledPlayerContainer
       $seat={seat}
       $isFullRing={totalSeats > SIX_MAX_TOTAL_SEATS}
+      $folded={folded}
+      onClick={onClick}
     >
-      {amount && (
-        <Text fontSize='small'>
-          {amount}
-          {currency}
-        </Text>
-      )}
-    </StyledPlayerBetConatiner>
-  </StyledPlayerContainer>
+      <Block display='flex' direction='column' justify='center' align='center'>
+        <Block display='flex'>
+          {cards?.map((card, i) => (
+            <CardComponent card={card} key={i} showSliced={!isHero} />
+          ))}
+        </Block>
+        <StyledPlayerInfoContainer $isHero={isHero}>
+          {stats ? (
+            <StyledVpipContainer>{Math.round(stats.vpip)}</StyledVpipContainer>
+          ) : null}
+          <Text fontSize='tiny'>{nick}</Text>
+          <Text fontSize='tiny' weight='bold'>{`${stack.toFixed(
+            2
+          )} ${currency}`}</Text>
+        </StyledPlayerInfoContainer>
+      </Block>
+      {isButton ? <StyledDealerButton>D</StyledDealerButton> : null}
+      <StyledPlayerBetConatiner
+        $seat={seat}
+        $isFullRing={totalSeats > SIX_MAX_TOTAL_SEATS}
+      >
+        {amount && (
+          <Text fontSize='small'>
+            {amount}
+            {currency}
+          </Text>
+        )}
+      </StyledPlayerBetConatiner>
+    </StyledPlayerContainer>
 );
 
 export default PlayerComponent;

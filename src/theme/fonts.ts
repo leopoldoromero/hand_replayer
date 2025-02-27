@@ -108,7 +108,7 @@ export const defaultFontStyles: Record<
 
 export const fontSizeGenerator = (
   tag: TextTags,
-  size: keyof typeof fontSize
+  size: keyof typeof fontSize,
 ) => css`
   font-size: ${defaultFontStyles[tag]['font-size'][size]};
   font-weight: ${defaultFontStyles[tag]['font-weight']};

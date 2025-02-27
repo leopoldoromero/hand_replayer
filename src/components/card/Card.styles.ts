@@ -7,8 +7,6 @@ export const StyledCard = styled.div<{
   $bigSize?: boolean;
   $hidden?: boolean;
 }>`
-  ${(p) =>
-    p.$bigSize ? 'width: 63px; height: 90px;' : ' width: 35px; height: 50px;'}
   position: relative;
   background: ${(p) => p.theme.color[p.$bgColor]};
   position: relative;
@@ -18,6 +16,20 @@ export const StyledCard = styled.div<{
   border-radius: 5%;
   ${(p) => p.$hidden && 'visibility: hidden;'};
   ${(p) => p.$showSliced && 'clip-path: inset(0 0 45% 0);'}
+  
+  width: ${(p) => (p.$bigSize ? '63px' : '35px')};
+  height: ${(p) => (p.$bigSize ? '90px' : '50px')};
+  
+  ${(p) => p.theme.media.tablet`
+    width: ${p.$bigSize ? '70px' : '40px'};
+    height: ${p.$bigSize ? '100px' : '55px'};
+  `}
+
+  ${(p) => p.theme.media.desktop`
+    width: ${p.$bigSize ? '70px' : '40px'};
+    height: ${p.$bigSize ? '100px' : '55px'};
+  `}
+
 `;
 
 export const StyledTopContainer = styled.div<{

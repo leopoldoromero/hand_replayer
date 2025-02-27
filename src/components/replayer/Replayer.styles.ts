@@ -17,6 +17,12 @@ export const StyledGameContainer = styled.div`
         max-height: 385px;
         max-width: 700px;
     `}
+
+    ${(p) => p.theme.media.desktop`
+        // max-width: 800px;
+        max-height: 385px;
+        max-width: 700px;
+    `}
 `;
 
 export const StyledButton = styled.button`
