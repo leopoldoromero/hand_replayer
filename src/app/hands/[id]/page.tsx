@@ -1,6 +1,8 @@
 import Replayer from '@/components/replayer/Replayer';
 
-export default function HandReplay({ params }: { params: { id: string } }) {
-  const { id } = params;
+type ParamsProps = Promise<{ id: string }>;
+
+export default async function HandReplay(props: { params: ParamsProps }) {
+  const { id } = await props.params;
   return <Replayer handId={id} />;
 }

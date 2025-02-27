@@ -5,7 +5,7 @@ import { HandDto, PlayersStatsDto } from './history_parser_api.response';
 import { handDtoToDomainMapper } from './history_parser_api_to_domain.mapper';
 import { cookies } from 'next/headers';
 import { PlayerStats } from '../domain/player_stats';
-
+import { v4 as uuidv4 } from "uuid";
 interface GetHandResponse {
   hand: HandDto;
   prev_hand_id: string;
@@ -20,10 +20,11 @@ export class HandApiClient implements HandRepository {
       const formData = new FormData();
       formData.append('file', file);
       const cookieStore = await cookies();
-      const userId = cookieStore.get('user_id')?.value;
+      let userId = cookieStore.get('user_id')?.value;
 
       if (!userId) {
-        cookieStore.set('user_id', '75565b68-ed1f-11ef-901b-0ade7a4f7cd3');
+        userId = uuidv4();
+        cookieStore.set('user_id', userId);
       }
       await axios.post<File, void>(`${this.API_URL}/api/v1/hands`, formData, {
         headers: {
@@ -50,10 +51,11 @@ export class HandApiClient implements HandRepository {
     nextHandId: string | null;
   } | null> {
     const cookieStore = await cookies();
-    const userId = cookieStore.get('user_id')?.value;
+    let userId = cookieStore.get('user_id')?.value;
 
     if (!userId) {
-      cookieStore.set('user_id', '75565b68-ed1f-11ef-901b-0ade7a4f7cd3');
+      userId = uuidv4();
+      cookieStore.set('user_id', userId);
     }
     const response = await axios.get<File, AxiosResponse<GetHandResponse>>(
       `${this.API_URL}/api/v1/hands/${id}`,
@@ -82,10 +84,11 @@ export class HandApiClient implements HandRepository {
 
   async getAll(): Promise<Array<Hand>> {
     const cookieStore = await cookies();
-    const userId = cookieStore.get('user_id')?.value;
+    let userId = cookieStore.get('user_id')?.value;
 
     if (!userId) {
-      cookieStore.set('user_id', '75565b68-ed1f-11ef-901b-0ade7a4f7cd3');
+        userId = uuidv4();
+        cookieStore.set('user_id', userId);
     }
     const response = await axios.get<File, AxiosResponse<Array<HandDto>>>(
       `${this.API_URL}/api/v1/hands`,
@@ -105,10 +108,11 @@ export class HandApiClient implements HandRepository {
 
   async getStats(): Promise<PlayerStats> {
     const cookieStore = await cookies();
-    const userId = cookieStore.get('user_id')?.value;
+    let userId = cookieStore.get('user_id')?.value;
 
     if (!userId) {
-      cookieStore.set('user_id', '75565b68-ed1f-11ef-901b-0ade7a4f7cd3');
+        userId = uuidv4();
+        cookieStore.set('user_id', userId);
     }
     const response = await axios.get<File, AxiosResponse<PlayersStatsDto>>(
       `${this.API_URL}/api/v1/stats`,
