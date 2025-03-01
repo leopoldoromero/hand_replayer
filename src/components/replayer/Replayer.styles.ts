@@ -7,8 +7,8 @@ export const StyledGameContainer = styled.div`
   align-items: center;
   height: 100%;
   position: relative;
-    min-width: 300px;
-    width: 80%;
+  min-width: 300px;
+  width: 80%;
   max-width: 400px;
   max-height: 570px;
 
@@ -18,7 +18,7 @@ export const StyledGameContainer = styled.div`
         max-width: 700px;
     `}
 
-    ${(p) => p.theme.media.desktop`
+  ${(p) => p.theme.media.desktop`
         width: 80%;
         max-height: 385px;
         max-width: 700px;

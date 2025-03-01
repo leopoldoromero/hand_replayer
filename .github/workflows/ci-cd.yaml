@@ -23,7 +23,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: 'Build and Push Docker Image'
         run: |
           docker build . \
@@ -35,4 +35,3 @@ jobs:
           eval $(ssh-agent -s)
           echo "${{ secrets.DEPLOY_KEY }}" | ssh-add -
           ssh -o StrictHostKeyChecking=no -t ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "bash ${{ secrets.DEPLOY_FOLDER }}/${{ secrets.DEPLOY_SCRIPT_SH }}"
-      

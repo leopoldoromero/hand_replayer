@@ -97,7 +97,7 @@ export const gameReducer = (
               showAction: false,
               amount: isNewRound ? null : player.amount,
             }
-      )
+      );
       return {
         ...state,
         actionIndex: state.actionIndex + 1,

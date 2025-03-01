@@ -1,8 +1,7 @@
-'use client'
+'use client';
 import styled from 'styled-components';
 
-export const SVGContainer = styled.svg`
-`;
+export const SVGContainer = styled.svg``;
 
 export const Circle = styled.circle`
   stroke-linecap: round;
@@ -17,7 +16,6 @@ export const ProgressCircle = styled(Circle)`
 export const StyledText = styled.text`
   font-size: 0.7rem;
   font-weight: bold;
-    fill: #ffffff;
+  fill: #ffffff;
   text-anchor: middle;
 `;
-

@@ -46,7 +46,7 @@ const HandSummaryCard: React.FC<Props> = ({
         pb='s'
       >
         <Block display='flex' align='center' mb='s'>
-          <Text isUppercase fontSize='small' mr='s' >
+          <Text isUppercase fontSize='small' mr='s'>
             Position:
           </Text>
           <Text fontSize='tiny'>{position}</Text>

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React from 'react';
 import { Wrapper } from './Backdrop.styles';
 import Block from '../block/Block';
@@ -11,15 +11,19 @@ export type Props = {
 };
 
 const Backdrop: React.FC<Props> = ({ isVisible, onClose, hasButton }) => (
-  <Wrapper data-testid="backdrop_test_id" $isVisible={isVisible} onClick={onClose}>
+  <Wrapper
+    data-testid='backdrop_test_id'
+    $isVisible={isVisible}
+    onClick={onClose}
+  >
     {hasButton && (
       <Block>
         <Button
-          variant="icon"
-          icon="closeX"
+          variant='icon'
+          icon='closeX'
           onClick={onClose}
-          iconColor="white"
-          iconSize="m"
+          iconColor='white'
+          iconSize='m'
           id={`backdrop_closeX_button`}
         />
       </Block>
