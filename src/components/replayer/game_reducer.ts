@@ -77,30 +77,31 @@ export const gameReducer = (
         (state.actionIndex === 0 ||
           state.board.length !==
             (currentAction.cards?.length || state.board.length));
+      const playerACtions = state.playersActions.map((player) =>
+        player.name === currentAction.player
+          ? {
+              ...player,
+              stack: currentAction.amount
+                ? player.stack - currentAction.amount
+                : player.stack,
+              action: currentAction.action,
+              amount: currentAction.amount
+                ? (player.amount || 0) + currentAction.amount
+                : isNewRound
+                ? null
+                : player.amount,
+              showAction: true,
+            }
+          : {
+              ...player,
+              showAction: false,
+              amount: isNewRound ? null : player.amount,
+            }
+      )
       return {
         ...state,
         actionIndex: state.actionIndex + 1,
-        playersActions: state.playersActions.map((player) =>
-          player.name === currentAction.player
-            ? {
-                ...player,
-                stack: currentAction.amount
-                  ? player.stack - currentAction.amount
-                  : player.stack,
-                action: currentAction.action,
-                amount: currentAction.amount
-                  ? (player.amount || 0) + currentAction.amount
-                  : isNewRound
-                  ? null
-                  : player.amount,
-                showAction: true,
-              }
-            : {
-                ...player,
-                showAction: false,
-                amount: isNewRound ? null : player.amount,
-              }
-        ),
+        playersActions: playerACtions,
         pot: currentAction.amount
           ? state.pot + currentAction.amount
           : state.pot,
