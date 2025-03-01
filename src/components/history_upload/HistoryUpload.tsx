@@ -96,7 +96,7 @@ const HistoryUploadComponent = () => {
       pr='l'
       pb='l'
       pl='l'
-      customStyles={{ overflowY: 'auto'}}
+      customStyles={{ overflowY: 'auto' }}
     >
       <Block
         display='flex'
@@ -132,18 +132,14 @@ const HistoryUploadComponent = () => {
           </Block>
         </StyledForm>
       </Block>
-      <Block  mt='m'>
+      <Block mt='m'>
         <Block display='flex' justify='center' mb='m'>
-            <HandListFilters
+          <HandListFilters
             filterHandsByCriteria={filterHandsByCriteria}
             loadHands={loadHands}
-            />
+          />
         </Block>
-        {hands?.length ? (
-            <UploadedHandsList
-            hands={hands}
-            />
-        ) : null}
+        {hands?.length ? <UploadedHandsList hands={hands} /> : null}
       </Block>
     </Block>
   );

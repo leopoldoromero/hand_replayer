@@ -19,7 +19,7 @@ export const StyledTable = styled.div`
         border-radius: 20% / 43%;
     `}
 
-    ${(p) => p.theme.media.desktop`
+  ${(p) => p.theme.media.desktop`
         width: 580px;
         height: 285px;
         border-radius: 20% / 43%;

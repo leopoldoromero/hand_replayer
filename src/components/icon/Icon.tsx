@@ -7,7 +7,7 @@ import { ColorKeys } from '@/theme/colors';
 
 export type IconSize = 'xs' | 's' | 'm' | 'l';
 export type IconTypes =
-'closeX' 
+  | 'closeX'
   | 'play'
   | 'pause'
   | 'forward'

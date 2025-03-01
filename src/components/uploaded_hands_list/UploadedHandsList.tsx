@@ -8,31 +8,29 @@ interface Props {
   hands: Array<Hand>;
 }
 
-const UploadedHandsList: React.FC<Props> = ({
-  hands,
-}) => {
+const UploadedHandsList: React.FC<Props> = ({ hands }) => {
   const router = useRouter();
   return (
     <Block display='flex' flexWrap='wrap' gap='10px' justify='center'>
-        {hands?.length
-          ? hands.map(
-              ({ id, hero, potType, lastPhaseHeroFolded, tableType }, i) => (
-                <HandSummaryCard
-                  key={i}
-                  handId={id}
-                  cards={hero?.cards}
-                  heroPosition={hero?.seat}
-                  potType={potType}
-                  lastPhaseHeroFolded={lastPhaseHeroFolded}
-                  onClickHandler={() =>
-                    router.push(`/hands/${id}`, { scroll: true })
-                  }
-                  gameType={tableType}
-                />
-              )
+      {hands?.length
+        ? hands.map(
+            ({ id, hero, potType, lastPhaseHeroFolded, tableType }, i) => (
+              <HandSummaryCard
+                key={i}
+                handId={id}
+                cards={hero?.cards}
+                heroPosition={hero?.seat}
+                potType={potType}
+                lastPhaseHeroFolded={lastPhaseHeroFolded}
+                onClickHandler={() =>
+                  router.push(`/hands/${id}`, { scroll: true })
+                }
+                gameType={tableType}
+              />
             )
-          : null}
-      </Block>
+          )
+        : null}
+    </Block>
   );
 };
 

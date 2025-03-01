@@ -1,7 +1,7 @@
-'use client'
+'use client';
 import styled from 'styled-components';
 
-export const Wrapper = styled.div<{$isVisible: boolean}>`
+export const Wrapper = styled.div<{ $isVisible: boolean }>`
   position: fixed;
   width: 100%;
   height: 100%;

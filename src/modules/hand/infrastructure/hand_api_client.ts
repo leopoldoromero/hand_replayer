@@ -5,7 +5,7 @@ import { HandDto, PlayersStatsDto } from './history_parser_api.response';
 import { handDtoToDomainMapper } from './history_parser_api_to_domain.mapper';
 import { cookies } from 'next/headers';
 import { PlayerStats } from '../domain/player_stats';
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from 'uuid';
 interface GetHandResponse {
   hand: HandDto;
   prev_hand_id: string;
@@ -87,8 +87,8 @@ export class HandApiClient implements HandRepository {
     let userId = cookieStore.get('user_id')?.value;
 
     if (!userId) {
-        userId = uuidv4();
-        cookieStore.set('user_id', userId);
+      userId = uuidv4();
+      cookieStore.set('user_id', userId);
     }
     const response = await axios.get<File, AxiosResponse<Array<HandDto>>>(
       `${this.API_URL}/api/v1/hands`,
@@ -111,8 +111,8 @@ export class HandApiClient implements HandRepository {
     let userId = cookieStore.get('user_id')?.value;
 
     if (!userId) {
-        userId = uuidv4();
-        cookieStore.set('user_id', userId);
+      userId = uuidv4();
+      cookieStore.set('user_id', userId);
     }
     const response = await axios.get<File, AxiosResponse<PlayersStatsDto>>(
       `${this.API_URL}/api/v1/stats`,

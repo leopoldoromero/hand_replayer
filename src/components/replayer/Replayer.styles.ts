@@ -7,19 +7,19 @@ export const StyledGameContainer = styled.div`
   align-items: center;
   height: 100%;
   position: relative;
-  min-width: 350px;
-  width: 90%;
+  min-width: 300px;
+  width: 80%;
   max-width: 400px;
   max-height: 570px;
 
   ${(p) => p.theme.media.tablet`
-        // max-width: 800px;
+        width: 80%;
         max-height: 385px;
         max-width: 700px;
     `}
 
-    ${(p) => p.theme.media.desktop`
-        // max-width: 800px;
+  ${(p) => p.theme.media.desktop`
+        width: 80%;
         max-height: 385px;
         max-width: 700px;
     `}

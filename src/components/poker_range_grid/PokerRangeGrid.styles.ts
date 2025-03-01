@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import styled from 'styled-components';
 
 export const Container = styled.div`
@@ -14,7 +14,7 @@ export const Grid = styled.div`
   grid-template-columns: repeat(13, 30px);
 `;
 
-export const Cell = styled.div<{$selected: boolean}>`
+export const Cell = styled.div<{ $selected: boolean }>`
   width: 25px;
   height: 25px;
   padding: 0.2rem;
@@ -24,12 +24,12 @@ export const Cell = styled.div<{$selected: boolean}>`
   border: 1px solid #ccc;
   font-size: 0.8rem;
   cursor: pointer;
-  background-color: ${({ $selected }) => ($selected ? "#4CAF50" : "#f8f8f8")};
-  color: ${({ $selected }) => ($selected ? "white" : "black")};
-  font-weight: ${({ $selected }) => ($selected ? "bold" : "normal")};
+  background-color: ${({ $selected }) => ($selected ? '#4CAF50' : '#f8f8f8')};
+  color: ${({ $selected }) => ($selected ? 'white' : 'black')};
+  font-weight: ${({ $selected }) => ($selected ? 'bold' : 'normal')};
 
   &:hover {
-    background-color: ${({ $selected }) => ($selected ? "#45a049" : "#ddd")};
+    background-color: ${({ $selected }) => ($selected ? '#45a049' : '#ddd')};
   }
 `;
 
@@ -40,5 +40,5 @@ export const SelectedRange = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 375px;
-  display: block;       
+  display: block;
 `;

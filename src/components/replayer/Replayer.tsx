@@ -23,17 +23,22 @@ const Replayer: React.FC<Props> = ({ handId }) => {
   const [currentHand, setCurrentHand] = useState<Hand | null>(null);
   const [prevtHandId, setPrevHandId] = useState<string>('');
   const [nextHandId, setNextHandId] = useState<string>('');
-  const [statsModalData, setStatsModalData] = useState<{isOpen: boolean; stats?: PreflopStats; playerName: string}>({
+  const [statsModalData, setStatsModalData] = useState<{
+    isOpen: boolean;
+    stats?: PreflopStats;
+    playerName: string;
+  }>({
     isOpen: false,
     stats: {
-        vpip: 0,
-        pfr: 0,
-        threeBetPercent: 0,
-        hands: 0,
+      vpip: 0,
+      pfr: 0,
+      threeBetPercent: 0,
+      hands: 0,
     },
     playerName: '',
-  })
-  const [isOpenRangeSelectorModal, setIsOpenRangeSelectorModal] = useState<boolean>(false);
+  });
+  const [isOpenRangeSelectorModal, setIsOpenRangeSelectorModal] =
+    useState<boolean>(false);
   const router = useRouter();
   const [state, dispatch] = useReducer(gameReducer, initialState);
 
@@ -58,11 +63,11 @@ const Replayer: React.FC<Props> = ({ handId }) => {
 
   const statsModalHandler = (playerName: string, stats?: PreflopStats) => {
     setStatsModalData({
-        stats,
-        playerName,
-        isOpen: !statsModalData?.isOpen,
-    })
-  }
+      stats,
+      playerName,
+      isOpen: !statsModalData?.isOpen,
+    });
+  };
 
   useEffect(() => {
     getHandAction(handId).then((response) => {
@@ -125,11 +130,11 @@ const Replayer: React.FC<Props> = ({ handId }) => {
 
   const onSelectRangeHandler = () => {
     setStatsModalData({
-        ...statsModalData,
-        isOpen: false,
-    })
-    setIsOpenRangeSelectorModal(!isOpenRangeSelectorModal)
-  }
+      ...statsModalData,
+      isOpen: false,
+    });
+    setIsOpenRangeSelectorModal(!isOpenRangeSelectorModal);
+  };
 
   return (
     <Block
@@ -141,17 +146,22 @@ const Replayer: React.FC<Props> = ({ handId }) => {
       position='relative'
     >
       <HandInfoComponent hand={currentHand} />
-        <StatsModal 
-          isOpen={statsModalData?.isOpen} 
-          stats={statsModalData?.stats} 
-          onClose={() => setStatsModalData({
+      <StatsModal
+        isOpen={statsModalData?.isOpen}
+        stats={statsModalData?.stats}
+        onClose={() =>
+          setStatsModalData({
             ...statsModalData,
             isOpen: false,
-          })}
-          name={statsModalData?.playerName}
-          onSelectRange={onSelectRangeHandler}
-        />
-        <RangeSelectorModal isOpen={isOpenRangeSelectorModal} onClose={() => onSelectRangeHandler()}/>
+          })
+        }
+        name={statsModalData?.playerName}
+        onSelectRange={onSelectRangeHandler}
+      />
+      <RangeSelectorModal
+        isOpen={isOpenRangeSelectorModal}
+        onClose={() => onSelectRangeHandler()}
+      />
       <StyledGameContainer>
         {state.playersActions.map((player, i) => {
           const isWinner = currentHand.winner?.name === player.name;
