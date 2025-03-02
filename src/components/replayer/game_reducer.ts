@@ -52,7 +52,7 @@ export const gameReducer = (
     case 'LOAD_STATE':
       const { hand } = action;
       return {
-        ...state,
+        ...initialState,
         playersActions: hand?.players?.map((player) => ({
           name: player.name,
           stack: player.stack,

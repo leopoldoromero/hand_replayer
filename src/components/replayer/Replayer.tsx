@@ -72,7 +72,6 @@ const Replayer: React.FC<Props> = ({ handId }) => {
   useEffect(() => {
     getHandAction(handId).then((response) => {
       const hand = response?.hand as Hand;
-      console.log('HAND', hand);
       setCurrentHand(hand);
       setPrevHandId(response?.prevHandId ?? '');
       setNextHandId(response?.nextHandId ?? '');
@@ -91,7 +90,7 @@ const Replayer: React.FC<Props> = ({ handId }) => {
         dispatch({ type: 'HIDE_ACTION' });
       }, REPRODUCTION_SPEED / 2);
 
-      if (!state.isPlaying || !currentHand) return;
+      if (!state.isPlaying || !currentHand) return
 
       dispatch({
         type: 'NEXT_ACTION',
@@ -182,7 +181,7 @@ const Replayer: React.FC<Props> = ({ handId }) => {
                   : isWinner
                   ? currentHand!.winner!.cards?.length
                     ? currentHand!.winner!.cards
-                    : ['X', 'X']
+                    : ['', '']
                   : ['', '']
               }
               seat={
@@ -242,9 +241,12 @@ const Replayer: React.FC<Props> = ({ handId }) => {
           onNextHandHandler={() => handleNextHand()}
           onPrevHandHandler={() => handlePrevHand()}
           onShowInBbHandler={() => dispatch({ type: 'TOGGLE_BIG_BLINDS' })}
-          onReplayHandler={() =>
+          onReplayHandler={() => {
+            if (state.actionIndex === currentHand.actions.length) {
+              dispatch({ type: 'LOAD_STATE', hand: currentHand });
+            }
             dispatch({ type: state.isPlaying ? 'PAUSE' : 'PLAY' })
-          }
+          }}
         />
       </StyledGameContainer>
     </Block>
