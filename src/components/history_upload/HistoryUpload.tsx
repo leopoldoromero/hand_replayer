@@ -77,6 +77,7 @@ const HistoryUploadComponent = () => {
       }
       const response = await getHandsAction();
       setHands(response);
+      setText('')
     } catch (error) {
       console.error('Upload Failed:', error);
     } finally {
@@ -132,7 +133,7 @@ const HistoryUploadComponent = () => {
           </Block>
         </StyledForm>
       </Block>
-      <Block mt='m'>
+      <Block mt='m' customStyles={{maxWidth: '950px'}}>
         <Block display='flex' justify='center' mb='m'>
           <HandListFilters
             filterHandsByCriteria={filterHandsByCriteria}
