@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ApiConfig, HttpClient, HttpClientResponse } from "@/modules/hand/domain/http_client";
-import axios, { AxiosInstance, AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 
 export class AxiosHttpClient implements HttpClient {
     // protected client: AxiosInstance;
