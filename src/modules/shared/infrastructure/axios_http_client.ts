@@ -33,4 +33,4 @@ export class AxiosHttpClient implements HttpClient {
     };
 }
 
-export const axiosHttpClient = new AxiosHttpClient()
+export const getAxiosHttpClient = () => new AxiosHttpClient();

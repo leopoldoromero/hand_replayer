@@ -6,12 +6,14 @@ import { handDtoToDomainMapper } from './history_parser_api_to_domain.mapper';
 import { cookies } from 'next/headers';
 import { PlayerStats } from '../domain/player_stats';
 import { v4 as uuidv4 } from 'uuid';
-import { axiosHttpClient } from '@/modules/shared/infrastructure/axios_http_client';
+import { getAxiosHttpClient } from '@/modules/shared/infrastructure/axios_http_client';
 interface GetHandResponse {
   hand: HandDto;
   prev_hand_id: string;
   next_hand_id: string;
 }
+
+const axiosHttpClient = getAxiosHttpClient();
 
 export class HandApiClient implements HandRepository {
   private readonly API_URL = process.env.API_URL;
