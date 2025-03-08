@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError } from 'axios';
 import { Hand } from '../domain/hand';
 import { HandRepository } from '../domain/hand.repository';
 import { HandDto, PlayersStatsDto } from './history_parser_api.response';
@@ -6,6 +6,7 @@ import { handDtoToDomainMapper } from './history_parser_api_to_domain.mapper';
 import { cookies } from 'next/headers';
 import { PlayerStats } from '../domain/player_stats';
 import { v4 as uuidv4 } from 'uuid';
+import { axiosHttpClient } from '@/modules/shared/infrastructure/axios_http_client';
 interface GetHandResponse {
   hand: HandDto;
   prev_hand_id: string;
@@ -26,7 +27,7 @@ export class HandApiClient implements HandRepository {
         userId = uuidv4();
         cookieStore.set('user_id', userId);
       }
-      await axios.post<File, void>(`${this.API_URL}/api/v1/hands`, formData, {
+      await axiosHttpClient.post<FormData, void>(`${this.API_URL}/api/v1/hands`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Access-Control-Allow-Origin': 'localhost:8000',
@@ -57,7 +58,7 @@ export class HandApiClient implements HandRepository {
       userId = uuidv4();
       cookieStore.set('user_id', userId);
     }
-    const response = await axios.get<File, AxiosResponse<GetHandResponse>>(
+    const response = await axiosHttpClient.get<GetHandResponse>(
       `${this.API_URL}/api/v1/hands/${id}`,
       {
         headers: {
@@ -76,9 +77,9 @@ export class HandApiClient implements HandRepository {
     //     name: `${el.name}-${Math.random().toFixed(0)}`
     // })))
     return {
-      hand: handDtoToDomainMapper(response?.data?.hand, playeerStats),
-      prevHandId: response?.data?.prev_hand_id,
-      nextHandId: response?.data?.next_hand_id,
+      hand: handDtoToDomainMapper(response?.hand, playeerStats),
+      prevHandId: response?.prev_hand_id,
+      nextHandId: response?.next_hand_id,
     };
   }
 
@@ -90,7 +91,7 @@ export class HandApiClient implements HandRepository {
       userId = uuidv4();
       cookieStore.set('user_id', userId);
     }
-    const response = await axios.get<File, AxiosResponse<Array<HandDto>>>(
+    const response = await axiosHttpClient.get<Array<HandDto>>(
       `${this.API_URL}/api/v1/hands`,
       {
         headers: {
@@ -100,7 +101,7 @@ export class HandApiClient implements HandRepository {
         withCredentials: true,
       }
     );
-    const hands: Array<Hand> = response?.data?.map((handDto) =>
+    const hands: Array<Hand> = response?.map((handDto) =>
       handDtoToDomainMapper(handDto)
     );
     return hands;
@@ -114,7 +115,7 @@ export class HandApiClient implements HandRepository {
       userId = uuidv4();
       cookieStore.set('user_id', userId);
     }
-    const response = await axios.get<File, AxiosResponse<PlayersStatsDto>>(
+    const response = await axiosHttpClient.get<PlayersStatsDto>(
       `${this.API_URL}/api/v1/stats`,
       {
         headers: {
@@ -126,7 +127,7 @@ export class HandApiClient implements HandRepository {
     );
     const playerStats: PlayerStats = {};
 
-    Object.entries(response?.data).forEach(([player, stats]) => {
+    Object.entries(response).forEach(([player, stats]) => {
       playerStats[player] = {
         hands: stats?.hands,
         vpip: stats?.vpip,
