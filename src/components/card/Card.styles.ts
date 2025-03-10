@@ -1,11 +1,69 @@
 'use client';
-import styled from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
+
+// const appearAnimation = keyframes`
+//   from {
+//     transform: translateX(20px);
+//     background-color: #b2b2b2;
+//     color: #b2b2b2;
+//   }
+//   to {
+//     transform: translateX(0);
+//     background-color: inherit;
+//     color: inherit;
+//   }
+// `;
+
+// const appearAnimation = keyframes`
+//   0% {
+//     transform: translateX(20px);
+//     background-color: #b2b2b2;
+//     color: #b2b2b2;
+//   }
+//   50% {
+//     background-color: #b2b2b2;
+//     color: #b2b2b2;
+//   }
+//   100% {
+//     transform: translateX(0);
+//     background-color: inherit;
+//     color: inherit;
+//   }
+// `;
+
+const appearAnimation = keyframes`
+  0% {
+    transform: perspective(600px) rotateY(0deg);
+    background-color: #b2b2b2;
+    color: #b2b2b2;
+  }
+  50% {
+    transform: perspective(600px) rotateY(90deg);
+    background-color: #b2b2b2;
+    color: #b2b2b2;
+  }
+  51% {
+    transform: perspective(600px) rotateY(90deg);
+    background-color: inherit;
+    color: inherit;
+  }
+  100% {
+    transform: perspective(600px) rotateY(0deg);
+    background-color: inherit;
+    color: inherit;
+  }
+`;
+
+const animatedStyle = css`
+  animation: ${appearAnimation} 0.5s ease-out;
+`;
 
 export const StyledCard = styled.div<{
   $bgColor: string;
   $showSliced?: boolean;
   $bigSize?: boolean;
   $hidden?: boolean;
+  $animated?: boolean;
 }>`
   position: relative;
   background: ${(p) => p.theme.color[p.$bgColor]};
@@ -16,6 +74,7 @@ export const StyledCard = styled.div<{
   border-radius: 5%;
   ${(p) => p.$hidden && 'visibility: hidden;'};
   ${(p) => p.$showSliced && 'clip-path: inset(0 0 45% 0);'}
+  ${(p) => p.$animated && animatedStyle}
 
   width: ${(p) => (p.$bigSize ? '63px' : '35px')};
   height: ${(p) => (p.$bigSize ? '90px' : '50px')};

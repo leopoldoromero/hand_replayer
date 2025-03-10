@@ -9,25 +9,26 @@ interface CardProps {
   card: string;
   showSliced?: boolean;
   bigSize?: boolean;
+  animated?: boolean;
 }
 
 type Suits = { [key in string]: string };
 
-const CardComponent: React.FC<CardProps> = ({ card, showSliced, bigSize }) => {
-  if (card == '') {
+const CardComponent: React.FC<CardProps> = ({ card, showSliced, bigSize, animated }) => {
+  if (card === '') {
     return (
       <StyledCard
-        $bgColor='grey'
+        $bgColor="grey"
         $showSliced={showSliced}
         $bigSize={bigSize}
       ></StyledCard>
     );
   }
 
-  if (card == 'X') {
+  if (card === 'X') {
     return (
       <StyledCard
-        $bgColor='grey'
+        $bgColor="grey"
         $showSliced={showSliced}
         $bigSize={bigSize}
         $hidden
@@ -38,7 +39,7 @@ const CardComponent: React.FC<CardProps> = ({ card, showSliced, bigSize }) => {
   const cardElements: Array<string> = card.split('');
   const suit: string = cardElements?.pop() ?? 'c';
   const value: string = cardElements.join('');
-  const suitsSimbols: Suits = {
+  const suitsSymbols: Suits = {
     c: '♣',
     d: '♦',
     s: '♠',
@@ -50,16 +51,18 @@ const CardComponent: React.FC<CardProps> = ({ card, showSliced, bigSize }) => {
     s: 'black',
     h: 'red',
   };
+
   return (
     <StyledCard
       $bgColor={bgColorBySuit[suit]}
       $showSliced={showSliced}
       $bigSize={bigSize}
+      $animated={animated}
     >
       <StyledTopContainer $bigSize={bigSize}>
         <StyledCardText>{value}</StyledCardText>
         <StyledCardText $isSuit $bigSize={bigSize}>
-          {suitsSimbols[suit]}
+          {suitsSymbols[suit]}
         </StyledCardText>
       </StyledTopContainer>
       <StyledBottomContainer $bigSize={bigSize}>
