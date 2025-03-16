@@ -5,6 +5,7 @@ import { HistoryParserApiResponseDto } from './history_parser_api.response';
 
 export class HistoryParserApiClient implements HistoryParserRepository {
   private readonly API_URL = process.env.API_URL;
+  private readonly API_KEY = process.env.API_KEY;
 
   async parse(file: File): Promise<Array<Hand>> {
     try {
@@ -16,11 +17,10 @@ export class HistoryParserApiClient implements HistoryParserRepository {
         {
           headers: {
             'Content-Type': 'multipart/form-data',
+            'x-api-key':  this.API_KEY,
           },
         }
       );
-      // const hands: Array<Hand> = historyParserApiToDomainHand(response.data);
-
       return [];
     } catch (error: unknown) {
       console.error(
