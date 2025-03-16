@@ -18,7 +18,7 @@ const TableComponent: React.FC<TableProps> = ({ pot, cards, currency }) => (
       {cards?.length ? (
         <Block display='flex' gap='4px'>
           {cards.map((card, i) => (
-            <CardComponent card={card} key={i} />
+            <CardComponent card={card} key={i} animated/>
           ))}
         </Block>
       ) : null}

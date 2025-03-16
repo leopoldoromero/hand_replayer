@@ -17,6 +17,7 @@ const axiosHttpClient = getAxiosHttpClient();
 
 export class HandApiClient implements HandRepository {
   private readonly API_URL = process.env.API_URL;
+  private readonly API_KEY = process.env.API_KEY;
 
   async upload(file: File): Promise<void> {
     try {
@@ -32,7 +33,8 @@ export class HandApiClient implements HandRepository {
       await axiosHttpClient.post<FormData, void>(`${this.API_URL}/api/v1/hands`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Access-Control-Allow-Origin': 'localhost:8000',
+          'Access-Control-Allow-Origin': this.API_KEY,
+          'x-api-key':  this.API_KEY,
           Cookie: `user_id=${userId}`,
         },
         withCredentials: true,
@@ -64,20 +66,15 @@ export class HandApiClient implements HandRepository {
       `${this.API_URL}/api/v1/hands/${id}`,
       {
         headers: {
-          'Access-Control-Allow-Origin': 'localhost:8000',
+          'Access-Control-Allow-Origin': this.API_KEY,
+          'x-api-key':  this.API_KEY,
           Cookie: `user_id=${userId}`,
         },
         withCredentials: true,
       }
     );
-    console.log('[[HandsApiClient get hand response]]:', response)
     const playeerStats = await this.getStats();
-    // TODO: the next lines are usefull to test full ring styles
-    // response.data.hand.players.push(...response.data.hand.players.slice(0,3).map((el) => ({
-    //     ...el,
-    //     seat: el.seat + 6,
-    //     name: `${el.name}-${Math.random().toFixed(0)}`
-    // })))
+
     return {
       hand: handDtoToDomainMapper(response?.hand, playeerStats),
       prevHandId: response?.prev_hand_id,
@@ -97,13 +94,13 @@ export class HandApiClient implements HandRepository {
       `${this.API_URL}/api/v1/hands`,
       {
         headers: {
-          'Access-Control-Allow-Origin': 'localhost:8000',
+          'Access-Control-Allow-Origin': this.API_KEY,
+          'x-api-key':  this.API_KEY,
           Cookie: `user_id=${userId}`,
         },
         withCredentials: true,
       }
     );
-    console.log('[[HandsApiClient get hands response]]:', response)
     const hands: Array<Hand> = response.map((handDto) =>
       handDtoToDomainMapper(handDto)
     );
@@ -122,13 +119,13 @@ export class HandApiClient implements HandRepository {
       `${this.API_URL}/api/v1/stats`,
       {
         headers: {
-          'Access-Control-Allow-Origin': 'localhost:8000',
+          'Access-Control-Allow-Origin': this.API_KEY,
+          'x-api-key':  this.API_KEY,
           Cookie: `user_id=${userId}`,
         },
         withCredentials: true,
       }
     );
-    console.log('[[HandsApiClient get stats response]]:', response)
     const playerStats: PlayerStats = {};
 
     Object.entries(response).forEach(([player, stats]) => {

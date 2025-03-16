@@ -22,7 +22,7 @@ export class AxiosHttpClient implements HttpClient {
     }
 
     private handleRequest = (config: any) => {
-        console.log('[[Axios handle reqwuest]]:', config)
+        console.log('[[Axios handle reqwuest]]:', config?.url)
         return config;
     };
 

@@ -274,7 +274,7 @@ export const StyledPlayerInfoContainer = styled.div<{ $isHero: boolean }>`
   position: relative;
   width: fit-content;
   min-width: 80px;
-  margin-top: ${(p) => (p.$isHero ? '-15%' : '-30%')};
+  margin-top: ${(p) => (p.$isHero ? '-5%' : '-30%')};
   padding: 5px;
   z-index: ${(p) => p.theme.zIndex.low};
   background: ${(p) => p.theme.color.black};
@@ -287,8 +287,12 @@ export const StyledPlayerInfoContainer = styled.div<{ $isHero: boolean }>`
   gap: 5px;
 
   ${(p) => p.theme.media.tablet`
-    min-width: 90px;
+    min-width: 100px;
     `}
+  
+  ${(p) => p.theme.media.desktop`
+      min-width: 100px;
+  `}
 `;
 
 export const StyledPlayerBetConatiner = styled.div<{

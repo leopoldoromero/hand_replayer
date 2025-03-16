@@ -72,6 +72,7 @@ const Replayer: React.FC<Props> = ({ handId }) => {
   useEffect(() => {
     getHandAction(handId).then((response) => {
       const hand = response?.hand as Hand;
+      console.log('Mano', hand)
       setCurrentHand(hand);
       setPrevHandId(response?.prevHandId ?? '');
       setNextHandId(response?.nextHandId ?? '');
