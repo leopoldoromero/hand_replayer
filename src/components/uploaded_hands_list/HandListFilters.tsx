@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import Block from '../block/Block';
 import Dropdown from '../dropdown/DropDown';
-import { PotType, sixMaxPositions } from '@/modules/hand/domain/hand';
+import { sixMaxPositions } from '@/modules/hand/domain/hand';
 import { Range } from '../range/Range';
 import Text from '../text/Text';
 import Toggle from '../toggle/Toggle';
@@ -12,12 +12,12 @@ import { CriteriaFilter } from '@/modules/shared/domain/criteria_filter';
 
 interface Props {
   filterHandsByCriteria: (criteria: Criteria) => void;
-  loadHands: () => void;
+  resetFilters: () => void;
 }
 
 const HandListFilters: React.FC<Props> = ({
   filterHandsByCriteria,
-  loadHands,
+  resetFilters,
 }) => {
   const initialState = {
     potType: '',
@@ -28,23 +28,11 @@ const HandListFilters: React.FC<Props> = ({
 
   const [filters, setFilters] = useState(initialState);
 
-  const potTypeToEnumMapper = (): PotType => {
-    const valuesToEnum: { [key in string]: PotType } = {
-      SRP: PotType.OPEN_RAISED,
-      ROL: PotType.ROL_RAISED,
-      LIMPED: PotType.LIMPED,
-      '3BET': PotType.THREE_BET,
-      SQUEEZE: PotType.SQUEEZE,
-      '4BET': PotType.FOUR_BET,
-    };
-    return valuesToEnum[filters.potType] ?? PotType.UNOPENED;
-  };
-
   const applyFilters = () => {
     const filterCriteria: Array<CriteriaFilter> = [];
 
     if (filters.potType !== '') {
-      filterCriteria.push(new CriteriaFilter('potType', potTypeToEnumMapper()));
+      filterCriteria.push(new CriteriaFilter('potType', filters.potType));
     }
     if (filters.position !== '') {
       filterCriteria.push(new CriteriaFilter('position', filters.position));
@@ -61,11 +49,6 @@ const HandListFilters: React.FC<Props> = ({
     if (filterCriteria.length) {
       filterHandsByCriteria(new Criteria(filterCriteria));
     }
-  };
-
-  const resetFilters = () => {
-    setFilters(initialState); // ✅ Reset all states at once
-    loadHands(); // ✅ Reload hands after reset
   };
 
   return (
@@ -150,7 +133,10 @@ const HandListFilters: React.FC<Props> = ({
           size='l'
           text='Reset filters'
           color='green'
-          onClick={resetFilters}
+          onClick={() => {
+            setFilters(initialState);
+            resetFilters();
+          }}
         />
       </Block>
     </Block>

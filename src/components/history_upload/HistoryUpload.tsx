@@ -7,62 +7,36 @@ import { StyledForm } from './HistoryUpload.styles';
 import UploadedHandsList from '../uploaded_hands_list/UploadedHandsList';
 import Button from '../button/Button';
 import { uploadHandsAction } from '@/actions/upload_hands.action';
-import { getHandsAction } from '@/actions/get_hands.action';
-import { Hand, positionNumberToName } from '@/modules/hand/domain/hand';
 import { Criteria } from '@/modules/shared/domain/criteria';
 import HandListFilters from '../uploaded_hands_list/HandListFilters';
+import { useDispatch, useSelector } from 'react-redux';
+import { DefaultState, DispatchAction } from '@/lib/redux/store';
+import { selectHandsState } from '@/lib/redux/hand/hand.selector';
+import {
+  filterHands,
+  HandsState,
+  resetFilters,
+} from '@/lib/redux/hand/hand.slice';
+import { fetchHands } from '@/lib/redux/hand/hand.thunk';
 
 const HistoryUploadComponent = () => {
-  const [hands, setHands] = useState<Array<Hand>>([]);
+  const { hands, filtersApplied, filteredHands } = useSelector<
+    DefaultState,
+    HandsState
+  >(selectHandsState);
+  const dispatch = useDispatch<DispatchAction>();
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
 
   const filterHandsByCriteria = (criteria: Criteria) => {
-    const filterHands: Array<Hand> = [];
-    criteria.filters?.forEach((filter) => {
-      switch (filter.field) {
-        case 'potType':
-          filterHands.push(
-            ...hands.filter((hand) => hand.potType === filter.value)
-          );
-        case 'position':
-          filterHands.push(
-            ...hands.filter((hand) => {
-              const position = positionNumberToName(
-                hand.hero?.seat,
-                hand.tableType === '6-max'
-              );
-              return position === filter.value;
-            })
-          );
-        case 'minPotSize':
-          filterHands.push(
-            ...hands.filter(
-              (hand) => hand.potAmount / hand.bb >= (filter.value as number)
-            )
-          );
-        case 'loosingHands':
-          filterHands.push(
-            ...hands.filter((hand) => hand.looser?.name === hand.hero.nick)
-          );
-        default:
-          break;
-      }
-    });
-    setHands(filterHands);
+    dispatch(filterHands(criteria));
   };
 
   useEffect(() => {
-    getHandsAction().then((response) => {
-      setHands(response);
-    });
+    if (!hands?.length) {
+      dispatch(fetchHands());
+    }
   }, []);
-
-  const loadHands = () => {
-    getHandsAction().then((response) => {
-      setHands(response);
-    });
-  };
 
   const handleUpload = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -75,9 +49,8 @@ const HistoryUploadComponent = () => {
       } catch (error) {
         console.error('Upload Failed 1:', error);
       }
-      const response = await getHandsAction();
-      setHands(response);
-      setText('')
+      dispatch(fetchHands());
+      setText('');
     } catch (error) {
       console.error('Upload Failed:', error);
     } finally {
@@ -108,9 +81,8 @@ const HistoryUploadComponent = () => {
           Upload your poker hands
         </Text>
         <Text mb='m'>
-          Paste your hand history or directly upload a .txt file with your hand
-          history and we&apos;ll convert it into a replay for you to share with
-          others.
+          Paste your hand history and we&apos;ll convert it into a replay for
+          you to share with others.
         </Text>
         <StyledForm onSubmit={handleUpload}>
           <Textarea
@@ -133,14 +105,16 @@ const HistoryUploadComponent = () => {
           </Block>
         </StyledForm>
       </Block>
-      <Block mt='m' customStyles={{maxWidth: '950px'}}>
+      <Block mt='m' customStyles={{ maxWidth: '950px' }}>
         <Block display='flex' justify='center' mb='m'>
           <HandListFilters
             filterHandsByCriteria={filterHandsByCriteria}
-            loadHands={loadHands}
+            resetFilters={() => dispatch(resetFilters())}
           />
         </Block>
-        {hands?.length ? <UploadedHandsList hands={hands} /> : null}
+        {hands?.length ? (
+          <UploadedHandsList hands={filtersApplied ? filteredHands : hands} />
+        ) : null}
       </Block>
     </Block>
   );

@@ -289,7 +289,7 @@ export const StyledPlayerInfoContainer = styled.div<{ $isHero: boolean }>`
   ${(p) => p.theme.media.tablet`
     min-width: 100px;
     `}
-  
+
   ${(p) => p.theme.media.desktop`
       min-width: 100px;
   `}

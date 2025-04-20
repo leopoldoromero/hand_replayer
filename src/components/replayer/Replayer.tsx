@@ -13,6 +13,9 @@ import { StyledGameContainer } from './Replayer.styles';
 import { PreflopStats } from '@/modules/hand/domain/player';
 import StatsModal from '../stats_modal/StatsModal';
 import RangeSelectorModal from '../range_selector_modal/RangeSelectorModal';
+import { useDispatch } from 'react-redux';
+import { DispatchAction } from '@/lib/redux/store';
+import { snackbarActions } from '@/lib/redux/snackbar/snackbar.slice';
 
 interface Props {
   handId: string;
@@ -40,7 +43,9 @@ const Replayer: React.FC<Props> = ({ handId }) => {
   const [isOpenRangeSelectorModal, setIsOpenRangeSelectorModal] =
     useState<boolean>(false);
   const router = useRouter();
-  const [state, dispatch] = useReducer(gameReducer, initialState);
+  const [loading, setLoading] = useState(false);
+  const [state, gameReducerDispatch] = useReducer(gameReducer, initialState);
+  const dispatch = useDispatch<DispatchAction>();
 
   const formatAmount = (amount: number, bb: number) => {
     const amountToShow = state?.showInBigBlinds ? amount / bb : amount;
@@ -49,14 +54,14 @@ const Replayer: React.FC<Props> = ({ handId }) => {
 
   const handlePrevHand = () => {
     if (prevtHandId) {
-      dispatch({ type: 'PREV_HAND' });
+      gameReducerDispatch({ type: 'PREV_HAND' });
       router.push(`/hands/${prevtHandId}`, { scroll: true });
     }
   };
 
   const handleNextHand = () => {
     if (nextHandId) {
-      dispatch({ type: 'NEXT_HAND' });
+      gameReducerDispatch({ type: 'NEXT_HAND' });
       router.push(`/hands/${nextHandId}`, { scroll: true });
     }
   };
@@ -70,30 +75,44 @@ const Replayer: React.FC<Props> = ({ handId }) => {
   };
 
   useEffect(() => {
-    getHandAction(handId).then((response) => {
-      const hand = response?.hand as Hand;
-      console.log('Mano', hand)
-      setCurrentHand(hand);
-      setPrevHandId(response?.prevHandId ?? '');
-      setNextHandId(response?.nextHandId ?? '');
-      dispatch({ type: 'LOAD_STATE', hand });
-    });
+    setLoading(true);
+    getHandAction(handId)
+      .then((response) => {
+        const hand = response?.hand as Hand;
+        setCurrentHand(hand);
+        setPrevHandId(response?.prevHandId ?? '');
+        setNextHandId(response?.nextHandId ?? '');
+        gameReducerDispatch({ type: 'LOAD_STATE', hand });
+      })
+      .catch((err) => {
+        dispatch(snackbarActions.error(err?.message));
+
+        setTimeout(() => {
+          router.push(`/`, { scroll: true });
+        }, 2000);
+      })
+      .finally(() => {
+        setLoading(false);
+        // setTimeout(() => {
+        //   router.push(`/`, { scroll: true });
+        // }, 2000);
+      });
   }, [handId]);
 
   useEffect(() => {
     if (state.isPlaying && state.actionIndex >= currentHand!.actions.length) {
-      dispatch({ type: 'PAUSE' });
+      gameReducerDispatch({ type: 'PAUSE' });
       return;
     }
 
     const nextActionTimer = setTimeout(() => {
       setTimeout(() => {
-        dispatch({ type: 'HIDE_ACTION' });
+        gameReducerDispatch({ type: 'HIDE_ACTION' });
       }, REPRODUCTION_SPEED / 2);
 
-      if (!state.isPlaying || !currentHand) return
+      if (!state.isPlaying || !currentHand) return;
 
-      dispatch({
+      gameReducerDispatch({
         type: 'NEXT_ACTION',
         action: currentHand.actions[state.actionIndex],
         lastActionIdx: currentHand.actions.length,
@@ -103,7 +122,9 @@ const Replayer: React.FC<Props> = ({ handId }) => {
     return () => clearTimeout(nextActionTimer);
   }, [state.isPlaying, state.actionIndex, currentHand]);
 
-  if (!currentHand) return <p>Loading...</p>;
+  if (loading) return <p>Loading....</p>;
+
+  if (!currentHand) return null;
 
   function setPlayerCards(playerName: string): Array<string> {
     if (playerName === state.heroName) return state.heroCards;
@@ -222,13 +243,13 @@ const Replayer: React.FC<Props> = ({ handId }) => {
         />
         <ReplayerControls
           onPrevActionHandler={() =>
-            dispatch({
+            gameReducerDispatch({
               type: 'PREV_ACTION',
               currentHand,
             })
           }
           onNextActionHandler={() =>
-            dispatch({
+            gameReducerDispatch({
               type: 'NEXT_ACTION',
               action: currentHand.actions[state.actionIndex],
               lastActionIdx: currentHand.actions.length,
@@ -241,12 +262,14 @@ const Replayer: React.FC<Props> = ({ handId }) => {
           isPlaying={state.isPlaying}
           onNextHandHandler={() => handleNextHand()}
           onPrevHandHandler={() => handlePrevHand()}
-          onShowInBbHandler={() => dispatch({ type: 'TOGGLE_BIG_BLINDS' })}
+          onShowInBbHandler={() =>
+            gameReducerDispatch({ type: 'TOGGLE_BIG_BLINDS' })
+          }
           onReplayHandler={() => {
             if (state.actionIndex === currentHand.actions.length) {
-              dispatch({ type: 'LOAD_STATE', hand: currentHand });
+              gameReducerDispatch({ type: 'LOAD_STATE', hand: currentHand });
             }
-            dispatch({ type: state.isPlaying ? 'PAUSE' : 'PLAY' })
+            gameReducerDispatch({ type: state.isPlaying ? 'PAUSE' : 'PLAY' });
           }}
         />
       </StyledGameContainer>

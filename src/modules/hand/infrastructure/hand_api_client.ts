@@ -1,23 +1,29 @@
-import  { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 import { Hand } from '../domain/hand';
 import { HandRepository } from '../domain/hand.repository';
 import { HandDto, PlayersStatsDto } from './history_parser_api.response';
-import { handDtoToDomainMapper } from './history_parser_api_to_domain.mapper';
+import { handDtoToDomainMapper } from './hand_api_response_to_domain.mapper';
 import { cookies } from 'next/headers';
 import { PlayerStats } from '../domain/player_stats';
 import { v4 as uuidv4 } from 'uuid';
-import { getAxiosHttpClient } from '@/modules/shared/infrastructure/axios_http_client';
+import {
+  getAxiosHttpClient,
+  HttpErrorDto,
+} from '@/modules/shared/infrastructure/axios_http_client';
+import { HttpClient } from '../domain/http_client';
 interface GetHandResponse {
   hand: HandDto;
   prev_hand_id: string;
   next_hand_id: string;
 }
 
-const axiosHttpClient = getAxiosHttpClient();
+const axiosHttpClient: HttpClient = getAxiosHttpClient();
 
 export class HandApiClient implements HandRepository {
   private readonly API_URL = process.env.API_URL;
   private readonly API_KEY = process.env.API_KEY;
+
+  constructor(private httpClient: HttpClient) {}
 
   async upload(file: File): Promise<void> {
     try {
@@ -30,15 +36,19 @@ export class HandApiClient implements HandRepository {
         userId = uuidv4();
         cookieStore.set('user_id', userId);
       }
-      await axiosHttpClient.post<FormData, void>(`${this.API_URL}/api/v1/hands`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Access-Control-Allow-Origin': this.API_KEY,
-          'x-api-key':  this.API_KEY,
-          Cookie: `user_id=${userId}`,
-        },
-        withCredentials: true,
-      });
+      await this.httpClient.post<FormData, void>(
+        `${this.API_URL}/api/v1/hands`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Access-Control-Allow-Origin': this.API_KEY,
+            'x-api-key': this.API_KEY,
+            Cookie: `user_id=${userId}`,
+          },
+          withCredentials: true,
+        }
+      );
     } catch (error: unknown) {
       console.error(
         'Error uploading file:',
@@ -62,24 +72,37 @@ export class HandApiClient implements HandRepository {
       userId = uuidv4();
       cookieStore.set('user_id', userId);
     }
-    const response = await axiosHttpClient.get<GetHandResponse>(
-      `${this.API_URL}/api/v1/hands/${id}`,
-      {
-        headers: {
-          'Access-Control-Allow-Origin': this.API_KEY,
-          'x-api-key':  this.API_KEY,
-          Cookie: `user_id=${userId}`,
-        },
-        withCredentials: true,
-      }
-    );
-    const playeerStats = await this.getStats();
+    try {
+      const response = await this.httpClient.get<GetHandResponse>(
+        `${this.API_URL}/api/v1/hands/${id}`,
+        {
+          headers: {
+            'Access-Control-Allow-Origin': this.API_KEY,
+            'x-api-key': this.API_KEY,
+            Cookie: `user_id=${userId}`,
+          },
+          withCredentials: true,
+        }
+      );
+      let playerStats = undefined;
 
-    return {
-      hand: handDtoToDomainMapper(response?.hand, playeerStats),
-      prevHandId: response?.prev_hand_id,
-      nextHandId: response?.next_hand_id,
-    };
+      try {
+        playerStats = await this.getStats();
+      } catch (error) {
+        console.error(`Error getting stats for hand: ${response?.hand.id}: ${(error as HttpErrorDto).message}`)
+      }
+
+      return {
+        hand: handDtoToDomainMapper(response?.hand, playerStats),
+        prevHandId: response?.prev_hand_id,
+        nextHandId: response?.next_hand_id,
+      };
+    } catch (error) {
+      console.error(
+        `Error getting hand: ${Object.entries(error as HttpErrorDto)}`
+      );
+      throw new Error((error as HttpErrorDto).message || 'Failed to get hand.');
+    }
   }
 
   async getAll(): Promise<Array<Hand>> {
@@ -90,12 +113,12 @@ export class HandApiClient implements HandRepository {
       userId = uuidv4();
       cookieStore.set('user_id', userId);
     }
-    const response = await axiosHttpClient.get<Array<HandDto>>(
+    const response = await this.httpClient.get<Array<HandDto>>(
       `${this.API_URL}/api/v1/hands`,
       {
         headers: {
           'Access-Control-Allow-Origin': this.API_KEY,
-          'x-api-key':  this.API_KEY,
+          'x-api-key': this.API_KEY,
           Cookie: `user_id=${userId}`,
         },
         withCredentials: true,
@@ -115,12 +138,12 @@ export class HandApiClient implements HandRepository {
       userId = uuidv4();
       cookieStore.set('user_id', userId);
     }
-    const response = await axiosHttpClient.get<PlayersStatsDto>(
+    const response = await this.httpClient.get<PlayersStatsDto>(
       `${this.API_URL}/api/v1/stats`,
       {
         headers: {
           'Access-Control-Allow-Origin': this.API_KEY,
-          'x-api-key':  this.API_KEY,
+          'x-api-key': this.API_KEY,
           Cookie: `user_id=${userId}`,
         },
         withCredentials: true,
@@ -140,4 +163,4 @@ export class HandApiClient implements HandRepository {
   }
 }
 
-export const handApiClient: HandRepository = new HandApiClient();
+export const handApiClient: HandRepository = new HandApiClient(axiosHttpClient);
