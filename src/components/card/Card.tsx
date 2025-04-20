@@ -34,13 +34,18 @@ type Suits = { [key in string]: string };
 //   return `${suits[suit]}_${ranks[rank] ?? rank}.png`
 // }
 // TODO: regex to replace T by 10 -> .replace(/^T/, '10')
-const CardComponent: React.FC<CardProps> = ({ card, showSliced, bigSize, animated }) => {
+const CardComponent: React.FC<CardProps> = ({
+  card,
+  showSliced,
+  bigSize,
+  animated,
+}) => {
   if (card === '' || card === 'X') {
     return (
-      <StyledCardImg 
-        src={`/cards/back-black.png`} 
+      <StyledCardImg
+        src={`/cards/back-black.png`}
         alt='card-image'
-        width={90} 
+        width={90}
         height={90}
         $showSliced={showSliced}
         $bigSize={bigSize}
@@ -66,10 +71,10 @@ const CardComponent: React.FC<CardProps> = ({ card, showSliced, bigSize, animate
   };
 
   return (
-    // <StyledCardImg 
-    //     src={`/cards/${cardNameToPngFileName(card)}`} 
+    // <StyledCardImg
+    //     src={`/cards/${cardNameToPngFileName(card)}`}
     //     alt='card-image'
-    //     width={90} 
+    //     width={90}
     //     height={90}
     //     $showSliced={showSliced}
     //     $bigSize={bigSize}

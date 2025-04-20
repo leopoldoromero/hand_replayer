@@ -13,6 +13,7 @@ export enum ActionTypes {
   CALL = 'CALL',
   FOLD = 'FOLD',
   RAISE = 'RAISE',
+  BET = 'BET',
 }
 
 export interface Action {

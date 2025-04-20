@@ -4,6 +4,8 @@ import StylesProvider from '@/theme/StylesProvider';
 import { HandContextProvider } from '@/contexts/HandContext';
 import HeaderComponent from '@/components/header/Header';
 import Head from 'next/head';
+import ReduxProvider from '@/lib/redux/ReduxProvider';
+import Snackbar from '@/components/snackbar/Snackbar';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -26,10 +28,13 @@ export default function RootLayout({
       <body>
         <StyledComponentsRegistry>
           <StylesProvider>
-            <HandContextProvider>
-              <HeaderComponent />
-              {children}
-            </HandContextProvider>
+            <ReduxProvider>
+              <HandContextProvider>
+                <Snackbar />
+                <HeaderComponent />
+                {children}
+              </HandContextProvider>
+            </ReduxProvider>
           </StylesProvider>
         </StyledComponentsRegistry>
       </body>

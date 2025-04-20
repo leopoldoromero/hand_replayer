@@ -39,7 +39,7 @@ const PlayerComponent: React.FC<PlayerProps> = ({
   folded,
   stats,
   onClick,
-}) =>  {
+}) => {
   return (
     <StyledPlayerContainer
       $seat={seat}
@@ -77,6 +77,6 @@ const PlayerComponent: React.FC<PlayerProps> = ({
       </StyledPlayerBetConatiner>
     </StyledPlayerContainer>
   );
-}
+};
 
 export default PlayerComponent;

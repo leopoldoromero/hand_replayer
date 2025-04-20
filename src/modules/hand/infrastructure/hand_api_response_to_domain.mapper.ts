@@ -6,7 +6,8 @@ import { PlayerStats } from '../domain/player_stats';
 import { PokerRooms } from '../domain/poker_rooms';
 import { ActionDto, HandDto, PlayerDto } from './history_parser_api.response';
 
-function actionDtoToDomainMapper(actionDto: ActionDto): Action {
+// TODO: review phase and action squema in backend.
+export function actionDtoToDomainMapper(actionDto: ActionDto): Action {
   return {
     phase: actionDto.phase as ActionPhaseTypes,
     player: actionDto.player,
@@ -16,7 +17,7 @@ function actionDtoToDomainMapper(actionDto: ActionDto): Action {
   };
 }
 
-function playerDtoToDomain(
+export function playerDtoToDomain(
   playerDto: PlayerDto,
   playerStats?: PlayerStats
 ): Player {

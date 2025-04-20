@@ -25,10 +25,8 @@ export interface SummaryPlayerDto {
   name: string;
   cards: Array<string>;
   amount: number;
-  currency: string;
 }
 export interface SummaryDto {
-  player_actions: Array<SummaryPlayerActionDto>;
   pot: number;
   rake: number;
   winner: SummaryPlayerDto | null;
@@ -49,7 +47,7 @@ export interface HandDto {
   id: string;
   user_id: string;
   general_info: {
-    hand_id: string;
+    room_hand_id: string;
     datetime: string;
     game_type: string;
     currency: string;
@@ -67,12 +65,6 @@ export interface HandDto {
   hero_seat: number;
   actions: Array<ActionDto>;
   summary: SummaryDto;
-  showdown: ShowdownDto | null;
-  finish_before_showdown: Array<{
-    player: string;
-    action: string;
-    amount: number;
-  }> | null;
 }
 
 export interface HistoryParserApiResponseDto {

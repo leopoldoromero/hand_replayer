@@ -25,7 +25,6 @@ export interface SummaryPlayer {
   name: string;
   cards: Array<string>;
   amount: number;
-  currency: string;
 }
 export interface Hand {
   id: string;
