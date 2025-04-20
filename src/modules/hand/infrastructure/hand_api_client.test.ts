@@ -1,6 +1,5 @@
 import { HandApiClient } from './hand_api_client';
 import { HandDto } from './history_parser_api.response';
-import { v4 as uuidv4 } from 'uuid';
 import { HttpClientMock } from '@/__mocks__/http_client.mock';
 import { handApiResponseMock, playerStatsMock, statsApiResponseMock } from '@/__mocks__/hand_api_response.mock';
 
