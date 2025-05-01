@@ -85,6 +85,7 @@ const Replayer: React.FC<Props> = ({ handId }) => {
         gameReducerDispatch({ type: 'LOAD_STATE', hand });
       })
       .catch((err) => {
+        console.log('ERROR', err)
         dispatch(snackbarActions.error(err?.message));
 
         setTimeout(() => {

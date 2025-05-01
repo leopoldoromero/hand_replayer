@@ -24,6 +24,7 @@ export const SnackbarWrapper = styled.div<{ $open: boolean }>`
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   opacity: ${(props) => (props.$open ? 1 : 0)};
+  display: ${(props) => (!props.$open && 'none')};
   transition: opacity 0.3s ease-in-out;
   animation: ${fadeIn} 0.3s ease;
   z-index: 9999;
