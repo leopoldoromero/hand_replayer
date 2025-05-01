@@ -49,7 +49,7 @@ export class AxiosHttpClient implements HttpClient {
   };
 
   private handleResponse = (response: AxiosResponse) => {
-    console.log('[[Axios handle response]]:', response.data, response.status);
+    console.log('[[Axios handle response]]:', JSON.stringify(response.data), response.status);
     return response;
   };
 

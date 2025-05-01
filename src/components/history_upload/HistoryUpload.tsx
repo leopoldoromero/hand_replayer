@@ -18,6 +18,7 @@ import {
   resetFilters,
 } from '@/lib/redux/hand/hand.slice';
 import { fetchHands } from '@/lib/redux/hand/hand.thunk';
+import { TEST_HANDS } from './test_hands';
 
 const HistoryUploadComponent = () => {
   const { hands, filtersApplied, filteredHands } = useSelector<
@@ -34,9 +35,11 @@ const HistoryUploadComponent = () => {
 
   useEffect(() => {
     if (!hands?.length) {
+      setLoading(true);
       dispatch(fetchHands());
+      setLoading(false);
     }
-  }, []);
+  }, [hands.length, dispatch]);
 
   const handleUpload = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -82,7 +85,10 @@ const HistoryUploadComponent = () => {
         </Text>
         <Text mb='m'>
           Paste your hand history and we&apos;ll convert it into a replay for
-          you to share with others.
+          you.
+        </Text>
+        <Text mb='m' weight='semiBold'>
+          Note: the application only works with POKER STARS cash hands for now, we`ll add more features soon.
         </Text>
         <StyledForm onSubmit={handleUpload}>
           <Textarea
@@ -93,7 +99,7 @@ const HistoryUploadComponent = () => {
             name=''
             cols={10}
           />
-          <Block display='flex' justify='center' mt='m' mb='m'>
+          <Block display='flex' justify='space-evenly' mt='m' mb='m'>
             <Button
               type='submit'
               disabled={loading}
@@ -102,20 +108,31 @@ const HistoryUploadComponent = () => {
               text={loading ? 'Uploading...' : 'Upload'}
               color='green'
             />
+            <Button
+              type='button'
+              disabled={loading}
+              variant='default'
+              size='m'
+              text={loading ? 'Uploading...' : 'Use test hands'}
+              color='green'
+              onClick={() => setText(TEST_HANDS)}
+            />
           </Block>
         </StyledForm>
       </Block>
-      <Block mt='m' customStyles={{ maxWidth: '950px' }}>
-        <Block display='flex' justify='center' mb='m'>
-          <HandListFilters
-            filterHandsByCriteria={filterHandsByCriteria}
-            resetFilters={() => dispatch(resetFilters())}
-          />
-        </Block>
-        {hands?.length ? (
+      {
+        hands?.length ? (
+        <Block mt='m' customStyles={{ maxWidth: '950px' }}>
+          <Block display='flex' justify='center' mb='m'>
+            <HandListFilters
+              filterHandsByCriteria={filterHandsByCriteria}
+              resetFilters={() => dispatch(resetFilters())}
+            />
+          </Block>
           <UploadedHandsList hands={filtersApplied ? filteredHands : hands} />
-        ) : null}
-      </Block>
+        </Block>
+        ) : null
+      }
     </Block>
   );
 };
