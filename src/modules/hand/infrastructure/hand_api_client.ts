@@ -10,7 +10,7 @@ import {
   getAxiosHttpClient,
   HttpErrorDto,
 } from '@/modules/shared/infrastructure/axios_http_client';
-import { HttpClient } from '../domain/http_client';
+import { HttpClient } from '../../shared/domain/http_client';
 interface GetHandResponse {
   hand: HandDto;
   prev_hand_id: string;

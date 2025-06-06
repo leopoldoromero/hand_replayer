@@ -4,6 +4,7 @@ import styled from 'styled-components';
 export const DropdownContainer = styled.div`
   position: relative;
   width: fit-content;
+  width: 100%;
 `;
 
 export const DropdownButton = styled.button`

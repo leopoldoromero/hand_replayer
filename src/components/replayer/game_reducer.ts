@@ -19,6 +19,7 @@ interface GameState {
   heroCards: Array<string>;
   heroName: string;
   showKnownCards: boolean;
+  playersInHand: Array<string>;
 }
 
 type ChangeStateAction =
@@ -42,6 +43,7 @@ export const initialState: GameState = {
   heroCards: [],
   heroName: '',
   showKnownCards: false,
+  playersInHand: [],
 };
 
 export const gameReducer = (
@@ -51,7 +53,7 @@ export const gameReducer = (
   switch (action.type) {
     case 'LOAD_STATE':
       const { hand } = action;
-      return {
+      const newState = {
         ...initialState,
         playersActions: hand?.players?.map((player) => ({
           name: player.name,
@@ -63,7 +65,10 @@ export const gameReducer = (
         })),
         heroCards: hand?.hero?.cards,
         heroName: hand?.hero?.nick,
+        playersInHand: hand?.players?.map((player) => player.name)
       };
+      console.log('STATE 1', newState)
+      return newState;
     case 'PLAY':
       return { ...state, isPlaying: true };
     case 'PAUSE':
@@ -98,7 +103,7 @@ export const gameReducer = (
               amount: isNewRound ? null : player.amount,
             }
       );
-      return {
+      const newState2 = {
         ...state,
         actionIndex: state.actionIndex + 1,
         playersActions: playerACtions,
@@ -108,6 +113,8 @@ export const gameReducer = (
         board: currentAction.cards?.length ? currentAction.cards : state.board,
         showKnownCards: isShowdown,
       };
+      console.log('STATE 2', newState2)
+      return newState2;
     case 'PREV_ACTION':
       if (state.actionIndex === 0) return state;
       const { currentHand } = action;

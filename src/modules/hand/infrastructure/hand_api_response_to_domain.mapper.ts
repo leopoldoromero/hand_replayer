@@ -6,12 +6,23 @@ import { PlayerStats } from '../domain/player_stats';
 import { PokerRooms } from '../domain/poker_rooms';
 import { ActionDto, HandDto, PlayerDto } from './history_parser_api.response';
 
+function actionNameToDomain(name: string): ActionTypes {
+  const actionDtosToDomain: {[key in string]: ActionTypes} = {
+    'small_blind': ActionTypes.SB,
+    'big_blind': ActionTypes.BB,
+    'fold': ActionTypes.FOLD,
+    'check': ActionTypes.CHECK,
+    'bet': ActionTypes.BET,
+    'raise': ActionTypes.RAISE,
+  }
+  return actionDtosToDomain[name];
+}
 // TODO: review phase and action squema in backend.
 export function actionDtoToDomainMapper(actionDto: ActionDto): Action {
   return {
     phase: actionDto.phase as ActionPhaseTypes,
     player: actionDto.player,
-    action: actionDto.action as ActionTypes,
+    action: actionNameToDomain(actionDto.action),
     amount: actionDto.amount ?? 0,
     cards: actionDto.cards,
   };

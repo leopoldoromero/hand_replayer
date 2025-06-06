@@ -66,22 +66,36 @@ const HandListFilters: React.FC<Props> = ({
         mb='l'
         width='100%'
       >
-        <Dropdown
-          label='POT TYPE'
-          options={['SRP', 'ROL', 'LIMPED', '3BET', 'SQUEEZE', '4BET']}
-          value={filters.potType}
-          onChange={(value) =>
-            setFilters((prev) => ({ ...prev, potType: value }))
-          }
-        />
-        <Dropdown
-          label='POSITION'
-          options={Object.values(sixMaxPositions)}
-          value={filters.position}
-          onChange={(value) =>
-            setFilters((prev) => ({ ...prev, position: value }))
-          }
-        />
+        <Block 
+          display='flex' 
+          justify='center' 
+          mb='m'
+          customStyles={{ minWidth: '150px' }}
+        >
+          <Dropdown
+            label='POT TYPE'
+            options={['SRP', 'ROL', 'LIMPED', '3BET', 'SQUEEZE', '4BET']}
+            value={filters.potType}
+            onChange={(value) =>
+              setFilters((prev) => ({ ...prev, potType: value }))
+            }
+          />
+        </Block>
+        <Block 
+          display='flex' 
+          justify='center' 
+          mb='m'
+          customStyles={{ minWidth: '150px' }}
+        >
+          <Dropdown
+            label='POSITION'
+            options={Object.values(sixMaxPositions)}
+            value={filters.position}
+            onChange={(value) =>
+              setFilters((prev) => ({ ...prev, position: value }))
+            }
+          />
+        </Block>
         <Block
           display='flex'
           direction='column'

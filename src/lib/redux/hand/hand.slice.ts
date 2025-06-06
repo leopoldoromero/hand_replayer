@@ -5,22 +5,28 @@ import {
 } from '@/modules/hand/domain/hand';
 import { Criteria } from '@/modules/shared/domain/criteria';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { fetchHands } from './hand.thunk';
+import { fetchHand, fetchHands } from './hand.thunk';
 
 export interface HandsState {
-  hands: Array<Hand>;
-  filteredHands: Array<Hand>;
-  loading: boolean;
-  error: string | null;
-  filtersApplied: boolean;
+    hands: Array<Hand>;
+    filteredHands: Array<Hand>;
+    loading: boolean;
+    error: string | null;
+    filtersApplied: boolean;
+    currentHand: Hand | null;
+    prevHandId: string;
+    nextHandId: string;
 }
 
 const initialState: HandsState = {
-  hands: [],
-  filteredHands: [],
-  loading: false,
-  error: null,
-  filtersApplied: false,
+    hands: [],
+    filteredHands: [],
+    loading: false,
+    error: null,
+    filtersApplied: false,
+    currentHand: null,
+    prevHandId: '',
+    nextHandId: '',
 };
 
 const potTypeToEnumMapper = (potType: string): PotType => {
@@ -107,6 +113,18 @@ export const handsSlice = createSlice({
       .addCase(fetchHands.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+      .addCase(fetchHand.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchHand.fulfilled, (state, action) => {
+        state.loading = false;
+        state.currentHand = action.payload.hand;
+        state.prevHandId = action.payload.prevHandId;
+        state.nextHandId = action.payload.nextHandId;
+      })
+      .addCase(fetchHand.rejected, (state) => {
+        state.loading = false;
       });
   },
 });
