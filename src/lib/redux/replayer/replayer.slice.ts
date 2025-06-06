@@ -45,18 +45,9 @@ const replayerSlice = createSlice({
   name: 'replayer',
   initialState,
   reducers: {
+    resetState: () => initialState,
     setGameState: (state, action: PayloadAction<GameState>) => {
         state.gameState = action.payload;
-    },
-    toggleRangeSelectorModal: (state, action: PayloadAction<string | null | undefined>) => {
-        console.log('TOGGLE:', action)
-        if (!action?.payload) {
-            state.isRangeSelectorOpen = false;
-            state.currentRangeEditingPlayer = null;
-            return;
-        }
-        state.currentRangeEditingPlayer = action.payload;
-        state.isRangeSelectorOpen = !state.isRangeSelectorOpen;
     },
     setHighlightedPlayer: (state, action: PayloadAction<string | null>) => {
       state.highlightedPlayer = action.payload;
@@ -71,36 +62,6 @@ const replayerSlice = createSlice({
     toggleBigBlinds: (state) => {
       state.showInBigBlinds = !state.showInBigBlinds;
     },
-//     toggleStatsModal: (state,action: PayloadAction<
-//     | undefined
-//     | {
-//         playerName?: string;
-//         stats?: {
-//           vpip: number;
-//           pfr: number;
-//           threeBetPercent: number;
-//           hands: number;
-//         };
-//       }
-//   >
-// ) => {
-//   if (action.payload) {
-//     const { playerName, stats } = action.payload;
-//     state.statsModalData = {
-//       isOpen: true,
-//       playerName: playerName || '',
-//       stats: stats || {
-//         vpip: 0,
-//         pfr: 0,
-//         threeBetPercent: 0,
-//         hands: 0,
-//       },
-//     };
-//     state.currentRangeEditingPlayer = playerName ?? null
-//   } else {
-//     state.statsModalData.isOpen = false;
-//   }
-// },
   },
    extraReducers: (builder) => {
     builder
@@ -119,8 +80,7 @@ const replayerSlice = createSlice({
 
 export const {
     setGameState,
-    // toggleStatsModal,
-    toggleRangeSelectorModal,
+    resetState,
     setHighlightedPlayer,
     setRange,
     togglePlaying,

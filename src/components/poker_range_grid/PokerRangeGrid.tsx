@@ -58,7 +58,6 @@ const PokerRangeGrid: React.FC<Props> = ({selectedHands, onSelectedHandsChange})
    const newSelectedHands = isSelected
      ? selectedHands.filter((h) => h !== hand)
      : [...selectedHands, hand];
-     console.log('newSelectedHands', newSelectedHands);
     onSelectedHandsChange(newSelectedHands);
   };
 
@@ -67,7 +66,6 @@ const PokerRangeGrid: React.FC<Props> = ({selectedHands, onSelectedHandsChange})
       (acc, val) => acc + combosCalculator(val),
       0
     );
-    console.log("Combos", handsRangeCombos)
     const newPercentage = (handsRangeCombos * 100) / calculateCombos();
     setPercentage(Number(newPercentage.toFixed(2))); 
   }, [selectedHands]);
