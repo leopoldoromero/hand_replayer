@@ -45,7 +45,7 @@ const HeroSection: React.FC<Props> = ({toggleRangeSelectorModal, selectedVillian
   const selectedVillianRange: Array<string> = playersRanges[selectedVillian] ?? []
   const formatVillianRangeSelectBtnText = () => {
     const selectedVillainNameLength = selectedVillian.length;
-    const maxLength = 10;
+    const maxLength = 8;
     return selectedVillainNameLength > maxLength
       ? `${selectedVillian.slice(0, maxLength)}...`
       : selectedVillian;
@@ -107,7 +107,7 @@ const HeroSection: React.FC<Props> = ({toggleRangeSelectorModal, selectedVillian
               ) : null
             }
             {
-          selectedVillianRange ? (
+          selectedVillianRange?.length ? (
             <Block display='flex' direction='column' justify='center' align='center' mb='m'>
               <Button
                 type='submit'

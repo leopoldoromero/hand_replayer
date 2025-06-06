@@ -67,7 +67,6 @@ export const gameReducer = (
         heroName: hand?.hero?.nick,
         playersInHand: hand?.players?.map((player) => player.name)
       };
-      console.log('STATE 1', newState)
       return newState;
     case 'PLAY':
       return { ...state, isPlaying: true };
@@ -113,7 +112,6 @@ export const gameReducer = (
         board: currentAction.cards?.length ? currentAction.cards : state.board,
         showKnownCards: isShowdown,
       };
-      console.log('STATE 2', newState2)
       return newState2;
     case 'PREV_ACTION':
       if (state.actionIndex === 0) return state;

@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { DefaultState, DispatchAction } from '@/lib/redux/store';
 import { GameStateHandler } from './game_state';
 import { selectReplayerState } from '@/lib/redux/replayer/replayer.selector';
-import { ReplayerState, setGameState, setHighlightedPlayer, toggleBigBlinds, togglePlaying } from '@/lib/redux/replayer/replayer.slice';
+import { ReplayerState, resetState, setGameState, setHighlightedPlayer, toggleBigBlinds, togglePlaying } from '@/lib/redux/replayer/replayer.slice';
 import { fetchHand } from '@/lib/redux/hand/hand.thunk';
 import { selectHandsState } from '@/lib/redux/hand/hand.selector';
 import { HandsState } from '@/lib/redux/hand/hand.slice';
@@ -57,14 +57,14 @@ const Replayer: React.FC<Props> = ({ handId }) => {
 
   const onPrevHandHandler = () => {
     if (prevHandId && gameStateHandlerRef.current) {
-      dispatch(setGameState(gameStateHandlerRef.current?.reset()));
+      dispatch(resetState());
       router.push(`/hands/${prevHandId}`, { scroll: true });
     }
   };
 
   const onNextHandHandler = () => {
     if (nextHandId  && gameStateHandlerRef.current) {
-      dispatch(setGameState(gameStateHandlerRef.current?.reset()));
+      dispatch(resetState());
       router.push(`/hands/${nextHandId}`, { scroll: true });
     }
   };
@@ -78,7 +78,6 @@ const Replayer: React.FC<Props> = ({ handId }) => {
   };
 
   const toggleRangeSelectorModal = (playerName?: string) => {
-    console.log('Range player name:', playerName, rangeSelectorModalData?.isOpen)
     setRangeSelectorModalData({ isOpen: true, playerName: playerName ?? '' });
   }
 
