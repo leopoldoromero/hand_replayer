@@ -1,4 +1,4 @@
-import { ApiConfig, HttpClient } from "@/modules/hand/domain/http_client";
+import { ApiConfig, HttpClient } from "@/modules/shared/domain/http_client";
 
 export class HttpClientMock implements HttpClient {
     private mockGet = jest.fn();

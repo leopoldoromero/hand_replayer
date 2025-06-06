@@ -7,9 +7,9 @@ export type ApiRequestConfig = AxiosRequestConfig;
 
 export interface HttpClient {
   get<R>(url: string, config?: ApiConfig): Promise<R>;
-  post<T, R = ApiResponse<T>>(
+  post<T, R>(
     url: string,
     data?: T,
     config?: ApiConfig
-  ): Promise<R | void>;
+  ): Promise<Promise<R>>;
 }

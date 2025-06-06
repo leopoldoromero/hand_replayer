@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import Block from '@/components/block/Block';
 import PlayerComponent from '@/components/player/Player';
 import TableComponent from '@/components/table/Table';
@@ -14,25 +14,34 @@ import { useDispatch, useSelector } from 'react-redux';
 import { DefaultState, DispatchAction } from '@/lib/redux/store';
 import { GameStateHandler } from './game_state';
 import { selectReplayerState } from '@/lib/redux/replayer/replayer.selector';
-import { ReplayerState, setGameState, setHighlightedPlayer, toggleBigBlinds, togglePlaying, toggleRangeSelectorModal, toggleStatsModal } from '@/lib/redux/replayer/replayer.slice';
-import { fetchHand } from '@/lib/redux/replayer/replayer.thunk';
+import { ReplayerState, setGameState, setHighlightedPlayer, toggleBigBlinds, togglePlaying } from '@/lib/redux/replayer/replayer.slice';
+import { fetchHand } from '@/lib/redux/hand/hand.thunk';
+import { selectHandsState } from '@/lib/redux/hand/hand.selector';
+import { HandsState } from '@/lib/redux/hand/hand.slice';
 
 interface Props {
   handId: string;
 }
 
 const Replayer: React.FC<Props> = ({ handId }) => {
-  const REPRODUCTION_SPEED = 1000;
-  const { 
+  const [statsModalState, setStatsModalState] = useState<{ stats?: PreflopStats; playerName: string; isOpen: boolean }>({ playerName: '', isOpen: false });
+  const [rangeSelectorModalData, setRangeSelectorModalData] = useState<{ isOpen: boolean, playerName: string }>({ isOpen: false, playerName: '' });
+  const {
     currentHand,
     prevHandId,
     nextHandId,
-    isLoading,
+    loading,
+  } = useSelector<
+    DefaultState,
+    HandsState
+  >(selectHandsState)
+  const { 
     gameState, 
     isPlaying, 
     highlightedPlayer, 
     showInBigBlinds, 
-    isRangeSelectorOpen
+    playersRanges,
+    reproductionSpeed,
    } = useSelector<
     DefaultState,
     ReplayerState
@@ -54,20 +63,24 @@ const Replayer: React.FC<Props> = ({ handId }) => {
   };
 
   const onNextHandHandler = () => {
-    console.log('Executing NEXT', nextHandId)
     if (nextHandId  && gameStateHandlerRef.current) {
       dispatch(setGameState(gameStateHandlerRef.current?.reset()));
       router.push(`/hands/${nextHandId}`, { scroll: true });
     }
   };
 
-  const statsModalHandler = (playerName: string, stats?: PreflopStats) => {
-      const isHero = playerName === gameState?.heroName;
-      return isHero ? dispatch(toggleStatsModal({
-        stats,
-        playerName,
-      })) : null;
+  const statsModalHandler = (playerName?: string, stats?: PreflopStats) => {
+     setStatsModalState({
+      playerName: playerName ?? '',
+      stats,
+      isOpen: !statsModalState.isOpen,
+     })
   };
+
+  const toggleRangeSelectorModal = (playerName?: string) => {
+    console.log('Range player name:', playerName, rangeSelectorModalData?.isOpen)
+    setRangeSelectorModalData({ isOpen: true, playerName: playerName ?? '' });
+  }
 
   const onNextActionHandler = useCallback(() => {
     if (!currentHand || !gameStateHandlerRef.current) return;
@@ -79,8 +92,8 @@ const Replayer: React.FC<Props> = ({ handId }) => {
   
     setTimeout(() => {
       dispatch(setHighlightedPlayer(null));
-    }, REPRODUCTION_SPEED / 2);
-  }, [currentHand, dispatch]);
+    }, reproductionSpeed / 2);
+  }, [currentHand, dispatch, reproductionSpeed]);
 
   const onPrevActionHandler = () => {
     if (!gameStateHandlerRef.current) return;
@@ -97,31 +110,6 @@ useEffect(() => {
   }
 }, [currentHand, dispatch]);
 
-  // const fetchHand = useCallback(async () => {
-  //   setLoading(true);
-  //   try {
-  //     const response = await getHandAction(handId);
-  //     const hand = response?.hand as Hand;
-  //     gameStateHandlerRef.current = new GameStateHandler(hand);
-  //     setCurrentHand(hand);
-  //     setPrevHandId(response?.prevHandId ?? '');
-  //     setNextHandId(response?.nextHandId ?? '');
-  //     dispatch(setGameState(gameStateHandlerRef.current?.getState()));
-  //   } catch (err: unknown) {
-  //     console.error('ERROR', err);
-  //     dispatch(snackbarActions.error((err as Error)?.message));
-  //     setTimeout(() => {
-  //       router.push(`/`, { scroll: true });
-  //     }, 2000);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }, [handId, dispatch, router]);
-  
-
-  // useEffect(() => {
-  //   fetchHand();
-  // }, [fetchHand]);
 
   useEffect(() => {
     if (!isPlaying || !currentHand) return;
@@ -133,14 +121,14 @@ useEffect(() => {
   
     const timer = setTimeout(() => {
       onNextActionHandler();
-    }, REPRODUCTION_SPEED);
+    }, reproductionSpeed);
   
     return () => {
       clearTimeout(timer);
     };
-  }, [isPlaying, gameStateHandlerRef.current?.actionIndex, currentHand, onNextActionHandler, dispatch]);
+  }, [isPlaying, gameStateHandlerRef.current?.actionIndex, currentHand, onNextActionHandler, dispatch, reproductionSpeed]);
 
-  if (isLoading) return <p>Loading....</p>;
+  if (loading) return <p>Loading....</p>;
 
   if (!currentHand || !gameState || !gameStateHandlerRef.current) return null;
 
@@ -153,7 +141,7 @@ useEffect(() => {
     dispatch(togglePlaying());
   };
 
-
+  const selectedRange: Array<string> = playersRanges[rangeSelectorModalData.playerName] ?? []
   return (
     <Block
       display='flex'
@@ -164,10 +152,16 @@ useEffect(() => {
       position='relative'
     >
       <HandInfoComponent hand={currentHand} />
-      <StatsModal/>
+      <StatsModal 
+      statsModalData={statsModalState}
+      statsModalHandler={statsModalHandler}
+      toggleRangeSelectorModal={toggleRangeSelectorModal}
+      />
       <RangeSelectorModal
-        isOpen={isRangeSelectorOpen}
-        onClose={() => dispatch(toggleRangeSelectorModal())}
+        isOpen={rangeSelectorModalData.isOpen}
+        playerName={rangeSelectorModalData.playerName}
+        initialRange={selectedRange}
+        onClose={() => toggleRangeSelectorModal()}
       />
       <StyledGameContainer>
         {gameState?.players.map((player) => {

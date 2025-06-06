@@ -2,8 +2,7 @@
 import {
   ApiConfig,
   HttpClient,
-  HttpClientResponse,
-} from '@/modules/hand/domain/http_client';
+} from '@/modules/shared/domain/http_client';
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
 export interface HttpErrorDto {
@@ -30,7 +29,7 @@ export class AxiosHttpClient implements HttpClient {
     return response.data;
   }
 
-  async post<T = any, R = HttpClientResponse<T>>(
+  async post<T = any, R = any>(
     url: string,
     data?: T,
     config?: ApiConfig

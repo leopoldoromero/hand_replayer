@@ -1,53 +1,31 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { getHandAction } from "@/actions/get_hand.action";
-import { Hand } from "@/modules/hand/domain/hand";
-
-
-export const fetchHand = createAsyncThunk(
-  'replayer/fetchHand',
-  async (handId: string, { rejectWithValue }) => {
-    try {
-      const response = await getHandAction(handId);
-      return {
-        hand: response?.hand as Hand,
-        prevHandId: response?.prevHandId ?? '',
-        nextHandId: response?.nextHandId ?? '',
-      };
-    } catch (error: unknown) {
-      return rejectWithValue((error as Error).message || 'Failed to fetch hand');
-    }
-  }
-);
-
-// TODO: move this later to its own file near to the api response dto.
-type EquityResult = {
-    win: number;
-    loose: number
-    tie: number;
-}
+import { calculateEquityAction } from "@/actions/calculate_equity.action";
+import { Equity } from "@/modules/equity/domain/equity";
 
 export const calculateEquity = createAsyncThunk<
-  EquityResult,
-  void,
+  Equity,
+  string,
   { state: RootState }
 >(
   'replayer/calculateEquity',
-  async (_, { getState, rejectWithValue }) => {
+  async (villainName: string, { getState, rejectWithValue }) => {
     const state = getState().replayerState;
-    const hero = state.heroRange || state.gameState?.heroCards;
-    const villain = state.selectedVillainData;
+    const villainRange = state.playersRanges[villainName] ?? [];
+
+    if (!villainRange?.length || !state.gameState?.heroCards) {
+      return rejectWithValue('Invalid data: missing villain range or hero cards');
+    }
 
     try {
-    //   const response = await api.calculateEquity(hero, villain);
-    //   return response.data;
-    return {
-        win: 0.5,
-        loose: 0.3,
-        tie: 0.2
-    }
+    return calculateEquityAction({
+      hand: state.gameState?.heroCards,
+      range: villainRange,
+      board: state.gameState?.board ?? [],
+    });
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
   }
 );
+   

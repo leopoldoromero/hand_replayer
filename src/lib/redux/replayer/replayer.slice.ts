@@ -1,30 +1,17 @@
 import { GameState } from '@/components/replayer/game_state';
-import { Hand } from '@/modules/hand/domain/hand';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { fetchHand } from './replayer.thunk';
+import { calculateEquity } from './replayer.thunk';
 
+const INIT_REPRODUCTION_SPEED = 1000;
 export interface ReplayerState {
     gameState: GameState | null;
     isPlaying: boolean;
     highlightedPlayer: string | null;
     showInBigBlinds: boolean;
-    statsModalData: {
-        isOpen: boolean;
-        stats?: {
-            vpip: number;
-            pfr: number;
-            threeBetPercent: number;
-            hands: number; 
-        };
-        playerName: string;
-    };
-    isStatsModalOpen: boolean;
     isRangeSelectorOpen: boolean;
-    selectedVillainData: {
-        name: string;
-        range: string;
-    };
-    heroRange: string;
+    heroSelectedRange: Array<string>;
+    playersRanges: {[key in string]: Array<string>};
+    currentRangeEditingPlayer: string | null;
     equityCalculation: {
         loading: boolean;
         error: string | null;
@@ -34,10 +21,7 @@ export interface ReplayerState {
             tie: number;
         } | null;
     };
-    isLoading: boolean;
-    currentHand: Hand | null;
-    prevHandId: string;
-    nextHandId: string;
+    reproductionSpeed: number;
 }
 
 const initialState: ReplayerState = {
@@ -45,32 +29,16 @@ const initialState: ReplayerState = {
     isPlaying: false,
     highlightedPlayer: null,
     showInBigBlinds: false,
-    isStatsModalOpen: false,
-    statsModalData: {
-    isOpen: false,
-    stats: {
-      vpip: 0,
-      pfr: 0,
-      threeBetPercent: 0,
-      hands: 0,
-    },
-    playerName: '',
-    },
     isRangeSelectorOpen: false,
-    selectedVillainData: {
-        name: '',
-        range: '',
-    },
-    heroRange: '',
+    heroSelectedRange: [],
+    playersRanges: {},
+    currentRangeEditingPlayer: null,
     equityCalculation: {
         loading: false,
         error: null,
         result: null,
     },
-    currentHand: null,
-    prevHandId: '',
-    nextHandId: '',
-    isLoading: false,
+    reproductionSpeed: INIT_REPRODUCTION_SPEED,
 };
 
 const replayerSlice = createSlice({
@@ -80,20 +48,22 @@ const replayerSlice = createSlice({
     setGameState: (state, action: PayloadAction<GameState>) => {
         state.gameState = action.payload;
     },
-    toggleRangeSelectorModal: (state) => {
-      state.isRangeSelectorOpen = !state.isRangeSelectorOpen;
+    toggleRangeSelectorModal: (state, action: PayloadAction<string | null | undefined>) => {
+        console.log('TOGGLE:', action)
+        if (!action?.payload) {
+            state.isRangeSelectorOpen = false;
+            state.currentRangeEditingPlayer = null;
+            return;
+        }
+        state.currentRangeEditingPlayer = action.payload;
+        state.isRangeSelectorOpen = !state.isRangeSelectorOpen;
     },
     setHighlightedPlayer: (state, action: PayloadAction<string | null>) => {
       state.highlightedPlayer = action.payload;
     },
-    setSelectedVillainName: (state, action) => {
-    state.selectedVillainData.name = action.payload;
-    },
-    setSelectedVillainRange: (state, action) => {
-        state.selectedVillainData.range = action.payload;
-    },
-    setHeroRange: (state, action: PayloadAction<string>) => {
-      state.heroRange = action.payload;
+    setRange: (state, action: PayloadAction<{name: string; hands: Array<string>}>) => {
+        const {name, hands} = action.payload;
+        state.playersRanges[name] = hands;
     },
     togglePlaying: (state) => {
       state.isPlaying = !state.isPlaying;
@@ -101,61 +71,58 @@ const replayerSlice = createSlice({
     toggleBigBlinds: (state) => {
       state.showInBigBlinds = !state.showInBigBlinds;
     },
-    toggleStatsModal: (state,action: PayloadAction<
-    | undefined
-    | {
-        playerName?: string;
-        stats?: {
-          vpip: number;
-          pfr: number;
-          threeBetPercent: number;
-          hands: number;
-        };
-      }
-  >
-) => {
-  if (action.payload) {
-    const { playerName, stats } = action.payload;
-    state.statsModalData = {
-      isOpen: true,
-      playerName: playerName || '',
-      stats: stats || {
-        vpip: 0,
-        pfr: 0,
-        threeBetPercent: 0,
-        hands: 0,
-      },
-    };
-  } else {
-    state.statsModalData.isOpen = false;
-  }
-},
+//     toggleStatsModal: (state,action: PayloadAction<
+//     | undefined
+//     | {
+//         playerName?: string;
+//         stats?: {
+//           vpip: number;
+//           pfr: number;
+//           threeBetPercent: number;
+//           hands: number;
+//         };
+//       }
+//   >
+// ) => {
+//   if (action.payload) {
+//     const { playerName, stats } = action.payload;
+//     state.statsModalData = {
+//       isOpen: true,
+//       playerName: playerName || '',
+//       stats: stats || {
+//         vpip: 0,
+//         pfr: 0,
+//         threeBetPercent: 0,
+//         hands: 0,
+//       },
+//     };
+//     state.currentRangeEditingPlayer = playerName ?? null
+//   } else {
+//     state.statsModalData.isOpen = false;
+//   }
+// },
   },
    extraReducers: (builder) => {
     builder
-      .addCase(fetchHand.pending, (state) => {
-        state.isLoading = true;
+      .addCase(calculateEquity.pending, (state) => {
+        state.equityCalculation.loading = true;
       })
-      .addCase(fetchHand.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.currentHand = action.payload.hand;
-        state.prevHandId = action.payload.prevHandId;
-        state.nextHandId = action.payload.nextHandId;
+      .addCase(calculateEquity.fulfilled, (state, action) => {
+        state.equityCalculation.loading = false;
+        state.equityCalculation.result = action.payload;
       })
-      .addCase(fetchHand.rejected, (state) => {
-        state.isLoading = false;
+      .addCase(calculateEquity.rejected, (state) => {
+        state.equityCalculation.loading = false;
       });
   },
 });
 
 export const {
     setGameState,
-    toggleStatsModal,
+    // toggleStatsModal,
     toggleRangeSelectorModal,
     setHighlightedPlayer,
-    setSelectedVillainName,
-    setSelectedVillainRange,
-    setHeroRange,
+    setRange,
     togglePlaying,
     toggleBigBlinds,
 } = replayerSlice.actions;
