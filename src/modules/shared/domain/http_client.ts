@@ -13,3 +13,11 @@ export interface HttpClient {
     config?: ApiConfig
   ): Promise<Promise<R>>;
 }
+
+export type  HttpClientError = {
+  status: number;
+  data: {
+    detail: unknown;
+  };
+  message: string;
+}

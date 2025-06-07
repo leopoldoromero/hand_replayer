@@ -11,18 +11,16 @@ export const Container = styled.div`
 
 export const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(13, 30px);
+  grid-template-columns: repeat(13, minmax(20px, 35px));
 `;
 
 export const Cell = styled.div<{ $selected: boolean }>`
-  width: 25px;
-  height: 25px;
-  padding: 0.2rem;
+  padding: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 1px solid #ccc;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   cursor: pointer;
   background-color: ${({ $selected }) => ($selected ? '#4CAF50' : '#f8f8f8')};
   color: ${({ $selected }) => ($selected ? 'white' : 'black')};

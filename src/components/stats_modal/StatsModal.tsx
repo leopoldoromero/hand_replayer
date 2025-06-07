@@ -1,7 +1,7 @@
 'use client';
 import Block from '../block/Block';
 import Modal from '../modal/Modal';
-import Backdrop from '../backdrop/Backdrop';
+// import Backdrop from '../backdrop/Backdrop';
 import { PreflopStats } from '@/modules/hand/domain/player';
 import { useSelector } from 'react-redux';
 import { DefaultState } from '@/lib/redux/store';
@@ -31,7 +31,7 @@ const StatsModal: React.FC<Props> = ({statsModalData, statsModalHandler, toggleR
   
   return (
   <>
-    <Backdrop isVisible={statsModalData?.isOpen} hasButton onClose={() => statsModalHandler()} />
+    {/* <Backdrop isVisible={statsModalData?.isOpen} hasButton onClose={() => statsModalHandler()} /> */}
     <Modal isOpen={statsModalData?.isOpen} onClose={() => statsModalHandler()}>
       <Block
         display='flex'
