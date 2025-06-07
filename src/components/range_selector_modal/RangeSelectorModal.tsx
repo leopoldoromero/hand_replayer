@@ -1,7 +1,7 @@
 'use client';
 import Block from '../block/Block';
 import Modal from '../modal/Modal';
-import Backdrop from '../backdrop/Backdrop';
+// import Backdrop from '../backdrop/Backdrop';
 import PokerRangeGrid from '../poker_range_grid/PokerRangeGrid';
 import { useDispatch } from 'react-redux';
 import { DispatchAction } from '@/lib/redux/store';
@@ -33,12 +33,11 @@ const RangeSelectorModal: React.FC<Props> = ({
 
   return (
   <>
-    <Backdrop isVisible={isOpen} hasButton onClose={onClose} />
+    {/* <Backdrop isVisible={isOpen} hasButton onClose={onClose} /> */}
     <Modal isOpen={isOpen} onClose={onClose}>
       <Block
         display='flex'
         direction='column'
-        customStyles={{ minWidth: '140px' }}
       >
         <PokerRangeGrid 
         selectedHands={selectedRangeHands}

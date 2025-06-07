@@ -6,7 +6,10 @@ import {
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
 export interface HttpErrorDto {
-  detail?: string;
+  detail?: string | Array<{
+      type: string,
+      msg: string,
+    }>;
   code?: string;
   message?: string;
   errors?: Record<string, string[]>;
@@ -56,7 +59,6 @@ export class AxiosHttpClient implements HttpClient {
     const httpError: HttpErrorDto = error.response?.data || {};
 
     if (error.response) {
-      // Log the error response details
       console.error(
         '[[Axios handle error response]]:',
         httpError,
@@ -66,7 +68,7 @@ export class AxiosHttpClient implements HttpClient {
       throw {
         status: error.response.status,
         data: httpError,
-        message: httpError.detail || error.message,
+        message: Array.isArray(httpError!.detail) ? httpError!.detail![0].msg : httpError!.detail,
         isAxiosError: true,
       };
     } else if (error.request) {

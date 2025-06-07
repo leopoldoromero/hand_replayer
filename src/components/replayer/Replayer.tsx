@@ -78,7 +78,7 @@ const Replayer: React.FC<Props> = ({ handId }) => {
   };
 
   const toggleRangeSelectorModal = (playerName?: string) => {
-    setRangeSelectorModalData({ isOpen: true, playerName: playerName ?? '' });
+    setRangeSelectorModalData({ isOpen: !rangeSelectorModalData.isOpen, playerName: playerName ?? '' });
   }
 
   const onNextActionHandler = useCallback(() => {
