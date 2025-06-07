@@ -33,8 +33,5 @@ jobs:
       - name: 'Deploy to instance'
         run: |
           eval $(ssh-agent -s)
-          mkdir -p ~/.ssh
-          printf "%s\n" "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-add ~/.ssh/deploy_key
+          echo "${{ secrets.DEPLOY_KEY }}" | ssh-add -
           ssh -o StrictHostKeyChecking=no -t ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "bash ${{ secrets.DEPLOY_FOLDER }}/${{ secrets.DEPLOY_SCRIPT_SH }}"
