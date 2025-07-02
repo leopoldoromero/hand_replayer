@@ -9,5 +9,5 @@ export interface HandRepository {
     nextHandId: string | null;
   } | null>;
   getAll(): Promise<Array<Hand>>;
-  getStats(): Promise<PlayerStats>;
+  getStats(): Promise<Array<PlayerStats>>;
 }

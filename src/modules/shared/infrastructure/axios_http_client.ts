@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { getSessionDataAction } from '@/actions/session.actions';
 import {
   ApiConfig,
   HttpClient,
 } from '@/modules/shared/domain/http_client';
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
+// import { cookies } from 'next/headers';
+// import { v4 as uuidv4 } from 'uuid';
 
 export interface HttpErrorDto {
   detail?: string | Array<{
@@ -17,9 +20,20 @@ export interface HttpErrorDto {
 
 export class AxiosHttpClient implements HttpClient {
   protected client: AxiosInstance;
+  private readonly API_URL = process.env.API_URL;
+  private readonly API_KEY = process.env.API_KEY;
 
   public constructor() {
-    this.client = axios.create();
+    console.log("AxiosHttpClient initialized", Math.random());
+
+    this.client = axios.create({
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': this.API_URL,
+        'x-api-key': this.API_KEY,
+      },
+      withCredentials: true,
+    });
     this.client.interceptors.request.use(this.handleRequest);
     this.client.interceptors.response.use(
       this.handleResponse,
@@ -28,6 +42,21 @@ export class AxiosHttpClient implements HttpClient {
   }
 
   async get<R>(url: string, config?: ApiConfig): Promise<R> {
+    const session = await getSessionDataAction();
+    const identifier = session.accessToken
+    ? { Authorization: `Bearer ${session.accessToken}` }
+    : { 'X-Guest-ID': session.guestId };
+
+    if (config && config.headers) {
+         config.headers = {
+          ...config.headers,
+          ...identifier,
+         }
+      } else {
+        config = {
+          headers: {...identifier},
+        };
+    }
     const response: AxiosResponse<R> = await this.client.get(url, config);
     return response.data;
   }
@@ -37,16 +66,31 @@ export class AxiosHttpClient implements HttpClient {
     data?: T,
     config?: ApiConfig
   ): Promise<R> {
+    const session = await getSessionDataAction();
+    const identifier = session.accessToken
+    ? { Authorization: `Bearer ${session.accessToken}` }
+    : { 'X-Guest-ID': session.guestId };
+
+    if (config && config.headers) {
+         config.headers = {
+          ...config.headers,
+          ...identifier,
+         }
+      } else {
+        config = {
+          headers: {...identifier},
+        };
+    }
     const response: AxiosResponse<R> = await this.client.post(
       url,
       data,
-      config
+      config,
     );
     return response.data;
   }
 
   private handleRequest = (config: any) => {
-    console.log('[[Axios handle request]]:', config?.url);
+    console.log('[[Axios handle request]]:', config.url, config.headers);
     return config;
   };
 
@@ -68,7 +112,7 @@ export class AxiosHttpClient implements HttpClient {
       throw {
         status: error.response.status,
         data: httpError,
-        message: Array.isArray(httpError!.detail) ? httpError!.detail![0].msg : httpError!.detail,
+        message: Array.isArray(httpError!.detail) ? httpError!.detail![0].msg : httpError!.message,
         isAxiosError: true,
       };
     } else if (error.request) {
@@ -93,4 +137,12 @@ export class AxiosHttpClient implements HttpClient {
   };
 }
 
-export const getAxiosHttpClient = () => new AxiosHttpClient();
+let httpClientSingleton: AxiosHttpClient | null = null;
+
+export const getAxiosHttpClient = (): AxiosHttpClient => {
+  if (!httpClientSingleton) {
+    httpClientSingleton = new AxiosHttpClient();
+  }
+  return httpClientSingleton;
+};
+

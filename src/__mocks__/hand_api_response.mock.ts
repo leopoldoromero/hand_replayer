@@ -126,12 +126,12 @@ export const handApiResponseMock: HandDto = {
     button_seat: 1
 }
 
-export const playerStatsMock: PlayerStats = {
-    player1: { hands: 2, vpip: 0, pfr: 0, threeBetPercent: 0 },
-    player2: { hands: 4, vpip: 0, pfr: 0, threeBetPercent: 0 },
-}
+// export const playerStatsMock: PlayerStats = {
+//     player1: { hands: 2, vpip: 0, pfr: 0, threeBetPercent: 0 },
+//     player2: { hands: 4, vpip: 0, pfr: 0, threeBetPercent: 0 },
+// }
 
-export const statsApiResponseMock: {[key in string]: PlayersStatsDto} = {
-    player1: { hands: 2, vpip: 0, pfr: 0, three_bet_percent: 0 },
-    player2: { hands: 4, vpip: 0, pfr: 0, three_bet_percent: 0 },
-}
+// export const statsApiResponseMock: {[key in string]: PlayersStatsDto} = {
+//     player1: { hands: 2, vpip: 0, pfr: 0, three_bet_percent: 0 },
+//     player2: { hands: 4, vpip: 0, pfr: 0, three_bet_percent: 0 },
+// }

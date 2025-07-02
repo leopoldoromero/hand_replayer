@@ -12,17 +12,19 @@
     "prepare": "husky",
     "test": "jest",
     "test:watch": "jest --watch",
-     "cypress:open": "cypress open"
+    "cypress:open": "cypress open"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.6.1",
     "axios": "^1.7.9",
     "babel-plugin-styled-components": "^2.1.4",
     "crypto-js": "^4.2.0",
+    "iron-session": "^8.0.4",
     "lz-string": "^1.5.0",
     "next": "15.1.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hook-form": "^7.58.1",
     "react-redux": "^9.2.0",
     "styled-components": "^6.1.14",
     "uuid": "^11.1.0"

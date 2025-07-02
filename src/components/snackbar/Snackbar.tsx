@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DefaultState, DispatchAction } from '@/lib/redux/store';
 import { selectSnackbarState } from '@/lib/redux/snackbar/snackbar.selector';
@@ -20,13 +20,12 @@ const Snackbar: React.FC<Props> = ({ autoHideDuration = 2000 }) => {
   >(selectSnackbarState);
   const dispatch = useDispatch<DispatchAction>();
 
-  const closeSnackbar = () => dispatch(snackbarActions.clear());
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (openSnackbar) {
-      const timer = setTimeout(() => closeSnackbar(), autoHideDuration);
+      const timer = setTimeout(() => dispatch(snackbarActions.clear()), autoHideDuration);
       return () => clearTimeout(timer);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openSnackbar, autoHideDuration]);
 
   return (

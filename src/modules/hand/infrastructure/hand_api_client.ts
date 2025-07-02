@@ -3,11 +3,8 @@ import { Hand } from '../domain/hand';
 import { HandRepository } from '../domain/hand.repository';
 import { HandDto, PlayersStatsDto } from './history_parser_api.response';
 import { handDtoToDomainMapper } from './hand_api_response_to_domain.mapper';
-import { cookies } from 'next/headers';
 import { PlayerStats } from '../domain/player_stats';
-import { v4 as uuidv4 } from 'uuid';
 import {
-  getAxiosHttpClient,
   HttpErrorDto,
 } from '@/modules/shared/infrastructure/axios_http_client';
 import { HttpClient } from '../../shared/domain/http_client';
@@ -17,11 +14,8 @@ interface GetHandResponse {
   next_hand_id: string;
 }
 
-const axiosHttpClient: HttpClient = getAxiosHttpClient();
-
 export class HandApiClient implements HandRepository {
   private readonly API_URL = process.env.API_URL;
-  private readonly API_KEY = process.env.API_KEY;
 
   constructor(private httpClient: HttpClient) {}
 
@@ -29,24 +23,14 @@ export class HandApiClient implements HandRepository {
     try {
       const formData = new FormData();
       formData.append('file', file);
-      const cookieStore = await cookies();
-      let userId = cookieStore.get('user_id')?.value;
 
-      if (!userId) {
-        userId = uuidv4();
-        cookieStore.set('user_id', userId);
-      }
       await this.httpClient.post<FormData, void>(
         `${this.API_URL}/api/v1/hands`,
         formData,
         {
           headers: {
             'Content-Type': 'multipart/form-data',
-            'Access-Control-Allow-Origin': this.API_KEY,
-            'x-api-key': this.API_KEY,
-            Cookie: `user_id=${userId}`,
           },
-          withCredentials: true,
         }
       );
     } catch (error: unknown) {
@@ -65,24 +49,9 @@ export class HandApiClient implements HandRepository {
     prevHandId: string | null;
     nextHandId: string | null;
   } | null> {
-    const cookieStore = await cookies();
-    let userId = cookieStore.get('user_id')?.value;
-
-    if (!userId) {
-      userId = uuidv4();
-      cookieStore.set('user_id', userId);
-    }
     try {
       const response = await this.httpClient.get<GetHandResponse>(
         `${this.API_URL}/api/v1/hands/${id}`,
-        {
-          headers: {
-            'Access-Control-Allow-Origin': this.API_KEY,
-            'x-api-key': this.API_KEY,
-            Cookie: `user_id=${userId}`,
-          },
-          withCredentials: true,
-        }
       );
       let playerStats = undefined;
 
@@ -106,23 +75,8 @@ export class HandApiClient implements HandRepository {
   }
 
   async getAll(): Promise<Array<Hand>> {
-    const cookieStore = await cookies();
-    let userId = cookieStore.get('user_id')?.value;
-
-    if (!userId) {
-      userId = uuidv4();
-      cookieStore.set('user_id', userId);
-    }
     const response = await this.httpClient.get<Array<HandDto>>(
       `${this.API_URL}/api/v1/hands`,
-      {
-        headers: {
-          'Access-Control-Allow-Origin': this.API_KEY,
-          'x-api-key': this.API_KEY,
-          Cookie: `user_id=${userId}`,
-        },
-        withCredentials: true,
-      }
     );
     const hands: Array<Hand> = response.map((handDto) =>
       handDtoToDomainMapper(handDto)
@@ -130,37 +84,18 @@ export class HandApiClient implements HandRepository {
     return hands;
   }
 
-  async getStats(): Promise<PlayerStats> {
-    const cookieStore = await cookies();
-    let userId = cookieStore.get('user_id')?.value;
-
-    if (!userId) {
-      userId = uuidv4();
-      cookieStore.set('user_id', userId);
-    }
-    const response = await this.httpClient.get<PlayersStatsDto>(
-      `${this.API_URL}/api/v1/stats`,
-      {
-        headers: {
-          'Access-Control-Allow-Origin': this.API_KEY,
-          'x-api-key': this.API_KEY,
-          Cookie: `user_id=${userId}`,
-        },
-        withCredentials: true,
-      }
+  async getStats(): Promise<Array<PlayerStats>> {
+    const response = await this.httpClient.get<Array<PlayersStatsDto>>(
+      `${this.API_URL}/api/v1/hands/stats`,
     );
-    const playerStats: PlayerStats = {};
 
-    Object.entries(response).forEach(([player, stats]) => {
-      playerStats[player] = {
-        hands: stats?.hands,
-        vpip: stats?.vpip,
-        pfr: stats?.pfr,
-        threeBetPercent: stats?.three_bet_percent,
-      };
-    });
-    return playerStats;
+    return response?.map((playerStat) => ({
+        name: playerStat?.name,
+        hands: playerStat?.hands,
+        vpip: playerStat?.vpip,
+        pfr: playerStat?.pfr,
+        threeBetPercent: playerStat?.three_bet_percent,
+      }));
   }
 }
 
-export const handApiClient: HandRepository = new HandApiClient(axiosHttpClient);

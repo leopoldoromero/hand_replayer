@@ -13,7 +13,10 @@ export type IconTypes =
   | 'forward'
   | 'backward'
   | 'next'
-  | 'prev';
+  | 'prev'
+  | 'account'
+  | 'eye'
+  | 'eyeOff';
 
 export interface Props extends MarginProps, CustomStylesProps {
   icon: IconTypes;

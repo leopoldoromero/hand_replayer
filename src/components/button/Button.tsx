@@ -18,6 +18,7 @@ export type ButtonColor = 'primary' | 'secondary';
 
 export interface Props extends MarginProps, PaddingProps, CustomStylesProps {
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onMouseDown?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   type?: ButtonType;
   id?: string;
   size?: Size;
@@ -39,6 +40,7 @@ export interface Props extends MarginProps, PaddingProps, CustomStylesProps {
 
 const Button: React.FC<Props> = ({
   onClick,
+  onMouseDown,
   type = 'button',
   id = 'button_id',
   size = 'm',
@@ -85,6 +87,7 @@ const Button: React.FC<Props> = ({
     $pb={pb}
     $pl={pl}
     onClick={onClick}
+    onMouseDown={onMouseDown}
   >
     {position === 'start' ? (
       <>

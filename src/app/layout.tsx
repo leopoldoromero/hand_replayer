@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import StyledComponentsRegistry from '@/lib/StyledComponentsRegistry';
 import StylesProvider from '@/theme/StylesProvider';
-import { HandContextProvider } from '@/contexts/HandContext';
 import HeaderComponent from '@/components/header/Header';
 import Head from 'next/head';
 import ReduxProvider from '@/lib/redux/ReduxProvider';
 import Snackbar from '@/components/snackbar/Snackbar';
+import AuthModal from '@/components/auth_modal/AuthModal';
+import AuthInit from '@/components/auth_init/AuthInit';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -29,11 +30,11 @@ export default function RootLayout({
         <StyledComponentsRegistry>
           <StylesProvider>
             <ReduxProvider>
-              <HandContextProvider>
-                <Snackbar />
-                <HeaderComponent />
-                {children}
-              </HandContextProvider>
+              <AuthInit />
+              <Snackbar />
+              <HeaderComponent />
+              <AuthModal />
+              {children}
             </ReduxProvider>
           </StylesProvider>
         </StyledComponentsRegistry>

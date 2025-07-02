@@ -30,11 +30,12 @@ export function actionDtoToDomainMapper(actionDto: ActionDto): Action {
 
 export function playerDtoToDomain(
   playerDto: PlayerDto,
-  playerStats?: PlayerStats
+  playerStats?: Array<PlayerStats>
 ): Player {
+  const statsOrNull = playerStats?.filter((playerStat) => playerStat?.name === playerDto.name);
   const playerStatsOrNull =
-    playerStats && playerStats[playerDto.name]
-      ? playerStats[playerDto.name]
+    statsOrNull
+      ? statsOrNull[0]
       : null;
   return {
     seat: playerDto.seat,
@@ -54,7 +55,7 @@ export function playerDtoToDomain(
 
 export function handDtoToDomainMapper(
   handDto: HandDto,
-  playerStats?: PlayerStats
+  playerStats?: Array<PlayerStats>
 ): Hand {
   return {
     id: handDto?.id,

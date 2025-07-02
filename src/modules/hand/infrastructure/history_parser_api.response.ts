@@ -72,6 +72,7 @@ export interface HistoryParserApiResponseDto {
 }
 
 export interface PlayersStatsDto {
+  name: string;
   hands: number;
   vpip: number;
   pfr: number;
